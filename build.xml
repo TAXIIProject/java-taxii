@@ -6,11 +6,15 @@
 <project basedir=".">
 	<description> Ant build script for running xjc </description>
 
-	<!-- override default properties in build.properties -->
+	<!-- 
+    	Override the default properties below by setting override values in 
+    	build.properties. 
+	-->
 	<property file="build.properties"/>
 
 	<property name="jaxb.home" location="${user.home}/share/jaxb-ri-2.2.7"/>
-	<property name="src.generated.dir" value="src/generated/java"/>
+	<property name="src.generated.dir" location="src/generated/java"/>
+	<property name="src.xsd.dir" location="src/main/xsd"/>
 
 	<path id="classpath">
 		<fileset dir="${jaxb.home}" includes="lib/*.jar"/>
@@ -20,50 +24,14 @@
 		<classpath refid="classpath"/>
 	</taskdef>
 
-	<!--<target name="init">
-		<fail message="Build script requires Ant 1.7.0 or higher. Please upgrade.">
-	      <condition>
-	        <not>
-	          <antversion atleast="1.7.0"/>
-	        </not>
-	      </condition>
-	    </fail>
-	</target>-->
-
-	<!--compile Java source files-->
-	<target name="xjc" depends="xjc-check" description="Generate Java source files from XSD">
+	<target name="xjc" description="Generate Java source files from XSD">
 		<echo message="Compiling the schema..."/>
-
-		<!-- convert . to / in $package -->
-		<!--  	<loadresource property="package.dir">
-  		<propertyresource name="package"/>
-  		<filterchain>
-  			<tokenfilter>
-  			   <filetokenizer/>
-  			   <replacestring from="." to="/"/>
-			</tokenfilter>
-  		</filterchain>
-  	</loadresource>-->
-
 		<mkdir dir="${src.generated.dir}"/>
-		<xjc schema="${schema}" package="${package}" destdir="${src.generated.dir}"
-			catalog="${catalog}">
-			<produces dir="${src.generated.dir}" includes="**/*.java"/>
+		<xjc destdir="${src.generated.dir}" >
+    		<binding dir="${src.xsd.dir}" includes="**/*.xjb"/>
+			<schema dir="${src.xsd.dir}" includes="**/*.xsd"/>
+    		<produces dir="${src.generated.dir}" includes="**/*.java"/>
 		</xjc>
-	</target>
-
-	<target name="xjc-check">
-		<fail message="Missing required properties: $schema, $package, and $catalog!">
-			<condition>
-				<not>
-					<and>
-						<isset property="schema"/>
-						<isset property="package"/>
-						<isset property="catalog"/>
-					</and>
-				</not>
-			</condition>
-		</fail>
 	</target>
 
 	<target name="clean" description="Deletes all the generated artifacts.">

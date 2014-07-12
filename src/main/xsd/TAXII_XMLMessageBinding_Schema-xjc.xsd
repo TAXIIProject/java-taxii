@@ -16,8 +16,12 @@
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
     </xs:annotation>
 
+    <!-- 
+        The only difference between the original schema and this schema is
+        substitution of an xmldsig schema that is more compatible with xjc.
+    -->
     <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd">
+        schemaLocation="xmldsig-core-schema-xjc.xsd">
         <xs:annotation>
             <xs:documentation>XML Digital Signature schema imported to support signatures of messages and contents.</xs:documentation>
         </xs:annotation>

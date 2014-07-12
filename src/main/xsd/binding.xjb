@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               version="1.0">
+  <!--
+    Binding customizations defining package names for generated code.
+  -->
+  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-xjc.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.mitre.taxii.messages.xml11"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="xmldsig-core-schema-xjc.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.mitre.taxii.messages.xml11.xmldsig"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+</jaxb:bindings>  
