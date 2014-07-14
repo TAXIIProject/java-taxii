@@ -11,6 +11,11 @@
         - Substitution of an xmldsig schema that is more compatible with xjc.
         - MessageType is abstract to suppress the generation of code to create
             a MessageType instance.
+        - Removed TAXII_Message definition and the substitutionGroup references
+            as the substitionGroup was never used; that is, there isn't 
+            anywhere in the schema where one TAXII_Message can be substituted
+            for another, so the substitionGroup wasn't being used and was
+            resulting in extraneous (and useless) code being generated.
     -->
     
     <xs:annotation>
@@ -1302,6 +1307,7 @@
     </xs:complexType>
 
     <!-- GLOBAL ELEMENTS -->
+    <!-- CHANGED
     <xs:element name="TAXII_Message" abstract="true" type="MessageType">
         <xs:annotation>
             <xs:documentation>Abstract super-type of all message elements.</xs:documentation>
@@ -1327,4 +1333,18 @@
     />
     <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"
         substitutionGroup="TAXII_Message"/>
+    -->
+    <xs:element name="Status_Message" type="TAXIIStatusMessageType"/>
+    <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType"/>
+    <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType"/>
+    <xs:element name="Collection_Information_Request" type="TAXIICollectionInformationRequestType"/>
+    <xs:element name="Collection_Information_Response" type="TAXIICollectionInformationResponseType"/>
+    <xs:element name="Subscription_Management_Request" type="TAXIISubscriptionManagementRequestType"/>
+    <xs:element name="Subscription_Management_Response"
+        type="TAXIISubscriptionManagementResponseType"/>
+    <xs:element name="Poll_Request" type="TAXIIPollRequestType" />
+    <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
+    <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
+    <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"/>
+    
 </xs:schema>

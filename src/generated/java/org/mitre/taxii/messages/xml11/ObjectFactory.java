@@ -34,7 +34,6 @@ public class ObjectFactory {
     private final static QName _PollRequest_QNAME = new QName("http://taxii.mitre.org/messages/taxii_xml_binding-1.1", "Poll_Request");
     private final static QName _DiscoveryRequest_QNAME = new QName("http://taxii.mitre.org/messages/taxii_xml_binding-1.1", "Discovery_Request");
     private final static QName _SubscriptionManagementResponse_QNAME = new QName("http://taxii.mitre.org/messages/taxii_xml_binding-1.1", "Subscription_Management_Response");
-    private final static QName _TAXIIMessage_QNAME = new QName("http://taxii.mitre.org/messages/taxii_xml_binding-1.1", "TAXII_Message");
     private final static QName _CollectionInformationRequest_QNAME = new QName("http://taxii.mitre.org/messages/taxii_xml_binding-1.1", "Collection_Information_Request");
 
     /**
@@ -312,7 +311,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIPollFulfillmentType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Fulfillment", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Fulfillment")
     public JAXBElement<TAXIIPollFulfillmentType> createPollFulfillment(TAXIIPollFulfillmentType value) {
         return new JAXBElement<TAXIIPollFulfillmentType>(_PollFulfillment_QNAME, TAXIIPollFulfillmentType.class, null, value);
     }
@@ -321,7 +320,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIInboxMessageType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Inbox_Message", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Inbox_Message")
     public JAXBElement<TAXIIInboxMessageType> createInboxMessage(TAXIIInboxMessageType value) {
         return new JAXBElement<TAXIIInboxMessageType>(_InboxMessage_QNAME, TAXIIInboxMessageType.class, null, value);
     }
@@ -330,7 +329,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIStatusMessageType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Status_Message", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Status_Message")
     public JAXBElement<TAXIIStatusMessageType> createStatusMessage(TAXIIStatusMessageType value) {
         return new JAXBElement<TAXIIStatusMessageType>(_StatusMessage_QNAME, TAXIIStatusMessageType.class, null, value);
     }
@@ -339,7 +338,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIPollResponseType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Response", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Response")
     public JAXBElement<TAXIIPollResponseType> createPollResponse(TAXIIPollResponseType value) {
         return new JAXBElement<TAXIIPollResponseType>(_PollResponse_QNAME, TAXIIPollResponseType.class, null, value);
     }
@@ -348,7 +347,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIDiscoveryResponseType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Discovery_Response", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Discovery_Response")
     public JAXBElement<TAXIIDiscoveryResponseType> createDiscoveryResponse(TAXIIDiscoveryResponseType value) {
         return new JAXBElement<TAXIIDiscoveryResponseType>(_DiscoveryResponse_QNAME, TAXIIDiscoveryResponseType.class, null, value);
     }
@@ -357,7 +356,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIICollectionInformationResponseType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Collection_Information_Response", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Collection_Information_Response")
     public JAXBElement<TAXIICollectionInformationResponseType> createCollectionInformationResponse(TAXIICollectionInformationResponseType value) {
         return new JAXBElement<TAXIICollectionInformationResponseType>(_CollectionInformationResponse_QNAME, TAXIICollectionInformationResponseType.class, null, value);
     }
@@ -366,7 +365,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIISubscriptionManagementRequestType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Subscription_Management_Request", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Subscription_Management_Request")
     public JAXBElement<TAXIISubscriptionManagementRequestType> createSubscriptionManagementRequest(TAXIISubscriptionManagementRequestType value) {
         return new JAXBElement<TAXIISubscriptionManagementRequestType>(_SubscriptionManagementRequest_QNAME, TAXIISubscriptionManagementRequestType.class, null, value);
     }
@@ -375,7 +374,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIPollRequestType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Request", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Poll_Request")
     public JAXBElement<TAXIIPollRequestType> createPollRequest(TAXIIPollRequestType value) {
         return new JAXBElement<TAXIIPollRequestType>(_PollRequest_QNAME, TAXIIPollRequestType.class, null, value);
     }
@@ -384,7 +383,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIIDiscoveryRequestType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Discovery_Request", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Discovery_Request")
     public JAXBElement<TAXIIDiscoveryRequestType> createDiscoveryRequest(TAXIIDiscoveryRequestType value) {
         return new JAXBElement<TAXIIDiscoveryRequestType>(_DiscoveryRequest_QNAME, TAXIIDiscoveryRequestType.class, null, value);
     }
@@ -393,25 +392,16 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIISubscriptionManagementResponseType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Subscription_Management_Response", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Subscription_Management_Response")
     public JAXBElement<TAXIISubscriptionManagementResponseType> createSubscriptionManagementResponse(TAXIISubscriptionManagementResponseType value) {
         return new JAXBElement<TAXIISubscriptionManagementResponseType>(_SubscriptionManagementResponse_QNAME, TAXIISubscriptionManagementResponseType.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link MessageType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "TAXII_Message")
-    public JAXBElement<MessageType> createTAXIIMessage(MessageType value) {
-        return new JAXBElement<MessageType>(_TAXIIMessage_QNAME, MessageType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TAXIICollectionInformationRequestType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Collection_Information_Request", substitutionHeadNamespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", substitutionHeadName = "TAXII_Message")
+    @XmlElementDecl(namespace = "http://taxii.mitre.org/messages/taxii_xml_binding-1.1", name = "Collection_Information_Request")
     public JAXBElement<TAXIICollectionInformationRequestType> createCollectionInformationRequest(TAXIICollectionInformationRequestType value) {
         return new JAXBElement<TAXIICollectionInformationRequestType>(_CollectionInformationRequest_QNAME, TAXIICollectionInformationRequestType.class, null, value);
     }
