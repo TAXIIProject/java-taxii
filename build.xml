@@ -27,7 +27,7 @@
 	<target name="xjc" description="Generate Java source files from XSD">
 		<echo message="Compiling the schema..."/>
 		<mkdir dir="${src.generated.dir}"/>
-		<xjc destdir="${src.generated.dir}" >
+		<xjc destdir="${src.generated.dir}" header="false">
     		<binding dir="${src.xsd.dir}" includes="**/*.xjb"/>
 			<schema dir="${src.xsd.dir}" includes="**/*.xsd"/>
     		<produces dir="${src.generated.dir}" includes="**/*.java"/>
