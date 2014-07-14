@@ -5,6 +5,14 @@
     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
     targetNamespace="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
     elementFormDefault="qualified" version="1.1">
+    
+    <!-- 
+        Changes between this schema and the original marked with CHANGED below:
+        - Substitution of an xmldsig schema that is more compatible with xjc.
+        - MessageType is abstract to suppress the generation of code to create
+            a MessageType instance.
+    -->
+    
     <xs:annotation>
         <xs:appinfo>
             <schema>TAXII XML Message Binding Schema</schema>
@@ -16,11 +24,11 @@
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
     </xs:annotation>
 
-    <!-- 
-        The only difference between the original schema and this schema is
-        substitution of an xmldsig schema that is more compatible with xjc.
+	<!-- CHANGED
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+        schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"> 
     -->
-    <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
         schemaLocation="xmldsig-core-schema-xjc.xsd">
         <xs:annotation>
             <xs:documentation>XML Digital Signature schema imported to support signatures of messages and contents.</xs:documentation>
@@ -29,7 +37,10 @@
 
     <!-- GLOBAL TYPES -->
 
+    <!-- CHANGED
     <xs:complexType name="MessageType">
+	-->
+	<xs:complexType name="MessageType" abstract="true">
         <xs:annotation>
             <xs:documentation>The root of all TAXII messages. This is used to define header fields. This will never be instantiated directly but the TAXII Message Body types all extend this type.</xs:documentation>
         </xs:annotation>

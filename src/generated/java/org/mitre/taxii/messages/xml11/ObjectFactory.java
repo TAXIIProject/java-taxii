@@ -53,14 +53,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MessageType }
-     * 
-     */
-    public MessageType createMessageType() {
-        return new MessageType();
-    }
-
-    /**
      * Create an instance of {@link TAXIIPollRequestType }
      * 
      */

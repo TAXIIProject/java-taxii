@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
     RequestMessageType.class,
     ResponseMessageType.class
 })
-public class MessageType {
+public abstract class MessageType {
 
     @XmlElement(name = "Extended_Headers")
     protected ExtendedHeadersType extendedHeaders;
