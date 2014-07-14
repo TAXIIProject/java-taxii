@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import org.mitre.taxii.messages.xml11.xmldsig.SignatureType;
+import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
 /**

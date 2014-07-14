@@ -3,3 +3,4 @@
 /.gradle
 /bin
 /build
+/src/generated/java/org/mitre/taxii/messages/xmldsig
