@@ -1,3 +1,6 @@
 /.project
 /.classpath
 /src/generated
+/.gradle
+/bin
+/build

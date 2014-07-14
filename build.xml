@@ -34,7 +34,7 @@
 		</xjc>
 	</target>
 
-	<target name="clean" description="Deletes all the generated artifacts.">
+	<target name="xjc-clean" description="Deletes all the generated artifacts.">
 		<delete dir="${src.generated.dir}"/>
 	</target>
 </project>

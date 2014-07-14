@@ -1,5 +1,16 @@
+apply plugin: 'java'
+//apply plugin: 'eclipse'
+
+sourceSets {
+    generated
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    jaxb 'javax.xml.bind:jaxb-api:2.2.7'
+    generatedCompile 'javax.xml.bind:jaxb-api:2.2.7'
 }
 
 ant.importBuild 'build.xml'
