@@ -22,10 +22,10 @@ TAXII HTTP Protocol Binding Spec 1.1
 .
 .
 
-1.0
+1.1.0
 - Any other features needed to reach parity with libtaxii WRT TAXII 1.1  
 
-post-1.0
+post-1.1.0
 - Add support for TAXII 1.0.
 - Add support for JSON Message Binding.
 
