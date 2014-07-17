@@ -1,16 +1,63 @@
+defaultTasks 'compileJava'
+
 apply plugin: 'java'
-//apply plugin: 'eclipse'
+apply plugin: 'eclipse'
 
 sourceSets {
     generated
+    
+    main {
+//        compileClasspath.add(sourceSets.generated.output.classesDir)
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    generatedCompile 'javax.xml.bind:jaxb-api:2.2.7'
+
+configurations {
+    xjc
 }
 
-ant.importBuild 'build.xml'
+dependencies {
+    xjc 'com.sun.xml.bind:jaxb-impl:2.2.7'
+    xjc 'com.sun.xml.bind:jaxb-xjc:2.2.7'
+
+    generatedCompile 'javax.xml.bind:jaxb-api:2.2.7'
+    compile 'javax.xml.bind:jaxb-api:2.2.7'
+    testCompile 'junit:junit:4.11'
+}
+
+
+//ant.importBuild 'build.xml'
+String srcGeneratedDir = 'src/generated/java'
+
+task generate << {
+    String srcXsdDir = 'src/main/resources'
+    ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', 
+                classpath: configurations.xjc.asPath)
+    ant.mkdir(dir: srcGeneratedDir)
+    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true) {
+        binding(dir: srcXsdDir, includes: '*.xjb')
+        schema(dir: srcXsdDir, includes: '*.xsd')
+        produces(dir: srcGeneratedDir, includes: '**/*.java')
+    }
+}
+
+
+task cleanGenerate << {
+    ant.delete(dir: srcGeneratedDir)    
+}
+
+// fix dependencies to that generate gets called before compileJava
+compileGeneratedJava.dependsOn generate
+compileJava.dependsOn compileGeneratedJava 
+
+
+
+//jar.dependsOn generatedClasses
+
+//jar {
+//    from sourceSets.generated.output
+//}

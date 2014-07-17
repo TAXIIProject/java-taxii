@@ -23,11 +23,11 @@ www.gradle.org for details.
 
 Common targets (see a complete list by running 'gradle tasks'):
 
-    clean       - Deletes the build directory.
-    build       - Builds the project, creates the jar, runs the tests
-    xjc         - Runs the JAXB xjc compiler against the schemas in 
-                    src/main/xsd, generating java in src/generated/java
-    xjc-clean   - Removes the src/generated/java directory
+    clean             - Deletes the build directory.
+    build             - Builds the project, creates the jar, runs the tests
+    generate          - Runs the JAXB xjc compiler against the schemas in 
+                        src/main/xsd, generating java in src/generated/java
+    cleanGenerate    - Removes the src/generated/java directory
     compileGenerated  - Compiles the generated code
     
     

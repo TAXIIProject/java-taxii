@@ -14,7 +14,7 @@
 
 	<property name="jaxb.home" location="${user.home}/share/jaxb-ri-2.2.7"/>
 	<property name="src.generated.dir" location="src/generated/java"/>
-	<property name="src.xsd.dir" location="src/main/xsd"/>
+	<property name="src.xsd.dir" location="src/main/resources"/>
 
 	<path id="classpath">
 		<fileset dir="${jaxb.home}" includes="lib/*.jar"/>
@@ -25,16 +25,15 @@
 	</taskdef>
 
 	<target name="xjc" description="Generate Java source files from XSD">
-		<echo message="Compiling the schema..."/>
 		<mkdir dir="${src.generated.dir}"/>
-		<xjc destdir="${src.generated.dir}" header="false">
-    		<binding dir="${src.xsd.dir}" includes="**/*.xjb"/>
-			<schema dir="${src.xsd.dir}" includes="**/*.xsd"/>
+		<xjc destdir="${src.generated.dir}" header="false" readonly="true">
+    		<binding dir="${src.xsd.dir}" includes="*.xjb"/>
+			<schema dir="${src.xsd.dir}" includes="*.xsd"/>
     		<produces dir="${src.generated.dir}" includes="**/*.java"/>
 		</xjc>
 	</target>
 
-	<target name="xjc-clean" description="Deletes all the generated artifacts.">
+	<target name="xjc_clean" description="Deletes all the generated artifacts.">
 		<delete dir="${src.generated.dir}"/>
 	</target>
 </project>

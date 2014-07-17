@@ -3,3 +3,5 @@
 /.gradle
 /bin
 /build
+/.eclipse-bak
+/.settings
