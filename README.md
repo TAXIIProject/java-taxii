@@ -12,7 +12,9 @@ intuitive both to Java developers and XML developers.
 ## Versioning
 
 Releases of java-taxii will comply with the Semantic Versioning specification
-at http://semver.org/.
+at http://semver.org/.  Java-taxii is currently under active development;
+see TODO.txt for a tentative roadmap.  Releases will be announced on the
+[TAXII discussion list](http://taxii.mitre.org/community/registration.html).
 
 ## Building
 
@@ -51,4 +53,5 @@ systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost
 ## Feedback
 
 You are encouraged to provide feedback by commenting on open issues or 
-signing up for the TAXII discussion list and posting your questions.
+signing up for the [TAXII discussion list](http://taxii.mitre.org/community/registration.html)
+and posting your questions.
