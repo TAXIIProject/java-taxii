@@ -21,11 +21,13 @@ configurations {
 }
 
 dependencies {
-    xjc 'com.sun.xml.bind:jaxb-impl:2.2.7'
-    xjc 'com.sun.xml.bind:jaxb-xjc:2.2.7'
+    xjc 'com.sun.xml.bind:jaxb-impl:2.2.5-2'
+    xjc 'com.sun.xml.bind:jaxb-xjc:2.2.5-2'
+    xjc 'org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.6.5'
+    
 
-    generatedCompile 'javax.xml.bind:jaxb-api:2.2.7'
-    compile 'javax.xml.bind:jaxb-api:2.2.7'
+    generatedCompile 'javax.xml.bind:jaxb-api:2.2.5-2'
+    compile 'javax.xml.bind:jaxb-api:2.2.5-2'
     testCompile 'junit:junit:4.11'
 }
 
@@ -35,7 +37,7 @@ String srcGeneratedDir = 'src/generated/java'
 
 task generate << {
     String srcXsdDir = 'src/main/resources'
-    ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', 
+    ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task', 
                 classpath: configurations.xjc.asPath)
     ant.mkdir(dir: srcGeneratedDir)
     ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true) {
