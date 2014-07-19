@@ -5,6 +5,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -32,7 +37,9 @@ import javax.xml.bind.annotation.XmlType;
     "modulus",
     "exponent"
 })
-public class RSAKeyValueType {
+public class RSAKeyValueType
+    implements Equals
+{
 
     @XmlElement(name = "Modulus", required = true)
     protected byte[] modulus;
@@ -81,6 +88,40 @@ public class RSAKeyValueType {
      */
     public void setExponent(byte[] value) {
         this.exponent = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof RSAKeyValueType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final RSAKeyValueType that = ((RSAKeyValueType) object);
+        {
+            byte[] lhsModulus;
+            lhsModulus = this.getModulus();
+            byte[] rhsModulus;
+            rhsModulus = that.getModulus();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "modulus", lhsModulus), LocatorUtils.property(thatLocator, "modulus", rhsModulus), lhsModulus, rhsModulus)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsExponent;
+            lhsExponent = this.getExponent();
+            byte[] rhsExponent;
+            rhsExponent = that.getExponent();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "exponent", lhsExponent), LocatorUtils.property(thatLocator, "exponent", rhsExponent), lhsExponent, rhsExponent)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

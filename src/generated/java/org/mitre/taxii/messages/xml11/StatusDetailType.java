@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -34,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "StatusDetailType", propOrder = {
     "detail"
 })
-public class StatusDetailType {
+public class StatusDetailType
+    implements Equals
+{
 
     @XmlElement(name = "Detail", required = true)
     protected List<StatusDetailDetailType> detail;
@@ -66,6 +73,31 @@ public class StatusDetailType {
             detail = new ArrayList<StatusDetailDetailType>();
         }
         return this.detail;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof StatusDetailType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final StatusDetailType that = ((StatusDetailType) object);
+        {
+            List<StatusDetailDetailType> lhsDetail;
+            lhsDetail = (((this.detail!= null)&&(!this.detail.isEmpty()))?this.getDetail():null);
+            List<StatusDetailDetailType> rhsDetail;
+            rhsDetail = (((that.detail!= null)&&(!that.detail.isEmpty()))?that.getDetail():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "detail", lhsDetail), LocatorUtils.property(thatLocator, "detail", rhsDetail), lhsDetail, rhsDetail)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

@@ -8,6 +8,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -34,7 +39,9 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "RecordCountType", propOrder = {
     "value"
 })
-public class RecordCountType {
+public class RecordCountType
+    implements Equals
+{
 
     @XmlValue
     @XmlSchemaType(name = "nonNegativeInteger")
@@ -92,6 +99,40 @@ public class RecordCountType {
      */
     public void setPartialCount(Boolean value) {
         this.partialCount = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof RecordCountType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final RecordCountType that = ((RecordCountType) object);
+        {
+            BigInteger lhsValue;
+            lhsValue = this.getValue();
+            BigInteger rhsValue;
+            rhsValue = that.getValue();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "value", lhsValue), LocatorUtils.property(thatLocator, "value", rhsValue), lhsValue, rhsValue)) {
+                return false;
+            }
+        }
+        {
+            boolean lhsPartialCount;
+            lhsPartialCount = ((this.partialCount!= null)?this.isPartialCount():false);
+            boolean rhsPartialCount;
+            rhsPartialCount = ((that.partialCount!= null)?that.isPartialCount():false);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "partialCount", lhsPartialCount), LocatorUtils.property(thatLocator, "partialCount", rhsPartialCount), lhsPartialCount, rhsPartialCount)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

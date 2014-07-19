@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -31,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ExtendedHeaderType")
 public class ExtendedHeaderType
     extends AnyMixedContentType
+    implements Equals
 {
 
     @XmlAttribute(name = "name", required = true)
@@ -59,6 +65,34 @@ public class ExtendedHeaderType
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ExtendedHeaderType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final ExtendedHeaderType that = ((ExtendedHeaderType) object);
+        {
+            String lhsName;
+            lhsName = this.getName();
+            String rhsName;
+            rhsName = that.getName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "name", lhsName), LocatorUtils.property(thatLocator, "name", rhsName), lhsName, rhsName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

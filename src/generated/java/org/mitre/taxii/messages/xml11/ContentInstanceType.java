@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -34,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ContentInstanceType", propOrder = {
     "subtype"
 })
-public class ContentInstanceType {
+public class ContentInstanceType
+    implements Equals
+{
 
     @XmlElement(name = "Subtype")
     protected SubtypeType subtype;
@@ -87,6 +94,40 @@ public class ContentInstanceType {
      */
     public void setBindingId(String value) {
         this.bindingId = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ContentInstanceType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ContentInstanceType that = ((ContentInstanceType) object);
+        {
+            SubtypeType lhsSubtype;
+            lhsSubtype = this.getSubtype();
+            SubtypeType rhsSubtype;
+            rhsSubtype = that.getSubtype();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subtype", lhsSubtype), LocatorUtils.property(thatLocator, "subtype", rhsSubtype), lhsSubtype, rhsSubtype)) {
+                return false;
+            }
+        }
+        {
+            String lhsBindingId;
+            lhsBindingId = this.getBindingId();
+            String rhsBindingId;
+            rhsBindingId = that.getBindingId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "bindingId", lhsBindingId), LocatorUtils.property(thatLocator, "bindingId", rhsBindingId), lhsBindingId, rhsBindingId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

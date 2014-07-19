@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -44,6 +49,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIISubscriptionManagementResponseType
     extends ResponseMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Message")
@@ -155,6 +161,61 @@ public class TAXIISubscriptionManagementResponseType
      */
     public void setCollectionName(String value) {
         this.collectionName = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIISubscriptionManagementResponseType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIISubscriptionManagementResponseType that = ((TAXIISubscriptionManagementResponseType) object);
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            List<SubscriptionRecordType> lhsSubscription;
+            lhsSubscription = (((this.subscription!= null)&&(!this.subscription.isEmpty()))?this.getSubscription():null);
+            List<SubscriptionRecordType> rhsSubscription;
+            rhsSubscription = (((that.subscription!= null)&&(!that.subscription.isEmpty()))?that.getSubscription():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscription", lhsSubscription), LocatorUtils.property(thatLocator, "subscription", rhsSubscription), lhsSubscription, rhsSubscription)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

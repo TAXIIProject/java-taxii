@@ -8,6 +8,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -35,7 +40,9 @@ import javax.xml.bind.annotation.XmlType;
     "address",
     "messageBinding"
 })
-public class ServiceContactInfoType {
+public class ServiceContactInfoType
+    implements Equals
+{
 
     @XmlElement(name = "Protocol_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
@@ -121,6 +128,49 @@ public class ServiceContactInfoType {
             messageBinding = new ArrayList<String>();
         }
         return this.messageBinding;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ServiceContactInfoType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ServiceContactInfoType that = ((ServiceContactInfoType) object);
+        {
+            String lhsProtocolBinding;
+            lhsProtocolBinding = this.getProtocolBinding();
+            String rhsProtocolBinding;
+            rhsProtocolBinding = that.getProtocolBinding();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "protocolBinding", lhsProtocolBinding), LocatorUtils.property(thatLocator, "protocolBinding", rhsProtocolBinding), lhsProtocolBinding, rhsProtocolBinding)) {
+                return false;
+            }
+        }
+        {
+            String lhsAddress;
+            lhsAddress = this.getAddress();
+            String rhsAddress;
+            rhsAddress = that.getAddress();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "address", lhsAddress), LocatorUtils.property(thatLocator, "address", rhsAddress), lhsAddress, rhsAddress)) {
+                return false;
+            }
+        }
+        {
+            List<String> lhsMessageBinding;
+            lhsMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
+            List<String> rhsMessageBinding;
+            rhsMessageBinding = (((that.messageBinding!= null)&&(!that.messageBinding.isEmpty()))?that.getMessageBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBinding", lhsMessageBinding), LocatorUtils.property(thatLocator, "messageBinding", rhsMessageBinding), lhsMessageBinding, rhsMessageBinding)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

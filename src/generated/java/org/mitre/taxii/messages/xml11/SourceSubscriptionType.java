@@ -8,6 +8,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -41,7 +46,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "exclusiveBeginTimestamp",
     "inclusiveEndTimestamp"
 })
-public class SourceSubscriptionType {
+public class SourceSubscriptionType
+    implements Equals
+{
 
     @XmlElement(name = "Subscription_ID", required = true)
     @XmlSchemaType(name = "anyURI")
@@ -148,6 +155,58 @@ public class SourceSubscriptionType {
      */
     public void setCollectionName(String value) {
         this.collectionName = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SourceSubscriptionType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SourceSubscriptionType that = ((SourceSubscriptionType) object);
+        {
+            String lhsSubscriptionID;
+            lhsSubscriptionID = this.getSubscriptionID();
+            String rhsSubscriptionID;
+            rhsSubscriptionID = that.getSubscriptionID();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionID", lhsSubscriptionID), LocatorUtils.property(thatLocator, "subscriptionID", rhsSubscriptionID), lhsSubscriptionID, rhsSubscriptionID)) {
+                return false;
+            }
+        }
+        {
+            XMLGregorianCalendar lhsExclusiveBeginTimestamp;
+            lhsExclusiveBeginTimestamp = this.getExclusiveBeginTimestamp();
+            XMLGregorianCalendar rhsExclusiveBeginTimestamp;
+            rhsExclusiveBeginTimestamp = that.getExclusiveBeginTimestamp();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "exclusiveBeginTimestamp", lhsExclusiveBeginTimestamp), LocatorUtils.property(thatLocator, "exclusiveBeginTimestamp", rhsExclusiveBeginTimestamp), lhsExclusiveBeginTimestamp, rhsExclusiveBeginTimestamp)) {
+                return false;
+            }
+        }
+        {
+            XMLGregorianCalendar lhsInclusiveEndTimestamp;
+            lhsInclusiveEndTimestamp = this.getInclusiveEndTimestamp();
+            XMLGregorianCalendar rhsInclusiveEndTimestamp;
+            rhsInclusiveEndTimestamp = that.getInclusiveEndTimestamp();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "inclusiveEndTimestamp", lhsInclusiveEndTimestamp), LocatorUtils.property(thatLocator, "inclusiveEndTimestamp", rhsInclusiveEndTimestamp), lhsInclusiveEndTimestamp, rhsInclusiveEndTimestamp)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

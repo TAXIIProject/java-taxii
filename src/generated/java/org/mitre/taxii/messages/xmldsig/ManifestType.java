@@ -12,6 +12,11 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -38,7 +43,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "ManifestType", propOrder = {
     "reference"
 })
-public class ManifestType {
+public class ManifestType
+    implements Equals
+{
 
     @XmlElement(name = "Reference", required = true)
     protected List<ReferenceType> reference;
@@ -99,6 +106,40 @@ public class ManifestType {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ManifestType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ManifestType that = ((ManifestType) object);
+        {
+            List<ReferenceType> lhsReference;
+            lhsReference = (((this.reference!= null)&&(!this.reference.isEmpty()))?this.getReference():null);
+            List<ReferenceType> rhsReference;
+            rhsReference = (((that.reference!= null)&&(!that.reference.isEmpty()))?that.getReference():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "reference", lhsReference), LocatorUtils.property(thatLocator, "reference", rhsReference), lhsReference, rhsReference)) {
+                return false;
+            }
+        }
+        {
+            String lhsId;
+            lhsId = this.getId();
+            String rhsId;
+            rhsId = that.getId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "id", lhsId), LocatorUtils.property(thatLocator, "id", rhsId), lhsId, rhsId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

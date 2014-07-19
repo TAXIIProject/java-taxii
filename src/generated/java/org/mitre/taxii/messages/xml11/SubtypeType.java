@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -29,7 +34,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SubtypeType")
-public class SubtypeType {
+public class SubtypeType
+    implements Equals
+{
 
     @XmlAttribute(name = "subtype_id", required = true)
     @XmlSchemaType(name = "anyURI")
@@ -57,6 +64,31 @@ public class SubtypeType {
      */
     public void setSubtypeId(String value) {
         this.subtypeId = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SubtypeType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SubtypeType that = ((SubtypeType) object);
+        {
+            String lhsSubtypeId;
+            lhsSubtypeId = this.getSubtypeId();
+            String rhsSubtypeId;
+            rhsSubtypeId = that.getSubtypeId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subtypeId", lhsSubtypeId), LocatorUtils.property(thatLocator, "subtypeId", rhsSubtypeId), lhsSubtypeId, rhsSubtypeId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

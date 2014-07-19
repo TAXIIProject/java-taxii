@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -44,7 +49,9 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
     "padding",
     "signature"
 })
-public class ContentBlockType {
+public class ContentBlockType
+    implements Equals
+{
 
     @XmlElement(name = "Content_Binding", required = true)
     protected ContentInstanceType contentBinding;
@@ -201,6 +208,76 @@ public class ContentBlockType {
      */
     public void setSignature(SignatureType value) {
         this.signature = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ContentBlockType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ContentBlockType that = ((ContentBlockType) object);
+        {
+            ContentInstanceType lhsContentBinding;
+            lhsContentBinding = this.getContentBinding();
+            ContentInstanceType rhsContentBinding;
+            rhsContentBinding = that.getContentBinding();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+                return false;
+            }
+        }
+        {
+            AnyMixedContentType lhsContent;
+            lhsContent = this.getContent();
+            AnyMixedContentType rhsContent;
+            rhsContent = that.getContent();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "content", lhsContent), LocatorUtils.property(thatLocator, "content", rhsContent), lhsContent, rhsContent)) {
+                return false;
+            }
+        }
+        {
+            XMLGregorianCalendar lhsTimestampLabel;
+            lhsTimestampLabel = this.getTimestampLabel();
+            XMLGregorianCalendar rhsTimestampLabel;
+            rhsTimestampLabel = that.getTimestampLabel();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "timestampLabel", lhsTimestampLabel), LocatorUtils.property(thatLocator, "timestampLabel", rhsTimestampLabel), lhsTimestampLabel, rhsTimestampLabel)) {
+                return false;
+            }
+        }
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            String lhsPadding;
+            lhsPadding = this.getPadding();
+            String rhsPadding;
+            rhsPadding = that.getPadding();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "padding", lhsPadding), LocatorUtils.property(thatLocator, "padding", rhsPadding), lhsPadding, rhsPadding)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

@@ -12,6 +12,11 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +49,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "keyInfo",
     "object"
 })
-public class SignatureType {
+public class SignatureType
+    implements Equals
+{
 
     @XmlElement(name = "SignedInfo", required = true)
     protected SignedInfoType signedInfo;
@@ -183,6 +190,67 @@ public class SignatureType {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SignatureType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SignatureType that = ((SignatureType) object);
+        {
+            SignedInfoType lhsSignedInfo;
+            lhsSignedInfo = this.getSignedInfo();
+            SignedInfoType rhsSignedInfo;
+            rhsSignedInfo = that.getSignedInfo();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signedInfo", lhsSignedInfo), LocatorUtils.property(thatLocator, "signedInfo", rhsSignedInfo), lhsSignedInfo, rhsSignedInfo)) {
+                return false;
+            }
+        }
+        {
+            SignatureValueType lhsSignatureValue;
+            lhsSignatureValue = this.getSignatureValue();
+            SignatureValueType rhsSignatureValue;
+            rhsSignatureValue = that.getSignatureValue();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signatureValue", lhsSignatureValue), LocatorUtils.property(thatLocator, "signatureValue", rhsSignatureValue), lhsSignatureValue, rhsSignatureValue)) {
+                return false;
+            }
+        }
+        {
+            KeyInfoType lhsKeyInfo;
+            lhsKeyInfo = this.getKeyInfo();
+            KeyInfoType rhsKeyInfo;
+            rhsKeyInfo = that.getKeyInfo();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "keyInfo", lhsKeyInfo), LocatorUtils.property(thatLocator, "keyInfo", rhsKeyInfo), lhsKeyInfo, rhsKeyInfo)) {
+                return false;
+            }
+        }
+        {
+            List<ObjectType> lhsObject;
+            lhsObject = (((this.object!= null)&&(!this.object.isEmpty()))?this.getObject():null);
+            List<ObjectType> rhsObject;
+            rhsObject = (((that.object!= null)&&(!that.object.isEmpty()))?that.getObject():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "object", lhsObject), LocatorUtils.property(thatLocator, "object", rhsObject), lhsObject, rhsObject)) {
+                return false;
+            }
+        }
+        {
+            String lhsId;
+            lhsId = this.getId();
+            String rhsId;
+            rhsId = that.getId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "id", lhsId), LocatorUtils.property(thatLocator, "id", rhsId), lhsId, rhsId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

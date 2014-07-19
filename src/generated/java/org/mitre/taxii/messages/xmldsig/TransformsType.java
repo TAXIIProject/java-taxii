@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -32,7 +37,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "TransformsType", propOrder = {
     "transform"
 })
-public class TransformsType {
+public class TransformsType
+    implements Equals
+{
 
     @XmlElement(name = "Transform", required = true)
     protected List<TransformType> transform;
@@ -64,6 +71,31 @@ public class TransformsType {
             transform = new ArrayList<TransformType>();
         }
         return this.transform;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TransformsType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final TransformsType that = ((TransformsType) object);
+        {
+            List<TransformType> lhsTransform;
+            lhsTransform = (((this.transform!= null)&&(!this.transform.isEmpty()))?this.getTransform():null);
+            List<TransformType> rhsTransform;
+            rhsTransform = (((that.transform!= null)&&(!that.transform.isEmpty()))?that.getTransform():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "transform", lhsTransform), LocatorUtils.property(thatLocator, "transform", rhsTransform), lhsTransform, rhsTransform)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

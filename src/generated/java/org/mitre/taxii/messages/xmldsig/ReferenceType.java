@@ -10,6 +10,11 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -42,7 +47,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "digestMethod",
     "digestValue"
 })
-public class ReferenceType {
+public class ReferenceType
+    implements Equals
+{
 
     @XmlElement(name = "Transforms")
     protected TransformsType transforms;
@@ -202,6 +209,76 @@ public class ReferenceType {
      */
     public void setType(String value) {
         this.type = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ReferenceType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ReferenceType that = ((ReferenceType) object);
+        {
+            TransformsType lhsTransforms;
+            lhsTransforms = this.getTransforms();
+            TransformsType rhsTransforms;
+            rhsTransforms = that.getTransforms();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "transforms", lhsTransforms), LocatorUtils.property(thatLocator, "transforms", rhsTransforms), lhsTransforms, rhsTransforms)) {
+                return false;
+            }
+        }
+        {
+            DigestMethodType lhsDigestMethod;
+            lhsDigestMethod = this.getDigestMethod();
+            DigestMethodType rhsDigestMethod;
+            rhsDigestMethod = that.getDigestMethod();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "digestMethod", lhsDigestMethod), LocatorUtils.property(thatLocator, "digestMethod", rhsDigestMethod), lhsDigestMethod, rhsDigestMethod)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsDigestValue;
+            lhsDigestValue = this.getDigestValue();
+            byte[] rhsDigestValue;
+            rhsDigestValue = that.getDigestValue();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "digestValue", lhsDigestValue), LocatorUtils.property(thatLocator, "digestValue", rhsDigestValue), lhsDigestValue, rhsDigestValue)) {
+                return false;
+            }
+        }
+        {
+            String lhsId;
+            lhsId = this.getId();
+            String rhsId;
+            rhsId = that.getId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "id", lhsId), LocatorUtils.property(thatLocator, "id", rhsId), lhsId, rhsId)) {
+                return false;
+            }
+        }
+        {
+            String lhsURI;
+            lhsURI = this.getURI();
+            String rhsURI;
+            rhsURI = that.getURI();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "uri", lhsURI), LocatorUtils.property(thatLocator, "uri", rhsURI), lhsURI, rhsURI)) {
+                return false;
+            }
+        }
+        {
+            String lhsType;
+            lhsType = this.getType();
+            String rhsType;
+            rhsType = that.getType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "type", lhsType), LocatorUtils.property(thatLocator, "type", rhsType), lhsType, rhsType)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

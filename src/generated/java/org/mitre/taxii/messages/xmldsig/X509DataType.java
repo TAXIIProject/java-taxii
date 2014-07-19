@@ -10,6 +10,11 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
 
 
@@ -43,14 +48,16 @@ import org.w3c.dom.Element;
 @XmlType(name = "X509DataType", propOrder = {
     "x509IssuerSerialOrX509SKIOrX509SubjectName"
 })
-public class X509DataType {
+public class X509DataType
+    implements Equals
+{
 
     @XmlElementRefs({
         @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509IssuerSerial", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     })
     @XmlAnyElement(lax = true)
     protected List<Object> x509IssuerSerialOrX509SKIOrX509SubjectName;
@@ -73,13 +80,13 @@ public class X509DataType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link Object }
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link Element }
      * 
      * 
      */
@@ -88,6 +95,31 @@ public class X509DataType {
             x509IssuerSerialOrX509SKIOrX509SubjectName = new ArrayList<Object>();
         }
         return this.x509IssuerSerialOrX509SKIOrX509SubjectName;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof X509DataType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final X509DataType that = ((X509DataType) object);
+        {
+            List<Object> lhsX509IssuerSerialOrX509SKIOrX509SubjectName;
+            lhsX509IssuerSerialOrX509SKIOrX509SubjectName = (((this.x509IssuerSerialOrX509SKIOrX509SubjectName!= null)&&(!this.x509IssuerSerialOrX509SKIOrX509SubjectName.isEmpty()))?this.getX509IssuerSerialOrX509SKIOrX509SubjectName():null);
+            List<Object> rhsX509IssuerSerialOrX509SKIOrX509SubjectName;
+            rhsX509IssuerSerialOrX509SKIOrX509SubjectName = (((that.x509IssuerSerialOrX509SKIOrX509SubjectName!= null)&&(!that.x509IssuerSerialOrX509SKIOrX509SubjectName.isEmpty()))?that.getX509IssuerSerialOrX509SKIOrX509SubjectName():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "x509IssuerSerialOrX509SKIOrX509SubjectName", lhsX509IssuerSerialOrX509SKIOrX509SubjectName), LocatorUtils.property(thatLocator, "x509IssuerSerialOrX509SKIOrX509SubjectName", rhsX509IssuerSerialOrX509SKIOrX509SubjectName), lhsX509IssuerSerialOrX509SKIOrX509SubjectName, rhsX509IssuerSerialOrX509SKIOrX509SubjectName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

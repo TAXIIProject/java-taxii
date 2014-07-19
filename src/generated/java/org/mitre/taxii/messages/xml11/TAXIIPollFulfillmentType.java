@@ -8,6 +8,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -41,6 +46,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIPollFulfillmentType
     extends RequestMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
@@ -149,6 +155,61 @@ public class TAXIIPollFulfillmentType
      */
     public void setResultPartNumber(BigInteger value) {
         this.resultPartNumber = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIIPollFulfillmentType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIIPollFulfillmentType that = ((TAXIIPollFulfillmentType) object);
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        {
+            String lhsResultId;
+            lhsResultId = this.getResultId();
+            String rhsResultId;
+            rhsResultId = that.getResultId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "resultId", lhsResultId), LocatorUtils.property(thatLocator, "resultId", rhsResultId), lhsResultId, rhsResultId)) {
+                return false;
+            }
+        }
+        {
+            BigInteger lhsResultPartNumber;
+            lhsResultPartNumber = this.getResultPartNumber();
+            BigInteger rhsResultPartNumber;
+            rhsResultPartNumber = that.getResultPartNumber();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "resultPartNumber", lhsResultPartNumber), LocatorUtils.property(thatLocator, "resultPartNumber", rhsResultPartNumber), lhsResultPartNumber, rhsResultPartNumber)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

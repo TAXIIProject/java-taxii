@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -34,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ExtendedHeadersType", propOrder = {
     "extendedHeader"
 })
-public class ExtendedHeadersType {
+public class ExtendedHeadersType
+    implements Equals
+{
 
     @XmlElement(name = "Extended_Header", required = true)
     protected List<ExtendedHeaderType> extendedHeader;
@@ -66,6 +73,31 @@ public class ExtendedHeadersType {
             extendedHeader = new ArrayList<ExtendedHeaderType>();
         }
         return this.extendedHeader;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ExtendedHeadersType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ExtendedHeadersType that = ((ExtendedHeadersType) object);
+        {
+            List<ExtendedHeaderType> lhsExtendedHeader;
+            lhsExtendedHeader = (((this.extendedHeader!= null)&&(!this.extendedHeader.isEmpty()))?this.getExtendedHeader():null);
+            List<ExtendedHeaderType> rhsExtendedHeader;
+            rhsExtendedHeader = (((that.extendedHeader!= null)&&(!that.extendedHeader.isEmpty()))?that.getExtendedHeader():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "extendedHeader", lhsExtendedHeader), LocatorUtils.property(thatLocator, "extendedHeader", rhsExtendedHeader), lhsExtendedHeader, rhsExtendedHeader)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

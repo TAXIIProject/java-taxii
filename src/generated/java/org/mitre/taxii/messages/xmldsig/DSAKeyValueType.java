@@ -5,6 +5,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -46,7 +51,9 @@ import javax.xml.bind.annotation.XmlType;
     "seed",
     "pgenCounter"
 })
-public class DSAKeyValueType {
+public class DSAKeyValueType
+    implements Equals
+{
 
     @XmlElement(name = "P")
     protected byte[] p;
@@ -215,6 +222,85 @@ public class DSAKeyValueType {
      */
     public void setPgenCounter(byte[] value) {
         this.pgenCounter = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof DSAKeyValueType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final DSAKeyValueType that = ((DSAKeyValueType) object);
+        {
+            byte[] lhsP;
+            lhsP = this.getP();
+            byte[] rhsP;
+            rhsP = that.getP();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "p", lhsP), LocatorUtils.property(thatLocator, "p", rhsP), lhsP, rhsP)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsQ;
+            lhsQ = this.getQ();
+            byte[] rhsQ;
+            rhsQ = that.getQ();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "q", lhsQ), LocatorUtils.property(thatLocator, "q", rhsQ), lhsQ, rhsQ)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsG;
+            lhsG = this.getG();
+            byte[] rhsG;
+            rhsG = that.getG();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "g", lhsG), LocatorUtils.property(thatLocator, "g", rhsG), lhsG, rhsG)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsY;
+            lhsY = this.getY();
+            byte[] rhsY;
+            rhsY = that.getY();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "y", lhsY), LocatorUtils.property(thatLocator, "y", rhsY), lhsY, rhsY)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsJ;
+            lhsJ = this.getJ();
+            byte[] rhsJ;
+            rhsJ = that.getJ();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "j", lhsJ), LocatorUtils.property(thatLocator, "j", rhsJ), lhsJ, rhsJ)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsSeed;
+            lhsSeed = this.getSeed();
+            byte[] rhsSeed;
+            rhsSeed = that.getSeed();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "seed", lhsSeed), LocatorUtils.property(thatLocator, "seed", rhsSeed), lhsSeed, rhsSeed)) {
+                return false;
+            }
+        }
+        {
+            byte[] lhsPgenCounter;
+            lhsPgenCounter = this.getPgenCounter();
+            byte[] rhsPgenCounter;
+            rhsPgenCounter = that.getPgenCounter();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pgenCounter", lhsPgenCounter), LocatorUtils.property(thatLocator, "pgenCounter", rhsPgenCounter), lhsPgenCounter, rhsPgenCounter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

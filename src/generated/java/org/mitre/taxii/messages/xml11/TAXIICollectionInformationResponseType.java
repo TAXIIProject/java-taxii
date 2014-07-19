@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -39,6 +44,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIICollectionInformationResponseType
     extends ResponseMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Collection")
@@ -97,6 +103,43 @@ public class TAXIICollectionInformationResponseType
      */
     public void setSignature(SignatureType value) {
         this.signature = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIICollectionInformationResponseType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIICollectionInformationResponseType that = ((TAXIICollectionInformationResponseType) object);
+        {
+            List<CollectionRecordType> lhsCollection;
+            lhsCollection = (((this.collection!= null)&&(!this.collection.isEmpty()))?this.getCollection():null);
+            List<CollectionRecordType> rhsCollection;
+            rhsCollection = (((that.collection!= null)&&(!that.collection.isEmpty()))?that.getCollection():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collection", lhsCollection), LocatorUtils.property(thatLocator, "collection", rhsCollection), lhsCollection, rhsCollection)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

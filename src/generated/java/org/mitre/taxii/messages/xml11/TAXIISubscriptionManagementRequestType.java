@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -45,6 +50,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIISubscriptionManagementRequestType
     extends RequestMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Subscription_ID")
@@ -204,6 +210,79 @@ public class TAXIISubscriptionManagementRequestType
      */
     public void setCollectionName(String value) {
         this.collectionName = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIISubscriptionManagementRequestType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIISubscriptionManagementRequestType that = ((TAXIISubscriptionManagementRequestType) object);
+        {
+            String lhsSubscriptionID;
+            lhsSubscriptionID = this.getSubscriptionID();
+            String rhsSubscriptionID;
+            rhsSubscriptionID = that.getSubscriptionID();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionID", lhsSubscriptionID), LocatorUtils.property(thatLocator, "subscriptionID", rhsSubscriptionID), lhsSubscriptionID, rhsSubscriptionID)) {
+                return false;
+            }
+        }
+        {
+            SubscriptionParametersType lhsSubscriptionParameters;
+            lhsSubscriptionParameters = this.getSubscriptionParameters();
+            SubscriptionParametersType rhsSubscriptionParameters;
+            rhsSubscriptionParameters = that.getSubscriptionParameters();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionParameters", lhsSubscriptionParameters), LocatorUtils.property(thatLocator, "subscriptionParameters", rhsSubscriptionParameters), lhsSubscriptionParameters, rhsSubscriptionParameters)) {
+                return false;
+            }
+        }
+        {
+            PushParameterType lhsPushParameters;
+            lhsPushParameters = this.getPushParameters();
+            PushParameterType rhsPushParameters;
+            rhsPushParameters = that.getPushParameters();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pushParameters", lhsPushParameters), LocatorUtils.property(thatLocator, "pushParameters", rhsPushParameters), lhsPushParameters, rhsPushParameters)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            CollectionActionEnum lhsAction;
+            lhsAction = this.getAction();
+            CollectionActionEnum rhsAction;
+            rhsAction = that.getAction();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "action", lhsAction), LocatorUtils.property(thatLocator, "action", rhsAction), lhsAction, rhsAction)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

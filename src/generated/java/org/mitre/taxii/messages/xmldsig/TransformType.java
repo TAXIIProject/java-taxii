@@ -12,6 +12,11 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
 
 
@@ -40,7 +45,9 @@ import org.w3c.dom.Element;
 @XmlType(name = "TransformType", propOrder = {
     "content"
 })
-public class TransformType {
+public class TransformType
+    implements Equals
+{
 
     @XmlElementRef(name = "XPath", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     @XmlMixed
@@ -68,10 +75,10 @@ public class TransformType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link String }
      * {@link Object }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link Element }
      * 
      * 
      */
@@ -104,6 +111,40 @@ public class TransformType {
      */
     public void setAlgorithm(String value) {
         this.algorithm = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TransformType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final TransformType that = ((TransformType) object);
+        {
+            List<Object> lhsContent;
+            lhsContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            List<Object> rhsContent;
+            rhsContent = (((that.content!= null)&&(!that.content.isEmpty()))?that.getContent():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "content", lhsContent), LocatorUtils.property(thatLocator, "content", rhsContent), lhsContent, rhsContent)) {
+                return false;
+            }
+        }
+        {
+            String lhsAlgorithm;
+            lhsAlgorithm = this.getAlgorithm();
+            String rhsAlgorithm;
+            rhsAlgorithm = that.getAlgorithm();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "algorithm", lhsAlgorithm), LocatorUtils.property(thatLocator, "algorithm", rhsAlgorithm), lhsAlgorithm, rhsAlgorithm)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

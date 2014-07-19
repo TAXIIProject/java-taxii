@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -36,7 +41,9 @@ import javax.xml.bind.annotation.XmlType;
     "contentBinding",
     "query"
 })
-public class SubscriptionParametersType {
+public class SubscriptionParametersType
+    implements Equals
+{
 
     @XmlElement(name = "Response_Type", defaultValue = "FULL")
     protected ResponseTypeEnum responseType;
@@ -120,6 +127,49 @@ public class SubscriptionParametersType {
      */
     public void setQuery(QueryType value) {
         this.query = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SubscriptionParametersType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SubscriptionParametersType that = ((SubscriptionParametersType) object);
+        {
+            ResponseTypeEnum lhsResponseType;
+            lhsResponseType = this.getResponseType();
+            ResponseTypeEnum rhsResponseType;
+            rhsResponseType = that.getResponseType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "responseType", lhsResponseType), LocatorUtils.property(thatLocator, "responseType", rhsResponseType), lhsResponseType, rhsResponseType)) {
+                return false;
+            }
+        }
+        {
+            List<ContentBindingIDType> lhsContentBinding;
+            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            List<ContentBindingIDType> rhsContentBinding;
+            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+                return false;
+            }
+        }
+        {
+            QueryType lhsQuery;
+            lhsQuery = this.getQuery();
+            QueryType rhsQuery;
+            rhsQuery = that.getQuery();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "query", lhsQuery), LocatorUtils.property(thatLocator, "query", rhsQuery), lhsQuery, rhsQuery)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

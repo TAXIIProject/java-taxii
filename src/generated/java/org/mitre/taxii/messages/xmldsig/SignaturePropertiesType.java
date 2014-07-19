@@ -12,6 +12,11 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -38,7 +43,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "SignaturePropertiesType", propOrder = {
     "signatureProperty"
 })
-public class SignaturePropertiesType {
+public class SignaturePropertiesType
+    implements Equals
+{
 
     @XmlElement(name = "SignatureProperty", required = true)
     protected List<SignaturePropertyType> signatureProperty;
@@ -99,6 +106,40 @@ public class SignaturePropertiesType {
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SignaturePropertiesType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SignaturePropertiesType that = ((SignaturePropertiesType) object);
+        {
+            List<SignaturePropertyType> lhsSignatureProperty;
+            lhsSignatureProperty = (((this.signatureProperty!= null)&&(!this.signatureProperty.isEmpty()))?this.getSignatureProperty():null);
+            List<SignaturePropertyType> rhsSignatureProperty;
+            rhsSignatureProperty = (((that.signatureProperty!= null)&&(!that.signatureProperty.isEmpty()))?that.getSignatureProperty():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signatureProperty", lhsSignatureProperty), LocatorUtils.property(thatLocator, "signatureProperty", rhsSignatureProperty), lhsSignatureProperty, rhsSignatureProperty)) {
+                return false;
+            }
+        }
+        {
+            String lhsId;
+            lhsId = this.getId();
+            String rhsId;
+            rhsId = that.getId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "id", lhsId), LocatorUtils.property(thatLocator, "id", rhsId), lhsId, rhsId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

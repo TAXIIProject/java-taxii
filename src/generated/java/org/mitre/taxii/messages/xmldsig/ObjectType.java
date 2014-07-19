@@ -13,6 +13,11 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
 
 
@@ -42,7 +47,9 @@ import org.w3c.dom.Element;
 @XmlType(name = "ObjectType", propOrder = {
     "content"
 })
-public class ObjectType {
+public class ObjectType
+    implements Equals
+{
 
     @XmlMixed
     @XmlAnyElement(lax = true)
@@ -77,8 +84,8 @@ public class ObjectType {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * {@link Element }
      * {@link Object }
+     * {@link Element }
      * 
      * 
      */
@@ -159,6 +166,58 @@ public class ObjectType {
      */
     public void setEncoding(String value) {
         this.encoding = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ObjectType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ObjectType that = ((ObjectType) object);
+        {
+            List<Object> lhsContent;
+            lhsContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            List<Object> rhsContent;
+            rhsContent = (((that.content!= null)&&(!that.content.isEmpty()))?that.getContent():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "content", lhsContent), LocatorUtils.property(thatLocator, "content", rhsContent), lhsContent, rhsContent)) {
+                return false;
+            }
+        }
+        {
+            String lhsId;
+            lhsId = this.getId();
+            String rhsId;
+            rhsId = that.getId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "id", lhsId), LocatorUtils.property(thatLocator, "id", rhsId), lhsId, rhsId)) {
+                return false;
+            }
+        }
+        {
+            String lhsMimeType;
+            lhsMimeType = this.getMimeType();
+            String rhsMimeType;
+            rhsMimeType = that.getMimeType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "mimeType", lhsMimeType), LocatorUtils.property(thatLocator, "mimeType", rhsMimeType), lhsMimeType, rhsMimeType)) {
+                return false;
+            }
+        }
+        {
+            String lhsEncoding;
+            lhsEncoding = this.getEncoding();
+            String rhsEncoding;
+            rhsEncoding = that.getEncoding();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "encoding", lhsEncoding), LocatorUtils.property(thatLocator, "encoding", rhsEncoding), lhsEncoding, rhsEncoding)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

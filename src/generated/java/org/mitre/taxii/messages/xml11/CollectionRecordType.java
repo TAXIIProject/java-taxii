@@ -10,6 +10,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -52,7 +57,9 @@ import javax.xml.bind.annotation.XmlType;
     "subscriptionService",
     "receivingInboxService"
 })
-public class CollectionRecordType {
+public class CollectionRecordType
+    implements Equals
+{
 
     @XmlElement(name = "Description", required = true)
     protected String description;
@@ -344,6 +351,112 @@ public class CollectionRecordType {
      */
     public void setAvailable(Boolean value) {
         this.available = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof CollectionRecordType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final CollectionRecordType that = ((CollectionRecordType) object);
+        {
+            String lhsDescription;
+            lhsDescription = this.getDescription();
+            String rhsDescription;
+            rhsDescription = that.getDescription();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "description", lhsDescription), LocatorUtils.property(thatLocator, "description", rhsDescription), lhsDescription, rhsDescription)) {
+                return false;
+            }
+        }
+        {
+            BigInteger lhsCollectionVolume;
+            lhsCollectionVolume = this.getCollectionVolume();
+            BigInteger rhsCollectionVolume;
+            rhsCollectionVolume = that.getCollectionVolume();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionVolume", lhsCollectionVolume), LocatorUtils.property(thatLocator, "collectionVolume", rhsCollectionVolume), lhsCollectionVolume, rhsCollectionVolume)) {
+                return false;
+            }
+        }
+        {
+            List<ContentBindingIDType> lhsContentBinding;
+            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            List<ContentBindingIDType> rhsContentBinding;
+            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+                return false;
+            }
+        }
+        {
+            List<PushMethodType> lhsPushMethod;
+            lhsPushMethod = (((this.pushMethod!= null)&&(!this.pushMethod.isEmpty()))?this.getPushMethod():null);
+            List<PushMethodType> rhsPushMethod;
+            rhsPushMethod = (((that.pushMethod!= null)&&(!that.pushMethod.isEmpty()))?that.getPushMethod():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pushMethod", lhsPushMethod), LocatorUtils.property(thatLocator, "pushMethod", rhsPushMethod), lhsPushMethod, rhsPushMethod)) {
+                return false;
+            }
+        }
+        {
+            List<ServiceContactInfoType> lhsPollingService;
+            lhsPollingService = (((this.pollingService!= null)&&(!this.pollingService.isEmpty()))?this.getPollingService():null);
+            List<ServiceContactInfoType> rhsPollingService;
+            rhsPollingService = (((that.pollingService!= null)&&(!that.pollingService.isEmpty()))?that.getPollingService():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pollingService", lhsPollingService), LocatorUtils.property(thatLocator, "pollingService", rhsPollingService), lhsPollingService, rhsPollingService)) {
+                return false;
+            }
+        }
+        {
+            List<ServiceContactInfoType> lhsSubscriptionService;
+            lhsSubscriptionService = (((this.subscriptionService!= null)&&(!this.subscriptionService.isEmpty()))?this.getSubscriptionService():null);
+            List<ServiceContactInfoType> rhsSubscriptionService;
+            rhsSubscriptionService = (((that.subscriptionService!= null)&&(!that.subscriptionService.isEmpty()))?that.getSubscriptionService():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionService", lhsSubscriptionService), LocatorUtils.property(thatLocator, "subscriptionService", rhsSubscriptionService), lhsSubscriptionService, rhsSubscriptionService)) {
+                return false;
+            }
+        }
+        {
+            List<InboxServiceBindingsType> lhsReceivingInboxService;
+            lhsReceivingInboxService = (((this.receivingInboxService!= null)&&(!this.receivingInboxService.isEmpty()))?this.getReceivingInboxService():null);
+            List<InboxServiceBindingsType> rhsReceivingInboxService;
+            rhsReceivingInboxService = (((that.receivingInboxService!= null)&&(!that.receivingInboxService.isEmpty()))?that.getReceivingInboxService():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "receivingInboxService", lhsReceivingInboxService), LocatorUtils.property(thatLocator, "receivingInboxService", rhsReceivingInboxService), lhsReceivingInboxService, rhsReceivingInboxService)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        {
+            CollectionTypeEnum lhsCollectionType;
+            lhsCollectionType = this.getCollectionType();
+            CollectionTypeEnum rhsCollectionType;
+            rhsCollectionType = that.getCollectionType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionType", lhsCollectionType), LocatorUtils.property(thatLocator, "collectionType", rhsCollectionType), lhsCollectionType, rhsCollectionType)) {
+                return false;
+            }
+        }
+        {
+            Boolean lhsAvailable;
+            lhsAvailable = this.isAvailable();
+            Boolean rhsAvailable;
+            rhsAvailable = that.isAvailable();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "available", lhsAvailable), LocatorUtils.property(thatLocator, "available", rhsAvailable), lhsAvailable, rhsAvailable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

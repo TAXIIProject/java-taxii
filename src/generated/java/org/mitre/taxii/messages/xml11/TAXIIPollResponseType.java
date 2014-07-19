@@ -11,6 +11,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -57,6 +62,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIPollResponseType
     extends ResponseMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Subscription_ID")
@@ -361,6 +367,124 @@ public class TAXIIPollResponseType
      */
     public void setResultPartNumber(BigInteger value) {
         this.resultPartNumber = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIIPollResponseType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIIPollResponseType that = ((TAXIIPollResponseType) object);
+        {
+            String lhsSubscriptionID;
+            lhsSubscriptionID = this.getSubscriptionID();
+            String rhsSubscriptionID;
+            rhsSubscriptionID = that.getSubscriptionID();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionID", lhsSubscriptionID), LocatorUtils.property(thatLocator, "subscriptionID", rhsSubscriptionID), lhsSubscriptionID, rhsSubscriptionID)) {
+                return false;
+            }
+        }
+        {
+            XMLGregorianCalendar lhsExclusiveBeginTimestamp;
+            lhsExclusiveBeginTimestamp = this.getExclusiveBeginTimestamp();
+            XMLGregorianCalendar rhsExclusiveBeginTimestamp;
+            rhsExclusiveBeginTimestamp = that.getExclusiveBeginTimestamp();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "exclusiveBeginTimestamp", lhsExclusiveBeginTimestamp), LocatorUtils.property(thatLocator, "exclusiveBeginTimestamp", rhsExclusiveBeginTimestamp), lhsExclusiveBeginTimestamp, rhsExclusiveBeginTimestamp)) {
+                return false;
+            }
+        }
+        {
+            XMLGregorianCalendar lhsInclusiveEndTimestamp;
+            lhsInclusiveEndTimestamp = this.getInclusiveEndTimestamp();
+            XMLGregorianCalendar rhsInclusiveEndTimestamp;
+            rhsInclusiveEndTimestamp = that.getInclusiveEndTimestamp();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "inclusiveEndTimestamp", lhsInclusiveEndTimestamp), LocatorUtils.property(thatLocator, "inclusiveEndTimestamp", rhsInclusiveEndTimestamp), lhsInclusiveEndTimestamp, rhsInclusiveEndTimestamp)) {
+                return false;
+            }
+        }
+        {
+            RecordCountType lhsRecordCount;
+            lhsRecordCount = this.getRecordCount();
+            RecordCountType rhsRecordCount;
+            rhsRecordCount = that.getRecordCount();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "recordCount", lhsRecordCount), LocatorUtils.property(thatLocator, "recordCount", rhsRecordCount), lhsRecordCount, rhsRecordCount)) {
+                return false;
+            }
+        }
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            List<ContentBlockType> lhsContentBlock;
+            lhsContentBlock = (((this.contentBlock!= null)&&(!this.contentBlock.isEmpty()))?this.getContentBlock():null);
+            List<ContentBlockType> rhsContentBlock;
+            rhsContentBlock = (((that.contentBlock!= null)&&(!that.contentBlock.isEmpty()))?that.getContentBlock():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBlock", lhsContentBlock), LocatorUtils.property(thatLocator, "contentBlock", rhsContentBlock), lhsContentBlock, rhsContentBlock)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            String lhsCollectionName;
+            lhsCollectionName = this.getCollectionName();
+            String rhsCollectionName;
+            rhsCollectionName = that.getCollectionName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "collectionName", lhsCollectionName), LocatorUtils.property(thatLocator, "collectionName", rhsCollectionName), lhsCollectionName, rhsCollectionName)) {
+                return false;
+            }
+        }
+        {
+            boolean lhsMore;
+            lhsMore = ((this.more!= null)?this.isMore():false);
+            boolean rhsMore;
+            rhsMore = ((that.more!= null)?that.isMore():false);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "more", lhsMore), LocatorUtils.property(thatLocator, "more", rhsMore), lhsMore, rhsMore)) {
+                return false;
+            }
+        }
+        {
+            String lhsResultId;
+            lhsResultId = this.getResultId();
+            String rhsResultId;
+            rhsResultId = that.getResultId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "resultId", lhsResultId), LocatorUtils.property(thatLocator, "resultId", rhsResultId), lhsResultId, rhsResultId)) {
+                return false;
+            }
+        }
+        {
+            BigInteger lhsResultPartNumber;
+            lhsResultPartNumber = this.getResultPartNumber();
+            BigInteger rhsResultPartNumber;
+            rhsResultPartNumber = that.getResultPartNumber();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "resultPartNumber", lhsResultPartNumber), LocatorUtils.property(thatLocator, "resultPartNumber", rhsResultPartNumber), lhsResultPartNumber, rhsResultPartNumber)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

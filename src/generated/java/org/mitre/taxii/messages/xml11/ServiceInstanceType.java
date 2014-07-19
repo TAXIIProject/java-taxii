@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -47,7 +52,9 @@ import javax.xml.bind.annotation.XmlType;
     "contentBinding",
     "message"
 })
-public class ServiceInstanceType {
+public class ServiceInstanceType
+    implements Equals
+{
 
     @XmlElement(name = "Protocol_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
@@ -300,6 +307,103 @@ public class ServiceInstanceType {
      */
     public void setServiceVersion(String value) {
         this.serviceVersion = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ServiceInstanceType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ServiceInstanceType that = ((ServiceInstanceType) object);
+        {
+            String lhsProtocolBinding;
+            lhsProtocolBinding = this.getProtocolBinding();
+            String rhsProtocolBinding;
+            rhsProtocolBinding = that.getProtocolBinding();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "protocolBinding", lhsProtocolBinding), LocatorUtils.property(thatLocator, "protocolBinding", rhsProtocolBinding), lhsProtocolBinding, rhsProtocolBinding)) {
+                return false;
+            }
+        }
+        {
+            String lhsAddress;
+            lhsAddress = this.getAddress();
+            String rhsAddress;
+            rhsAddress = that.getAddress();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "address", lhsAddress), LocatorUtils.property(thatLocator, "address", rhsAddress), lhsAddress, rhsAddress)) {
+                return false;
+            }
+        }
+        {
+            List<String> lhsMessageBinding;
+            lhsMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
+            List<String> rhsMessageBinding;
+            rhsMessageBinding = (((that.messageBinding!= null)&&(!that.messageBinding.isEmpty()))?that.getMessageBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBinding", lhsMessageBinding), LocatorUtils.property(thatLocator, "messageBinding", rhsMessageBinding), lhsMessageBinding, rhsMessageBinding)) {
+                return false;
+            }
+        }
+        {
+            List<SupportedQueryType> lhsSupportedQuery;
+            lhsSupportedQuery = (((this.supportedQuery!= null)&&(!this.supportedQuery.isEmpty()))?this.getSupportedQuery():null);
+            List<SupportedQueryType> rhsSupportedQuery;
+            rhsSupportedQuery = (((that.supportedQuery!= null)&&(!that.supportedQuery.isEmpty()))?that.getSupportedQuery():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "supportedQuery", lhsSupportedQuery), LocatorUtils.property(thatLocator, "supportedQuery", rhsSupportedQuery), lhsSupportedQuery, rhsSupportedQuery)) {
+                return false;
+            }
+        }
+        {
+            List<ContentBindingIDType> lhsContentBinding;
+            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            List<ContentBindingIDType> rhsContentBinding;
+            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+                return false;
+            }
+        }
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            ServiceTypeEnum lhsServiceType;
+            lhsServiceType = this.getServiceType();
+            ServiceTypeEnum rhsServiceType;
+            rhsServiceType = that.getServiceType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "serviceType", lhsServiceType), LocatorUtils.property(thatLocator, "serviceType", rhsServiceType), lhsServiceType, rhsServiceType)) {
+                return false;
+            }
+        }
+        {
+            Boolean lhsAvailable;
+            lhsAvailable = this.isAvailable();
+            Boolean rhsAvailable;
+            rhsAvailable = that.isAvailable();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "available", lhsAvailable), LocatorUtils.property(thatLocator, "available", rhsAvailable), lhsAvailable, rhsAvailable)) {
+                return false;
+            }
+        }
+        {
+            String lhsServiceVersion;
+            lhsServiceVersion = this.getServiceVersion();
+            String rhsServiceVersion;
+            rhsServiceVersion = that.getServiceVersion();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "serviceVersion", lhsServiceVersion), LocatorUtils.property(thatLocator, "serviceVersion", rhsServiceVersion), lhsServiceVersion, rhsServiceVersion)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

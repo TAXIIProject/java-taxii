@@ -21,13 +21,17 @@ configurations {
 }
 
 dependencies {
+    xjc 'javax.activation:activation:1.1.1'
     xjc 'com.sun.xml.bind:jaxb-impl:2.2.5-2'
+    xjc 'javax.xml:jsr173:1.0'
+    xjc 'stax:stax-api:1.0.1'
+    xjc 'javax.xml.bind:jaxb-api:2.2.+'
+    xjc 'org.jvnet.jaxb2_commons:jaxb2-basics:0.6.5'
     xjc 'com.sun.xml.bind:jaxb-xjc:2.2.5-2'
     xjc 'org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.6.5'
     
-
-    generatedCompile 'javax.xml.bind:jaxb-api:2.2.5-2'
-    compile 'javax.xml.bind:jaxb-api:2.2.5-2'
+    generatedCompile 'javax.xml.bind:jaxb-api:2.2.+'
+    compile 'javax.xml.bind:jaxb-api:2.2.+'
     testCompile 'junit:junit:4.11'
 }
 
@@ -37,10 +41,16 @@ String srcGeneratedDir = 'src/generated/java'
 
 task generate << {
     String srcXsdDir = 'src/main/resources'
+    
+    // use the JAXB2 Commons project to include some XJC plugins
     ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task', 
                 classpath: configurations.xjc.asPath)
+    
     ant.mkdir(dir: srcGeneratedDir)
-    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true) {
+    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true, 
+        extension: true, classpath: configurations.xjc.asPath) {
+        // generate an equals method - this uses an XJC plugin
+        arg(line: '-Xequals')
         binding(dir: srcXsdDir, includes: '*.xjb')
         schema(dir: srcXsdDir, includes: '*.xsd')
         produces(dir: srcGeneratedDir, includes: '**/*.java')

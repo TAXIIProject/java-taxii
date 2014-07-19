@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
 
 
@@ -36,7 +41,9 @@ import org.w3c.dom.Element;
 @XmlType(name = "SPKIDataType", propOrder = {
     "spkiSexpAndAny"
 })
-public class SPKIDataType {
+public class SPKIDataType
+    implements Equals
+{
 
     @XmlElementRef(name = "SPKISexp", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class)
     @XmlAnyElement(lax = true)
@@ -71,6 +78,31 @@ public class SPKIDataType {
             spkiSexpAndAny = new ArrayList<Object>();
         }
         return this.spkiSexpAndAny;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SPKIDataType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SPKIDataType that = ((SPKIDataType) object);
+        {
+            List<Object> lhsSPKISexpAndAny;
+            lhsSPKISexpAndAny = (((this.spkiSexpAndAny!= null)&&(!this.spkiSexpAndAny.isEmpty()))?this.getSPKISexpAndAny():null);
+            List<Object> rhsSPKISexpAndAny;
+            rhsSPKISexpAndAny = (((that.spkiSexpAndAny!= null)&&(!that.spkiSexpAndAny.isEmpty()))?that.getSPKISexpAndAny():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "spkiSexpAndAny", lhsSPKISexpAndAny), LocatorUtils.property(thatLocator, "spkiSexpAndAny", rhsSPKISexpAndAny), lhsSPKISexpAndAny, rhsSPKISexpAndAny)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -41,6 +46,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIStatusMessageType
     extends ResponseMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Status_Detail")
@@ -146,6 +152,61 @@ public class TAXIIStatusMessageType
      */
     public void setStatusType(String value) {
         this.statusType = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIIStatusMessageType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIIStatusMessageType that = ((TAXIIStatusMessageType) object);
+        {
+            StatusDetailType lhsStatusDetail;
+            lhsStatusDetail = this.getStatusDetail();
+            StatusDetailType rhsStatusDetail;
+            rhsStatusDetail = that.getStatusDetail();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "statusDetail", lhsStatusDetail), LocatorUtils.property(thatLocator, "statusDetail", rhsStatusDetail), lhsStatusDetail, rhsStatusDetail)) {
+                return false;
+            }
+        }
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            String lhsStatusType;
+            lhsStatusType = this.getStatusType();
+            String rhsStatusType;
+            rhsStatusType = that.getStatusType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "statusType", lhsStatusType), LocatorUtils.property(thatLocator, "statusType", rhsStatusType), lhsStatusType, rhsStatusType)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

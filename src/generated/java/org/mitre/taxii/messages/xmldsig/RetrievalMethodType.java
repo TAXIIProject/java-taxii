@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -34,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "RetrievalMethodType", propOrder = {
     "transforms"
 })
-public class RetrievalMethodType {
+public class RetrievalMethodType
+    implements Equals
+{
 
     @XmlElement(name = "Transforms")
     protected TransformsType transforms;
@@ -115,6 +122,49 @@ public class RetrievalMethodType {
      */
     public void setType(String value) {
         this.type = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof RetrievalMethodType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final RetrievalMethodType that = ((RetrievalMethodType) object);
+        {
+            TransformsType lhsTransforms;
+            lhsTransforms = this.getTransforms();
+            TransformsType rhsTransforms;
+            rhsTransforms = that.getTransforms();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "transforms", lhsTransforms), LocatorUtils.property(thatLocator, "transforms", rhsTransforms), lhsTransforms, rhsTransforms)) {
+                return false;
+            }
+        }
+        {
+            String lhsURI;
+            lhsURI = this.getURI();
+            String rhsURI;
+            rhsURI = that.getURI();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "uri", lhsURI), LocatorUtils.property(thatLocator, "uri", rhsURI), lhsURI, rhsURI)) {
+                return false;
+            }
+        }
+        {
+            String lhsType;
+            lhsType = this.getType();
+            String rhsType;
+            rhsType = that.getType();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "type", lhsType), LocatorUtils.property(thatLocator, "type", rhsType), lhsType, rhsType)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

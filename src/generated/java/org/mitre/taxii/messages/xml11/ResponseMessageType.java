@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -39,6 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public abstract class ResponseMessageType
     extends MessageType
+    implements Equals
 {
 
     @XmlAttribute(name = "in_response_to", required = true)
@@ -67,6 +73,34 @@ public abstract class ResponseMessageType
      */
     public void setInResponseTo(String value) {
         this.inResponseTo = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ResponseMessageType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final ResponseMessageType that = ((ResponseMessageType) object);
+        {
+            String lhsInResponseTo;
+            lhsInResponseTo = this.getInResponseTo();
+            String rhsInResponseTo;
+            rhsInResponseTo = that.getInResponseTo();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "inResponseTo", lhsInResponseTo), LocatorUtils.property(thatLocator, "inResponseTo", rhsInResponseTo), lhsInResponseTo, rhsInResponseTo)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

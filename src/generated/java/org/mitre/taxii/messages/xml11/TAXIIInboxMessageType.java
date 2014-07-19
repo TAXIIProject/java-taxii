@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
 
 
@@ -50,6 +55,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIInboxMessageType
     extends RequestMessageType
+    implements Equals
 {
 
     @XmlElement(name = "Destination_Collection_Name")
@@ -245,6 +251,88 @@ public class TAXIIInboxMessageType
      */
     public void setResultId(String value) {
         this.resultId = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof TAXIIInboxMessageType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final TAXIIInboxMessageType that = ((TAXIIInboxMessageType) object);
+        {
+            List<String> lhsDestinationCollectionName;
+            lhsDestinationCollectionName = (((this.destinationCollectionName!= null)&&(!this.destinationCollectionName.isEmpty()))?this.getDestinationCollectionName():null);
+            List<String> rhsDestinationCollectionName;
+            rhsDestinationCollectionName = (((that.destinationCollectionName!= null)&&(!that.destinationCollectionName.isEmpty()))?that.getDestinationCollectionName():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "destinationCollectionName", lhsDestinationCollectionName), LocatorUtils.property(thatLocator, "destinationCollectionName", rhsDestinationCollectionName), lhsDestinationCollectionName, rhsDestinationCollectionName)) {
+                return false;
+            }
+        }
+        {
+            String lhsMessage;
+            lhsMessage = this.getMessage();
+            String rhsMessage;
+            rhsMessage = that.getMessage();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "message", lhsMessage), LocatorUtils.property(thatLocator, "message", rhsMessage), lhsMessage, rhsMessage)) {
+                return false;
+            }
+        }
+        {
+            SourceSubscriptionType lhsSourceSubscription;
+            lhsSourceSubscription = this.getSourceSubscription();
+            SourceSubscriptionType rhsSourceSubscription;
+            rhsSourceSubscription = that.getSourceSubscription();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "sourceSubscription", lhsSourceSubscription), LocatorUtils.property(thatLocator, "sourceSubscription", rhsSourceSubscription), lhsSourceSubscription, rhsSourceSubscription)) {
+                return false;
+            }
+        }
+        {
+            RecordCountType lhsRecordCount;
+            lhsRecordCount = this.getRecordCount();
+            RecordCountType rhsRecordCount;
+            rhsRecordCount = that.getRecordCount();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "recordCount", lhsRecordCount), LocatorUtils.property(thatLocator, "recordCount", rhsRecordCount), lhsRecordCount, rhsRecordCount)) {
+                return false;
+            }
+        }
+        {
+            List<ContentBlockType> lhsContentBlock;
+            lhsContentBlock = (((this.contentBlock!= null)&&(!this.contentBlock.isEmpty()))?this.getContentBlock():null);
+            List<ContentBlockType> rhsContentBlock;
+            rhsContentBlock = (((that.contentBlock!= null)&&(!that.contentBlock.isEmpty()))?that.getContentBlock():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBlock", lhsContentBlock), LocatorUtils.property(thatLocator, "contentBlock", rhsContentBlock), lhsContentBlock, rhsContentBlock)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            String lhsResultId;
+            lhsResultId = this.getResultId();
+            String rhsResultId;
+            rhsResultId = that.getResultId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "resultId", lhsResultId), LocatorUtils.property(thatLocator, "resultId", rhsResultId), lhsResultId, rhsResultId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }
