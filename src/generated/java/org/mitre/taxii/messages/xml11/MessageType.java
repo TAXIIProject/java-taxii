@@ -45,8 +45,8 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "extendedHeaders"
 })
 @XmlSeeAlso({
-    RequestMessageType.class,
-    ResponseMessageType.class
+    ResponseMessageType.class,
+    RequestMessageType.class
 })
 public abstract class MessageType
     implements Equals, HashCode

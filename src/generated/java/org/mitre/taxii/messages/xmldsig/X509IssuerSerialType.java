@@ -98,7 +98,7 @@ public class X509IssuerSerialType
         this.x509SerialNumber = value;
     }
 
-    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, java.lang.Object object, EqualsStrategy strategy) {
         if (!(object instanceof X509IssuerSerialType)) {
             return false;
         }
@@ -127,7 +127,7 @@ public class X509IssuerSerialType
         return true;
     }
 
-    public boolean equals(Object object) {
+    public boolean equals(java.lang.Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
     }

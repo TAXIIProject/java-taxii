@@ -44,7 +44,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PushMethodType", propOrder = {
     "protocolBinding",
-    "messageBinding"
+    "messageBindings"
 })
 public class PushMethodType
     implements Equals, HashCode
@@ -55,7 +55,7 @@ public class PushMethodType
     protected String protocolBinding;
     @XmlElement(name = "Message_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected List<String> messageBinding;
+    protected List<String> messageBindings;
 
     /**
      * Gets the value of the protocolBinding property.
@@ -82,18 +82,18 @@ public class PushMethodType
     }
 
     /**
-     * Gets the value of the messageBinding property.
+     * Gets the value of the messageBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the messageBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the messageBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMessageBinding().add(newItem);
+     *    getMessageBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -103,11 +103,11 @@ public class PushMethodType
      * 
      * 
      */
-    public List<String> getMessageBinding() {
-        if (messageBinding == null) {
-            messageBinding = new ArrayList<String>();
+    public List<String> getMessageBindings() {
+        if (messageBindings == null) {
+            messageBindings = new ArrayList<String>();
         }
-        return this.messageBinding;
+        return this.messageBindings;
     }
 
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
@@ -128,11 +128,11 @@ public class PushMethodType
             }
         }
         {
-            List<String> lhsMessageBinding;
-            lhsMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            List<String> rhsMessageBinding;
-            rhsMessageBinding = (((that.messageBinding!= null)&&(!that.messageBinding.isEmpty()))?that.getMessageBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBinding", lhsMessageBinding), LocatorUtils.property(thatLocator, "messageBinding", rhsMessageBinding), lhsMessageBinding, rhsMessageBinding)) {
+            List<String> lhsMessageBindings;
+            lhsMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            List<String> rhsMessageBindings;
+            rhsMessageBindings = (((that.messageBindings!= null)&&(!that.messageBindings.isEmpty()))?that.getMessageBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBindings", lhsMessageBindings), LocatorUtils.property(thatLocator, "messageBindings", rhsMessageBindings), lhsMessageBindings, rhsMessageBindings)) {
                 return false;
             }
         }
@@ -152,9 +152,9 @@ public class PushMethodType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "protocolBinding", theProtocolBinding), currentHashCode, theProtocolBinding);
         }
         {
-            List<String> theMessageBinding;
-            theMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBinding", theMessageBinding), currentHashCode, theMessageBinding);
+            List<String> theMessageBindings;
+            theMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBindings", theMessageBindings), currentHashCode, theMessageBindings);
         }
         return currentHashCode;
     }

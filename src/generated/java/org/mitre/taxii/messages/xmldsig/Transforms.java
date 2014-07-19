@@ -1,11 +1,12 @@
 
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
@@ -18,18 +19,16 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
- * Contains machine readable information about a Status Message.
- * 
- * <p>Java class for StatusDetailType complex type.
+ * <p>Java class for TransformsType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="StatusDetailType">
+ * &lt;complexType name="TransformsType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Detail" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}StatusDetailDetailType" maxOccurs="unbounded"/>
+ *         &lt;element ref="{http://www.w3.org/2000/09/xmldsig#}Transform" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,66 +38,67 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "StatusDetailType", propOrder = {
-    "details"
+@XmlType(name = "TransformsType", propOrder = {
+    "transforms"
 })
-public class StatusDetailType
+@XmlRootElement(name = "Transforms")
+public class Transforms
     implements Equals, HashCode
 {
 
-    @XmlElement(name = "Detail", required = true)
-    protected List<StatusDetailDetailType> details;
+    @XmlElement(name = "Transform", required = true)
+    protected List<Transform> transforms;
 
     /**
-     * Gets the value of the details property.
+     * Gets the value of the transforms property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the details property.
+     * This is why there is not a <CODE>set</CODE> method for the transforms property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getDetails().add(newItem);
+     *    getTransforms().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link StatusDetailDetailType }
+     * {@link Transform }
      * 
      * 
      */
-    public List<StatusDetailDetailType> getDetails() {
-        if (details == null) {
-            details = new ArrayList<StatusDetailDetailType>();
+    public List<Transform> getTransforms() {
+        if (transforms == null) {
+            transforms = new ArrayList<Transform>();
         }
-        return this.details;
+        return this.transforms;
     }
 
-    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
-        if (!(object instanceof StatusDetailType)) {
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, java.lang.Object object, EqualsStrategy strategy) {
+        if (!(object instanceof Transforms)) {
             return false;
         }
         if (this == object) {
             return true;
         }
-        final StatusDetailType that = ((StatusDetailType) object);
+        final Transforms that = ((Transforms) object);
         {
-            List<StatusDetailDetailType> lhsDetails;
-            lhsDetails = (((this.details!= null)&&(!this.details.isEmpty()))?this.getDetails():null);
-            List<StatusDetailDetailType> rhsDetails;
-            rhsDetails = (((that.details!= null)&&(!that.details.isEmpty()))?that.getDetails():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "details", lhsDetails), LocatorUtils.property(thatLocator, "details", rhsDetails), lhsDetails, rhsDetails)) {
+            List<Transform> lhsTransforms;
+            lhsTransforms = (((this.transforms!= null)&&(!this.transforms.isEmpty()))?this.getTransforms():null);
+            List<Transform> rhsTransforms;
+            rhsTransforms = (((that.transforms!= null)&&(!that.transforms.isEmpty()))?that.getTransforms():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "transforms", lhsTransforms), LocatorUtils.property(thatLocator, "transforms", rhsTransforms), lhsTransforms, rhsTransforms)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean equals(Object object) {
+    public boolean equals(java.lang.Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
     }
@@ -106,9 +106,9 @@ public class StatusDetailType
     public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
         int currentHashCode = 1;
         {
-            List<StatusDetailDetailType> theDetails;
-            theDetails = (((this.details!= null)&&(!this.details.isEmpty()))?this.getDetails():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "details", theDetails), currentHashCode, theDetails);
+            List<Transform> theTransforms;
+            theTransforms = (((this.transforms!= null)&&(!this.transforms.isEmpty()))?this.getTransforms():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "transforms", theTransforms), currentHashCode, theTransforms);
         }
         return currentHashCode;
     }

@@ -40,28 +40,28 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ExtendedHeadersType", propOrder = {
-    "extendedHeader"
+    "extendedHeaders"
 })
 public class ExtendedHeadersType
     implements Equals, HashCode
 {
 
     @XmlElement(name = "Extended_Header", required = true)
-    protected List<ExtendedHeaderType> extendedHeader;
+    protected List<ExtendedHeaderType> extendedHeaders;
 
     /**
-     * Gets the value of the extendedHeader property.
+     * Gets the value of the extendedHeaders property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the extendedHeader property.
+     * This is why there is not a <CODE>set</CODE> method for the extendedHeaders property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getExtendedHeader().add(newItem);
+     *    getExtendedHeaders().add(newItem);
      * </pre>
      * 
      * 
@@ -71,11 +71,11 @@ public class ExtendedHeadersType
      * 
      * 
      */
-    public List<ExtendedHeaderType> getExtendedHeader() {
-        if (extendedHeader == null) {
-            extendedHeader = new ArrayList<ExtendedHeaderType>();
+    public List<ExtendedHeaderType> getExtendedHeaders() {
+        if (extendedHeaders == null) {
+            extendedHeaders = new ArrayList<ExtendedHeaderType>();
         }
-        return this.extendedHeader;
+        return this.extendedHeaders;
     }
 
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
@@ -87,11 +87,11 @@ public class ExtendedHeadersType
         }
         final ExtendedHeadersType that = ((ExtendedHeadersType) object);
         {
-            List<ExtendedHeaderType> lhsExtendedHeader;
-            lhsExtendedHeader = (((this.extendedHeader!= null)&&(!this.extendedHeader.isEmpty()))?this.getExtendedHeader():null);
-            List<ExtendedHeaderType> rhsExtendedHeader;
-            rhsExtendedHeader = (((that.extendedHeader!= null)&&(!that.extendedHeader.isEmpty()))?that.getExtendedHeader():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "extendedHeader", lhsExtendedHeader), LocatorUtils.property(thatLocator, "extendedHeader", rhsExtendedHeader), lhsExtendedHeader, rhsExtendedHeader)) {
+            List<ExtendedHeaderType> lhsExtendedHeaders;
+            lhsExtendedHeaders = (((this.extendedHeaders!= null)&&(!this.extendedHeaders.isEmpty()))?this.getExtendedHeaders():null);
+            List<ExtendedHeaderType> rhsExtendedHeaders;
+            rhsExtendedHeaders = (((that.extendedHeaders!= null)&&(!that.extendedHeaders.isEmpty()))?that.getExtendedHeaders():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "extendedHeaders", lhsExtendedHeaders), LocatorUtils.property(thatLocator, "extendedHeaders", rhsExtendedHeaders), lhsExtendedHeaders, rhsExtendedHeaders)) {
                 return false;
             }
         }
@@ -106,9 +106,9 @@ public class ExtendedHeadersType
     public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
         int currentHashCode = 1;
         {
-            List<ExtendedHeaderType> theExtendedHeader;
-            theExtendedHeader = (((this.extendedHeader!= null)&&(!this.extendedHeader.isEmpty()))?this.getExtendedHeader():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "extendedHeader", theExtendedHeader), currentHashCode, theExtendedHeader);
+            List<ExtendedHeaderType> theExtendedHeaders;
+            theExtendedHeaders = (((this.extendedHeaders!= null)&&(!this.extendedHeaders.isEmpty()))?this.getExtendedHeaders():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "extendedHeaders", theExtendedHeaders), currentHashCode, theExtendedHeaders);
         }
         return currentHashCode;
     }

@@ -3,9 +3,8 @@ package org.mitre.taxii.messages.xml11;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
@@ -15,20 +14,23 @@ import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
+import org.mitre.taxii.messages.xmldsig.Signature;
 
 
 /**
- * The base type of response messages.
+ * Request to a Discovery Service for a listing of services.
  * 
- * <p>Java class for ResponseMessageType complex type.
+ * <p>Java class for TAXIIDiscoveryRequestType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ResponseMessageType">
+ * &lt;complexType name="TAXIIDiscoveryRequestType">
  *   &lt;complexContent>
- *     &lt;extension base="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}MessageType">
- *       &lt;attribute name="in_response_to" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
+ *     &lt;extension base="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}RequestMessageType">
+ *       &lt;sequence>
+ *         &lt;element ref="{http://www.w3.org/2000/09/xmldsig#}Signature" minOccurs="0"/>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -37,49 +39,44 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ResponseMessageType")
-@XmlSeeAlso({
-    DiscoveryResponse.class,
-    CollectionInformationResponse.class,
-    PollResponse.class,
-    StatusMessage.class,
-    SubscriptionManagementResponse.class
+@XmlType(name = "TAXIIDiscoveryRequestType", propOrder = {
+    "signature"
 })
-public abstract class ResponseMessageType
-    extends MessageType
+@XmlRootElement(name = "Discovery_Request")
+public class DiscoveryRequest
+    extends RequestMessageType
     implements Equals, HashCode
 {
 
-    @XmlAttribute(name = "in_response_to", required = true)
-    @XmlSchemaType(name = "anyURI")
-    protected String inResponseTo;
+    @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
+    protected Signature signature;
 
     /**
-     * Gets the value of the inResponseTo property.
+     * An XML Digital Signature scoped to this message.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Signature }
      *     
      */
-    public String getInResponseTo() {
-        return inResponseTo;
+    public Signature getSignature() {
+        return signature;
     }
 
     /**
-     * Sets the value of the inResponseTo property.
+     * Sets the value of the signature property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Signature }
      *     
      */
-    public void setInResponseTo(String value) {
-        this.inResponseTo = value;
+    public void setSignature(Signature value) {
+        this.signature = value;
     }
 
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
-        if (!(object instanceof ResponseMessageType)) {
+        if (!(object instanceof DiscoveryRequest)) {
             return false;
         }
         if (this == object) {
@@ -88,13 +85,13 @@ public abstract class ResponseMessageType
         if (!super.equals(thisLocator, thatLocator, object, strategy)) {
             return false;
         }
-        final ResponseMessageType that = ((ResponseMessageType) object);
+        final DiscoveryRequest that = ((DiscoveryRequest) object);
         {
-            String lhsInResponseTo;
-            lhsInResponseTo = this.getInResponseTo();
-            String rhsInResponseTo;
-            rhsInResponseTo = that.getInResponseTo();
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "inResponseTo", lhsInResponseTo), LocatorUtils.property(thatLocator, "inResponseTo", rhsInResponseTo), lhsInResponseTo, rhsInResponseTo)) {
+            Signature lhsSignature;
+            lhsSignature = this.getSignature();
+            Signature rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
                 return false;
             }
         }
@@ -109,9 +106,9 @@ public abstract class ResponseMessageType
     public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
         int currentHashCode = super.hashCode(locator, strategy);
         {
-            String theInResponseTo;
-            theInResponseTo = this.getInResponseTo();
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "inResponseTo", theInResponseTo), currentHashCode, theInResponseTo);
+            Signature theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
         }
         return currentHashCode;
     }

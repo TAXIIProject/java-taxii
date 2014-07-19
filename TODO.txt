@@ -3,16 +3,16 @@ ROADMAP
 0.1
 TAXII XML Message Binding Spec 1.1
 - create messages programmatically
-- serialize/deserialize messages
-- serialize/deserialize content blocks (to support content-block nesting)
+- marshal/unmarshal messages
+- marshal/unmarshal content blocks (to support content-block nesting)
 
 0.2
-- add support for creating XML Signatures using Java XML Digital Signature API
-
-0.3
 TAXII Default Query Spec 1.0
 - Add support for Default Query Format and associated structures and messages
     bindings.
+
+0.3
+- add support for creating XML Signatures using Java XML Digital Signature API
 
 0.4
 TAXII HTTP Protocol Binding Spec 1.1

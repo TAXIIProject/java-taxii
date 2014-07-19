@@ -50,9 +50,9 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "ServiceInstanceType", propOrder = {
     "protocolBinding",
     "address",
-    "messageBinding",
-    "supportedQuery",
-    "contentBinding",
+    "messageBindings",
+    "supportedQueries",
+    "contentBindings",
     "message"
 })
 public class ServiceInstanceType
@@ -66,11 +66,11 @@ public class ServiceInstanceType
     protected String address;
     @XmlElement(name = "Message_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected List<String> messageBinding;
+    protected List<String> messageBindings;
     @XmlElement(name = "Supported_Query")
-    protected List<SupportedQueryType> supportedQuery;
+    protected List<SupportedQueryType> supportedQueries;
     @XmlElement(name = "Content_Binding")
-    protected List<ContentBindingIDType> contentBinding;
+    protected List<ContentBindingIDType> contentBindings;
     @XmlElement(name = "Message")
     protected String message;
     @XmlAttribute(name = "service_type", required = true)
@@ -130,18 +130,18 @@ public class ServiceInstanceType
     }
 
     /**
-     * Gets the value of the messageBinding property.
+     * Gets the value of the messageBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the messageBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the messageBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMessageBinding().add(newItem);
+     *    getMessageBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -151,26 +151,26 @@ public class ServiceInstanceType
      * 
      * 
      */
-    public List<String> getMessageBinding() {
-        if (messageBinding == null) {
-            messageBinding = new ArrayList<String>();
+    public List<String> getMessageBindings() {
+        if (messageBindings == null) {
+            messageBindings = new ArrayList<String>();
         }
-        return this.messageBinding;
+        return this.messageBindings;
     }
 
     /**
-     * Gets the value of the supportedQuery property.
+     * Gets the value of the supportedQueries property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the supportedQuery property.
+     * This is why there is not a <CODE>set</CODE> method for the supportedQueries property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getSupportedQuery().add(newItem);
+     *    getSupportedQueries().add(newItem);
      * </pre>
      * 
      * 
@@ -180,26 +180,26 @@ public class ServiceInstanceType
      * 
      * 
      */
-    public List<SupportedQueryType> getSupportedQuery() {
-        if (supportedQuery == null) {
-            supportedQuery = new ArrayList<SupportedQueryType>();
+    public List<SupportedQueryType> getSupportedQueries() {
+        if (supportedQueries == null) {
+            supportedQueries = new ArrayList<SupportedQueryType>();
         }
-        return this.supportedQuery;
+        return this.supportedQueries;
     }
 
     /**
-     * Gets the value of the contentBinding property.
+     * Gets the value of the contentBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contentBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the contentBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getContentBinding().add(newItem);
+     *    getContentBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -209,11 +209,11 @@ public class ServiceInstanceType
      * 
      * 
      */
-    public List<ContentBindingIDType> getContentBinding() {
-        if (contentBinding == null) {
-            contentBinding = new ArrayList<ContentBindingIDType>();
+    public List<ContentBindingIDType> getContentBindings() {
+        if (contentBindings == null) {
+            contentBindings = new ArrayList<ContentBindingIDType>();
         }
-        return this.contentBinding;
+        return this.contentBindings;
     }
 
     /**
@@ -339,29 +339,29 @@ public class ServiceInstanceType
             }
         }
         {
-            List<String> lhsMessageBinding;
-            lhsMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            List<String> rhsMessageBinding;
-            rhsMessageBinding = (((that.messageBinding!= null)&&(!that.messageBinding.isEmpty()))?that.getMessageBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBinding", lhsMessageBinding), LocatorUtils.property(thatLocator, "messageBinding", rhsMessageBinding), lhsMessageBinding, rhsMessageBinding)) {
+            List<String> lhsMessageBindings;
+            lhsMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            List<String> rhsMessageBindings;
+            rhsMessageBindings = (((that.messageBindings!= null)&&(!that.messageBindings.isEmpty()))?that.getMessageBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBindings", lhsMessageBindings), LocatorUtils.property(thatLocator, "messageBindings", rhsMessageBindings), lhsMessageBindings, rhsMessageBindings)) {
                 return false;
             }
         }
         {
-            List<SupportedQueryType> lhsSupportedQuery;
-            lhsSupportedQuery = (((this.supportedQuery!= null)&&(!this.supportedQuery.isEmpty()))?this.getSupportedQuery():null);
-            List<SupportedQueryType> rhsSupportedQuery;
-            rhsSupportedQuery = (((that.supportedQuery!= null)&&(!that.supportedQuery.isEmpty()))?that.getSupportedQuery():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "supportedQuery", lhsSupportedQuery), LocatorUtils.property(thatLocator, "supportedQuery", rhsSupportedQuery), lhsSupportedQuery, rhsSupportedQuery)) {
+            List<SupportedQueryType> lhsSupportedQueries;
+            lhsSupportedQueries = (((this.supportedQueries!= null)&&(!this.supportedQueries.isEmpty()))?this.getSupportedQueries():null);
+            List<SupportedQueryType> rhsSupportedQueries;
+            rhsSupportedQueries = (((that.supportedQueries!= null)&&(!that.supportedQueries.isEmpty()))?that.getSupportedQueries():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "supportedQueries", lhsSupportedQueries), LocatorUtils.property(thatLocator, "supportedQueries", rhsSupportedQueries), lhsSupportedQueries, rhsSupportedQueries)) {
                 return false;
             }
         }
         {
-            List<ContentBindingIDType> lhsContentBinding;
-            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            List<ContentBindingIDType> rhsContentBinding;
-            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+            List<ContentBindingIDType> lhsContentBindings;
+            lhsContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            List<ContentBindingIDType> rhsContentBindings;
+            rhsContentBindings = (((that.contentBindings!= null)&&(!that.contentBindings.isEmpty()))?that.getContentBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBindings", lhsContentBindings), LocatorUtils.property(thatLocator, "contentBindings", rhsContentBindings), lhsContentBindings, rhsContentBindings)) {
                 return false;
             }
         }
@@ -422,19 +422,19 @@ public class ServiceInstanceType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "address", theAddress), currentHashCode, theAddress);
         }
         {
-            List<String> theMessageBinding;
-            theMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBinding", theMessageBinding), currentHashCode, theMessageBinding);
+            List<String> theMessageBindings;
+            theMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBindings", theMessageBindings), currentHashCode, theMessageBindings);
         }
         {
-            List<SupportedQueryType> theSupportedQuery;
-            theSupportedQuery = (((this.supportedQuery!= null)&&(!this.supportedQuery.isEmpty()))?this.getSupportedQuery():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "supportedQuery", theSupportedQuery), currentHashCode, theSupportedQuery);
+            List<SupportedQueryType> theSupportedQueries;
+            theSupportedQueries = (((this.supportedQueries!= null)&&(!this.supportedQueries.isEmpty()))?this.getSupportedQueries():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "supportedQueries", theSupportedQueries), currentHashCode, theSupportedQueries);
         }
         {
-            List<ContentBindingIDType> theContentBinding;
-            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+            List<ContentBindingIDType> theContentBindings;
+            theContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBindings", theContentBindings), currentHashCode, theContentBindings);
         }
         {
             String theMessage;

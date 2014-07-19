@@ -44,8 +44,8 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "InboxServiceBindingsType", propOrder = {
     "protocolBinding",
     "address",
-    "messageBinding",
-    "contentBinding"
+    "messageBindings",
+    "contentBindings"
 })
 public class InboxServiceBindingsType
     implements Equals, HashCode
@@ -58,9 +58,9 @@ public class InboxServiceBindingsType
     protected String address;
     @XmlElement(name = "Message_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected List<String> messageBinding;
+    protected List<String> messageBindings;
     @XmlElement(name = "Content_Binding")
-    protected List<ContentBindingIDType> contentBinding;
+    protected List<ContentBindingIDType> contentBindings;
 
     /**
      * Gets the value of the protocolBinding property.
@@ -111,18 +111,18 @@ public class InboxServiceBindingsType
     }
 
     /**
-     * Gets the value of the messageBinding property.
+     * Gets the value of the messageBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the messageBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the messageBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMessageBinding().add(newItem);
+     *    getMessageBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -132,26 +132,26 @@ public class InboxServiceBindingsType
      * 
      * 
      */
-    public List<String> getMessageBinding() {
-        if (messageBinding == null) {
-            messageBinding = new ArrayList<String>();
+    public List<String> getMessageBindings() {
+        if (messageBindings == null) {
+            messageBindings = new ArrayList<String>();
         }
-        return this.messageBinding;
+        return this.messageBindings;
     }
 
     /**
-     * Gets the value of the contentBinding property.
+     * Gets the value of the contentBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contentBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the contentBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getContentBinding().add(newItem);
+     *    getContentBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -161,11 +161,11 @@ public class InboxServiceBindingsType
      * 
      * 
      */
-    public List<ContentBindingIDType> getContentBinding() {
-        if (contentBinding == null) {
-            contentBinding = new ArrayList<ContentBindingIDType>();
+    public List<ContentBindingIDType> getContentBindings() {
+        if (contentBindings == null) {
+            contentBindings = new ArrayList<ContentBindingIDType>();
         }
-        return this.contentBinding;
+        return this.contentBindings;
     }
 
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
@@ -195,20 +195,20 @@ public class InboxServiceBindingsType
             }
         }
         {
-            List<String> lhsMessageBinding;
-            lhsMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            List<String> rhsMessageBinding;
-            rhsMessageBinding = (((that.messageBinding!= null)&&(!that.messageBinding.isEmpty()))?that.getMessageBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBinding", lhsMessageBinding), LocatorUtils.property(thatLocator, "messageBinding", rhsMessageBinding), lhsMessageBinding, rhsMessageBinding)) {
+            List<String> lhsMessageBindings;
+            lhsMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            List<String> rhsMessageBindings;
+            rhsMessageBindings = (((that.messageBindings!= null)&&(!that.messageBindings.isEmpty()))?that.getMessageBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "messageBindings", lhsMessageBindings), LocatorUtils.property(thatLocator, "messageBindings", rhsMessageBindings), lhsMessageBindings, rhsMessageBindings)) {
                 return false;
             }
         }
         {
-            List<ContentBindingIDType> lhsContentBinding;
-            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            List<ContentBindingIDType> rhsContentBinding;
-            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+            List<ContentBindingIDType> lhsContentBindings;
+            lhsContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            List<ContentBindingIDType> rhsContentBindings;
+            rhsContentBindings = (((that.contentBindings!= null)&&(!that.contentBindings.isEmpty()))?that.getContentBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBindings", lhsContentBindings), LocatorUtils.property(thatLocator, "contentBindings", rhsContentBindings), lhsContentBindings, rhsContentBindings)) {
                 return false;
             }
         }
@@ -233,14 +233,14 @@ public class InboxServiceBindingsType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "address", theAddress), currentHashCode, theAddress);
         }
         {
-            List<String> theMessageBinding;
-            theMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBinding", theMessageBinding), currentHashCode, theMessageBinding);
+            List<String> theMessageBindings;
+            theMessageBindings = (((this.messageBindings!= null)&&(!this.messageBindings.isEmpty()))?this.getMessageBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBindings", theMessageBindings), currentHashCode, theMessageBindings);
         }
         {
-            List<ContentBindingIDType> theContentBinding;
-            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+            List<ContentBindingIDType> theContentBindings;
+            theContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBindings", theContentBindings), currentHashCode, theContentBindings);
         }
         return currentHashCode;
     }

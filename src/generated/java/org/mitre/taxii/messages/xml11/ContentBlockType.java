@@ -14,7 +14,7 @@ import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
-import org.mitre.taxii.messages.xmldsig.SignatureType;
+import org.mitre.taxii.messages.xmldsig.Signature;
 
 
 /**
@@ -67,7 +67,7 @@ public class ContentBlockType
     @XmlElement(name = "Padding")
     protected String padding;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
-    protected SignatureType signature;
+    protected Signature signature;
 
     /**
      * Gets the value of the contentBinding property.
@@ -194,10 +194,10 @@ public class ContentBlockType
      * 
      * @return
      *     possible object is
-     *     {@link SignatureType }
+     *     {@link Signature }
      *     
      */
-    public SignatureType getSignature() {
+    public Signature getSignature() {
         return signature;
     }
 
@@ -206,10 +206,10 @@ public class ContentBlockType
      * 
      * @param value
      *     allowed object is
-     *     {@link SignatureType }
+     *     {@link Signature }
      *     
      */
-    public void setSignature(SignatureType value) {
+    public void setSignature(Signature value) {
         this.signature = value;
     }
 
@@ -267,9 +267,9 @@ public class ContentBlockType
             }
         }
         {
-            SignatureType lhsSignature;
+            Signature lhsSignature;
             lhsSignature = this.getSignature();
-            SignatureType rhsSignature;
+            Signature rhsSignature;
             rhsSignature = that.getSignature();
             if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
                 return false;
@@ -311,7 +311,7 @@ public class ContentBlockType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "padding", thePadding), currentHashCode, thePadding);
         }
         {
-            SignatureType theSignature;
+            Signature theSignature;
             theSignature = this.getSignature();
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
         }

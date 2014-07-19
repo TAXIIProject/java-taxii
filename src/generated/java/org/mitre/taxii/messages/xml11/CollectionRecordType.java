@@ -54,11 +54,11 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "CollectionRecordType", propOrder = {
     "description",
     "collectionVolume",
-    "contentBinding",
-    "pushMethod",
-    "pollingService",
-    "subscriptionService",
-    "receivingInboxService"
+    "contentBindings",
+    "pushMethods",
+    "pollingServices",
+    "subscriptionServices",
+    "receivingInboxServices"
 })
 public class CollectionRecordType
     implements Equals, HashCode
@@ -70,15 +70,15 @@ public class CollectionRecordType
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger collectionVolume;
     @XmlElement(name = "Content_Binding")
-    protected List<ContentBindingIDType> contentBinding;
+    protected List<ContentBindingIDType> contentBindings;
     @XmlElement(name = "Push_Method")
-    protected List<PushMethodType> pushMethod;
+    protected List<PushMethodType> pushMethods;
     @XmlElement(name = "Polling_Service")
-    protected List<ServiceContactInfoType> pollingService;
+    protected List<ServiceContactInfoType> pollingServices;
     @XmlElement(name = "Subscription_Service")
-    protected List<ServiceContactInfoType> subscriptionService;
+    protected List<ServiceContactInfoType> subscriptionServices;
     @XmlElement(name = "Receiving_Inbox_Service")
-    protected List<InboxServiceBindingsType> receivingInboxService;
+    protected List<InboxServiceBindingsType> receivingInboxServices;
     @XmlAttribute(name = "collection_name", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String collectionName;
@@ -136,18 +136,18 @@ public class CollectionRecordType
     }
 
     /**
-     * Gets the value of the contentBinding property.
+     * Gets the value of the contentBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contentBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the contentBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getContentBinding().add(newItem);
+     *    getContentBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -157,26 +157,26 @@ public class CollectionRecordType
      * 
      * 
      */
-    public List<ContentBindingIDType> getContentBinding() {
-        if (contentBinding == null) {
-            contentBinding = new ArrayList<ContentBindingIDType>();
+    public List<ContentBindingIDType> getContentBindings() {
+        if (contentBindings == null) {
+            contentBindings = new ArrayList<ContentBindingIDType>();
         }
-        return this.contentBinding;
+        return this.contentBindings;
     }
 
     /**
-     * Gets the value of the pushMethod property.
+     * Gets the value of the pushMethods property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the pushMethod property.
+     * This is why there is not a <CODE>set</CODE> method for the pushMethods property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPushMethod().add(newItem);
+     *    getPushMethods().add(newItem);
      * </pre>
      * 
      * 
@@ -186,26 +186,26 @@ public class CollectionRecordType
      * 
      * 
      */
-    public List<PushMethodType> getPushMethod() {
-        if (pushMethod == null) {
-            pushMethod = new ArrayList<PushMethodType>();
+    public List<PushMethodType> getPushMethods() {
+        if (pushMethods == null) {
+            pushMethods = new ArrayList<PushMethodType>();
         }
-        return this.pushMethod;
+        return this.pushMethods;
     }
 
     /**
-     * Gets the value of the pollingService property.
+     * Gets the value of the pollingServices property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the pollingService property.
+     * This is why there is not a <CODE>set</CODE> method for the pollingServices property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPollingService().add(newItem);
+     *    getPollingServices().add(newItem);
      * </pre>
      * 
      * 
@@ -215,26 +215,26 @@ public class CollectionRecordType
      * 
      * 
      */
-    public List<ServiceContactInfoType> getPollingService() {
-        if (pollingService == null) {
-            pollingService = new ArrayList<ServiceContactInfoType>();
+    public List<ServiceContactInfoType> getPollingServices() {
+        if (pollingServices == null) {
+            pollingServices = new ArrayList<ServiceContactInfoType>();
         }
-        return this.pollingService;
+        return this.pollingServices;
     }
 
     /**
-     * Gets the value of the subscriptionService property.
+     * Gets the value of the subscriptionServices property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the subscriptionService property.
+     * This is why there is not a <CODE>set</CODE> method for the subscriptionServices property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getSubscriptionService().add(newItem);
+     *    getSubscriptionServices().add(newItem);
      * </pre>
      * 
      * 
@@ -244,26 +244,26 @@ public class CollectionRecordType
      * 
      * 
      */
-    public List<ServiceContactInfoType> getSubscriptionService() {
-        if (subscriptionService == null) {
-            subscriptionService = new ArrayList<ServiceContactInfoType>();
+    public List<ServiceContactInfoType> getSubscriptionServices() {
+        if (subscriptionServices == null) {
+            subscriptionServices = new ArrayList<ServiceContactInfoType>();
         }
-        return this.subscriptionService;
+        return this.subscriptionServices;
     }
 
     /**
-     * Gets the value of the receivingInboxService property.
+     * Gets the value of the receivingInboxServices property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the receivingInboxService property.
+     * This is why there is not a <CODE>set</CODE> method for the receivingInboxServices property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getReceivingInboxService().add(newItem);
+     *    getReceivingInboxServices().add(newItem);
      * </pre>
      * 
      * 
@@ -273,11 +273,11 @@ public class CollectionRecordType
      * 
      * 
      */
-    public List<InboxServiceBindingsType> getReceivingInboxService() {
-        if (receivingInboxService == null) {
-            receivingInboxService = new ArrayList<InboxServiceBindingsType>();
+    public List<InboxServiceBindingsType> getReceivingInboxServices() {
+        if (receivingInboxServices == null) {
+            receivingInboxServices = new ArrayList<InboxServiceBindingsType>();
         }
-        return this.receivingInboxService;
+        return this.receivingInboxServices;
     }
 
     /**
@@ -383,47 +383,47 @@ public class CollectionRecordType
             }
         }
         {
-            List<ContentBindingIDType> lhsContentBinding;
-            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            List<ContentBindingIDType> rhsContentBinding;
-            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+            List<ContentBindingIDType> lhsContentBindings;
+            lhsContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            List<ContentBindingIDType> rhsContentBindings;
+            rhsContentBindings = (((that.contentBindings!= null)&&(!that.contentBindings.isEmpty()))?that.getContentBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBindings", lhsContentBindings), LocatorUtils.property(thatLocator, "contentBindings", rhsContentBindings), lhsContentBindings, rhsContentBindings)) {
                 return false;
             }
         }
         {
-            List<PushMethodType> lhsPushMethod;
-            lhsPushMethod = (((this.pushMethod!= null)&&(!this.pushMethod.isEmpty()))?this.getPushMethod():null);
-            List<PushMethodType> rhsPushMethod;
-            rhsPushMethod = (((that.pushMethod!= null)&&(!that.pushMethod.isEmpty()))?that.getPushMethod():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "pushMethod", lhsPushMethod), LocatorUtils.property(thatLocator, "pushMethod", rhsPushMethod), lhsPushMethod, rhsPushMethod)) {
+            List<PushMethodType> lhsPushMethods;
+            lhsPushMethods = (((this.pushMethods!= null)&&(!this.pushMethods.isEmpty()))?this.getPushMethods():null);
+            List<PushMethodType> rhsPushMethods;
+            rhsPushMethods = (((that.pushMethods!= null)&&(!that.pushMethods.isEmpty()))?that.getPushMethods():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pushMethods", lhsPushMethods), LocatorUtils.property(thatLocator, "pushMethods", rhsPushMethods), lhsPushMethods, rhsPushMethods)) {
                 return false;
             }
         }
         {
-            List<ServiceContactInfoType> lhsPollingService;
-            lhsPollingService = (((this.pollingService!= null)&&(!this.pollingService.isEmpty()))?this.getPollingService():null);
-            List<ServiceContactInfoType> rhsPollingService;
-            rhsPollingService = (((that.pollingService!= null)&&(!that.pollingService.isEmpty()))?that.getPollingService():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "pollingService", lhsPollingService), LocatorUtils.property(thatLocator, "pollingService", rhsPollingService), lhsPollingService, rhsPollingService)) {
+            List<ServiceContactInfoType> lhsPollingServices;
+            lhsPollingServices = (((this.pollingServices!= null)&&(!this.pollingServices.isEmpty()))?this.getPollingServices():null);
+            List<ServiceContactInfoType> rhsPollingServices;
+            rhsPollingServices = (((that.pollingServices!= null)&&(!that.pollingServices.isEmpty()))?that.getPollingServices():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "pollingServices", lhsPollingServices), LocatorUtils.property(thatLocator, "pollingServices", rhsPollingServices), lhsPollingServices, rhsPollingServices)) {
                 return false;
             }
         }
         {
-            List<ServiceContactInfoType> lhsSubscriptionService;
-            lhsSubscriptionService = (((this.subscriptionService!= null)&&(!this.subscriptionService.isEmpty()))?this.getSubscriptionService():null);
-            List<ServiceContactInfoType> rhsSubscriptionService;
-            rhsSubscriptionService = (((that.subscriptionService!= null)&&(!that.subscriptionService.isEmpty()))?that.getSubscriptionService():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionService", lhsSubscriptionService), LocatorUtils.property(thatLocator, "subscriptionService", rhsSubscriptionService), lhsSubscriptionService, rhsSubscriptionService)) {
+            List<ServiceContactInfoType> lhsSubscriptionServices;
+            lhsSubscriptionServices = (((this.subscriptionServices!= null)&&(!this.subscriptionServices.isEmpty()))?this.getSubscriptionServices():null);
+            List<ServiceContactInfoType> rhsSubscriptionServices;
+            rhsSubscriptionServices = (((that.subscriptionServices!= null)&&(!that.subscriptionServices.isEmpty()))?that.getSubscriptionServices():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subscriptionServices", lhsSubscriptionServices), LocatorUtils.property(thatLocator, "subscriptionServices", rhsSubscriptionServices), lhsSubscriptionServices, rhsSubscriptionServices)) {
                 return false;
             }
         }
         {
-            List<InboxServiceBindingsType> lhsReceivingInboxService;
-            lhsReceivingInboxService = (((this.receivingInboxService!= null)&&(!this.receivingInboxService.isEmpty()))?this.getReceivingInboxService():null);
-            List<InboxServiceBindingsType> rhsReceivingInboxService;
-            rhsReceivingInboxService = (((that.receivingInboxService!= null)&&(!that.receivingInboxService.isEmpty()))?that.getReceivingInboxService():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "receivingInboxService", lhsReceivingInboxService), LocatorUtils.property(thatLocator, "receivingInboxService", rhsReceivingInboxService), lhsReceivingInboxService, rhsReceivingInboxService)) {
+            List<InboxServiceBindingsType> lhsReceivingInboxServices;
+            lhsReceivingInboxServices = (((this.receivingInboxServices!= null)&&(!this.receivingInboxServices.isEmpty()))?this.getReceivingInboxServices():null);
+            List<InboxServiceBindingsType> rhsReceivingInboxServices;
+            rhsReceivingInboxServices = (((that.receivingInboxServices!= null)&&(!that.receivingInboxServices.isEmpty()))?that.getReceivingInboxServices():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "receivingInboxServices", lhsReceivingInboxServices), LocatorUtils.property(thatLocator, "receivingInboxServices", rhsReceivingInboxServices), lhsReceivingInboxServices, rhsReceivingInboxServices)) {
                 return false;
             }
         }
@@ -475,29 +475,29 @@ public class CollectionRecordType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionVolume", theCollectionVolume), currentHashCode, theCollectionVolume);
         }
         {
-            List<ContentBindingIDType> theContentBinding;
-            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+            List<ContentBindingIDType> theContentBindings;
+            theContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBindings", theContentBindings), currentHashCode, theContentBindings);
         }
         {
-            List<PushMethodType> thePushMethod;
-            thePushMethod = (((this.pushMethod!= null)&&(!this.pushMethod.isEmpty()))?this.getPushMethod():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pushMethod", thePushMethod), currentHashCode, thePushMethod);
+            List<PushMethodType> thePushMethods;
+            thePushMethods = (((this.pushMethods!= null)&&(!this.pushMethods.isEmpty()))?this.getPushMethods():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pushMethods", thePushMethods), currentHashCode, thePushMethods);
         }
         {
-            List<ServiceContactInfoType> thePollingService;
-            thePollingService = (((this.pollingService!= null)&&(!this.pollingService.isEmpty()))?this.getPollingService():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pollingService", thePollingService), currentHashCode, thePollingService);
+            List<ServiceContactInfoType> thePollingServices;
+            thePollingServices = (((this.pollingServices!= null)&&(!this.pollingServices.isEmpty()))?this.getPollingServices():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pollingServices", thePollingServices), currentHashCode, thePollingServices);
         }
         {
-            List<ServiceContactInfoType> theSubscriptionService;
-            theSubscriptionService = (((this.subscriptionService!= null)&&(!this.subscriptionService.isEmpty()))?this.getSubscriptionService():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionService", theSubscriptionService), currentHashCode, theSubscriptionService);
+            List<ServiceContactInfoType> theSubscriptionServices;
+            theSubscriptionServices = (((this.subscriptionServices!= null)&&(!this.subscriptionServices.isEmpty()))?this.getSubscriptionServices():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionServices", theSubscriptionServices), currentHashCode, theSubscriptionServices);
         }
         {
-            List<InboxServiceBindingsType> theReceivingInboxService;
-            theReceivingInboxService = (((this.receivingInboxService!= null)&&(!this.receivingInboxService.isEmpty()))?this.getReceivingInboxService():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "receivingInboxService", theReceivingInboxService), currentHashCode, theReceivingInboxService);
+            List<InboxServiceBindingsType> theReceivingInboxServices;
+            theReceivingInboxServices = (((this.receivingInboxServices!= null)&&(!this.receivingInboxServices.isEmpty()))?this.getReceivingInboxServices():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "receivingInboxServices", theReceivingInboxServices), currentHashCode, theReceivingInboxServices);
         }
         {
             String theCollectionName;

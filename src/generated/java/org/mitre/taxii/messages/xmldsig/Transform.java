@@ -1,13 +1,17 @@
 
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
@@ -21,19 +25,19 @@ import org.w3c.dom.Element;
 
 
 /**
- * Type for fields that may contain any string and may contain additional XML.
- * 
- * <p>Java class for AnyMixedContentType complex type.
+ * <p>Java class for TransformType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="AnyMixedContentType">
+ * &lt;complexType name="TransformType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;choice maxOccurs="unbounded" minOccurs="0">
+ *         &lt;any processContents='lax' namespace='##other'/>
+ *         &lt;element name="XPath" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *       &lt;/choice>
+ *       &lt;attribute name="Algorithm" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -42,25 +46,24 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AnyMixedContentType", propOrder = {
+@XmlType(name = "TransformType", propOrder = {
     "content"
 })
-@XmlSeeAlso({
-    SupportedQueryType.class,
-    QueryType.class,
-    StatusDetailDetailType.class,
-    ExtendedHeaderType.class
-})
-public class AnyMixedContentType
+@XmlRootElement(name = "Transform")
+public class Transform
     implements Equals, HashCode
 {
 
+    @XmlElementRef(name = "XPath", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     @XmlMixed
     @XmlAnyElement(lax = true)
-    protected List<Object> content;
+    protected List<java.lang.Object> content;
+    @XmlAttribute(name = "Algorithm", required = true)
+    @XmlSchemaType(name = "anyURI")
+    protected String algorithm;
 
     /**
-     * Type for fields that may contain any string and may contain additional XML.Gets the value of the content property.
+     * Gets the value of the content property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
@@ -77,40 +80,74 @@ public class AnyMixedContentType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link java.lang.Object }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link Element }
-     * {@link Object }
      * {@link String }
      * 
      * 
      */
-    public List<Object> getContent() {
+    public List<java.lang.Object> getContent() {
         if (content == null) {
-            content = new ArrayList<Object>();
+            content = new ArrayList<java.lang.Object>();
         }
         return this.content;
     }
 
-    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
-        if (!(object instanceof AnyMixedContentType)) {
+    /**
+     * Gets the value of the algorithm property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAlgorithm() {
+        return algorithm;
+    }
+
+    /**
+     * Sets the value of the algorithm property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAlgorithm(String value) {
+        this.algorithm = value;
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, java.lang.Object object, EqualsStrategy strategy) {
+        if (!(object instanceof Transform)) {
             return false;
         }
         if (this == object) {
             return true;
         }
-        final AnyMixedContentType that = ((AnyMixedContentType) object);
+        final Transform that = ((Transform) object);
         {
-            List<Object> lhsContent;
+            List<java.lang.Object> lhsContent;
             lhsContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
-            List<Object> rhsContent;
+            List<java.lang.Object> rhsContent;
             rhsContent = (((that.content!= null)&&(!that.content.isEmpty()))?that.getContent():null);
             if (!strategy.equals(LocatorUtils.property(thisLocator, "content", lhsContent), LocatorUtils.property(thatLocator, "content", rhsContent), lhsContent, rhsContent)) {
+                return false;
+            }
+        }
+        {
+            String lhsAlgorithm;
+            lhsAlgorithm = this.getAlgorithm();
+            String rhsAlgorithm;
+            rhsAlgorithm = that.getAlgorithm();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "algorithm", lhsAlgorithm), LocatorUtils.property(thatLocator, "algorithm", rhsAlgorithm), lhsAlgorithm, rhsAlgorithm)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean equals(Object object) {
+    public boolean equals(java.lang.Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
     }
@@ -118,9 +155,14 @@ public class AnyMixedContentType
     public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
         int currentHashCode = 1;
         {
-            List<Object> theContent;
+            List<java.lang.Object> theContent;
             theContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "content", theContent), currentHashCode, theContent);
+        }
+        {
+            String theAlgorithm;
+            theAlgorithm = this.getAlgorithm();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "algorithm", theAlgorithm), currentHashCode, theAlgorithm);
         }
         return currentHashCode;
     }

@@ -41,7 +41,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SubscriptionParametersType", propOrder = {
     "responseType",
-    "contentBinding",
+    "contentBindings",
     "query"
 })
 public class SubscriptionParametersType
@@ -51,7 +51,7 @@ public class SubscriptionParametersType
     @XmlElement(name = "Response_Type", defaultValue = "FULL")
     protected ResponseTypeEnum responseType;
     @XmlElement(name = "Content_Binding")
-    protected List<ContentBindingIDType> contentBinding;
+    protected List<ContentBindingIDType> contentBindings;
     @XmlElement(name = "Query")
     protected QueryType query;
 
@@ -80,18 +80,18 @@ public class SubscriptionParametersType
     }
 
     /**
-     * Gets the value of the contentBinding property.
+     * Gets the value of the contentBindings property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the contentBinding property.
+     * This is why there is not a <CODE>set</CODE> method for the contentBindings property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getContentBinding().add(newItem);
+     *    getContentBindings().add(newItem);
      * </pre>
      * 
      * 
@@ -101,11 +101,11 @@ public class SubscriptionParametersType
      * 
      * 
      */
-    public List<ContentBindingIDType> getContentBinding() {
-        if (contentBinding == null) {
-            contentBinding = new ArrayList<ContentBindingIDType>();
+    public List<ContentBindingIDType> getContentBindings() {
+        if (contentBindings == null) {
+            contentBindings = new ArrayList<ContentBindingIDType>();
         }
-        return this.contentBinding;
+        return this.contentBindings;
     }
 
     /**
@@ -150,11 +150,11 @@ public class SubscriptionParametersType
             }
         }
         {
-            List<ContentBindingIDType> lhsContentBinding;
-            lhsContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            List<ContentBindingIDType> rhsContentBinding;
-            rhsContentBinding = (((that.contentBinding!= null)&&(!that.contentBinding.isEmpty()))?that.getContentBinding():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBinding", lhsContentBinding), LocatorUtils.property(thatLocator, "contentBinding", rhsContentBinding), lhsContentBinding, rhsContentBinding)) {
+            List<ContentBindingIDType> lhsContentBindings;
+            lhsContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            List<ContentBindingIDType> rhsContentBindings;
+            rhsContentBindings = (((that.contentBindings!= null)&&(!that.contentBindings.isEmpty()))?that.getContentBindings():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBindings", lhsContentBindings), LocatorUtils.property(thatLocator, "contentBindings", rhsContentBindings), lhsContentBindings, rhsContentBindings)) {
                 return false;
             }
         }
@@ -183,9 +183,9 @@ public class SubscriptionParametersType
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "responseType", theResponseType), currentHashCode, theResponseType);
         }
         {
-            List<ContentBindingIDType> theContentBinding;
-            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+            List<ContentBindingIDType> theContentBindings;
+            theContentBindings = (((this.contentBindings!= null)&&(!this.contentBindings.isEmpty()))?this.getContentBindings():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBindings", theContentBindings), currentHashCode, theContentBindings);
         }
         {
             QueryType theQuery;
