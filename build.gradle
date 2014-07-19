@@ -3,18 +3,18 @@ defaultTasks 'compileJava'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+String srcGeneratedDir = 'src/generated/java'
 sourceSets {
-    generated
-    
     main {
-//        compileClasspath.add(sourceSets.generated.output.classesDir)
+        java {
+            srcDirs('src/main/java', srcGeneratedDir)
+        }
     }
 }
 
 repositories {
     mavenCentral()
 }
-
 
 configurations {
     xjc
@@ -26,50 +26,39 @@ dependencies {
     xjc 'javax.xml:jsr173:1.0'
     xjc 'stax:stax-api:1.0.1'
     xjc 'javax.xml.bind:jaxb-api:2.2.+'
-    xjc 'org.jvnet.jaxb2_commons:jaxb2-basics:0.6.5'
     xjc 'com.sun.xml.bind:jaxb-xjc:2.2.5-2'
+
+    // use the JAXB2 Commons project to include some XJC plugins
+    xjc 'org.jvnet.jaxb2_commons:jaxb2-basics:0.6.5'
     xjc 'org.jvnet.jaxb2_commons:jaxb2-basics-ant:0.6.5'
-    
-    generatedCompile 'javax.xml.bind:jaxb-api:2.2.+'
+
     compile 'javax.xml.bind:jaxb-api:2.2.+'
+    compile 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:0.6.5'
+
     testCompile 'junit:junit:4.11'
 }
 
 
-//ant.importBuild 'build.xml'
-String srcGeneratedDir = 'src/generated/java'
-
 task generate << {
     String srcXsdDir = 'src/main/resources'
-    
-    // use the JAXB2 Commons project to include some XJC plugins
-    ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task', 
-                classpath: configurations.xjc.asPath)
-    
+
+    ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task',
+        classpath: configurations.xjc.asPath)
+
     ant.mkdir(dir: srcGeneratedDir)
-    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true, 
-        extension: true, classpath: configurations.xjc.asPath) {
+    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true,
+            extension: true, classpath: configurations.xjc.asPath) {
         // generate an equals method - this uses an XJC plugin
-        arg(line: '-Xequals')
+        arg(value: '-Xequals')
         binding(dir: srcXsdDir, includes: '*.xjb')
         schema(dir: srcXsdDir, includes: '*.xsd')
         produces(dir: srcGeneratedDir, includes: '**/*.java')
     }
 }
 
-
 task cleanGenerate << {
-    ant.delete(dir: srcGeneratedDir)    
+    ant.delete(dir: srcGeneratedDir)
 }
 
 // fix dependencies to that generate gets called before compileJava
-compileGeneratedJava.dependsOn generate
-compileJava.dependsOn compileGeneratedJava 
-
-
-
-//jar.dependsOn generatedClasses
-
-//jar {
-//    from sourceSets.generated.output
-//}
+compileJava.dependsOn generate
