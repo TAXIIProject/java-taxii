@@ -13,7 +13,10 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
@@ -62,7 +65,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIPollResponseType
     extends ResponseMessageType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Subscription_ID")
@@ -485,6 +488,71 @@ public class TAXIIPollResponseType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = super.hashCode(locator, strategy);
+        {
+            String theSubscriptionID;
+            theSubscriptionID = this.getSubscriptionID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionID", theSubscriptionID), currentHashCode, theSubscriptionID);
+        }
+        {
+            XMLGregorianCalendar theExclusiveBeginTimestamp;
+            theExclusiveBeginTimestamp = this.getExclusiveBeginTimestamp();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "exclusiveBeginTimestamp", theExclusiveBeginTimestamp), currentHashCode, theExclusiveBeginTimestamp);
+        }
+        {
+            XMLGregorianCalendar theInclusiveEndTimestamp;
+            theInclusiveEndTimestamp = this.getInclusiveEndTimestamp();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "inclusiveEndTimestamp", theInclusiveEndTimestamp), currentHashCode, theInclusiveEndTimestamp);
+        }
+        {
+            RecordCountType theRecordCount;
+            theRecordCount = this.getRecordCount();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "recordCount", theRecordCount), currentHashCode, theRecordCount);
+        }
+        {
+            String theMessage;
+            theMessage = this.getMessage();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
+        }
+        {
+            List<ContentBlockType> theContentBlock;
+            theContentBlock = (((this.contentBlock!= null)&&(!this.contentBlock.isEmpty()))?this.getContentBlock():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBlock", theContentBlock), currentHashCode, theContentBlock);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        {
+            String theCollectionName;
+            theCollectionName = this.getCollectionName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionName", theCollectionName), currentHashCode, theCollectionName);
+        }
+        {
+            boolean theMore;
+            theMore = ((this.more!= null)?this.isMore():false);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "more", theMore), currentHashCode, theMore);
+        }
+        {
+            String theResultId;
+            theResultId = this.getResultId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "resultId", theResultId), currentHashCode, theResultId);
+        }
+        {
+            BigInteger theResultPartNumber;
+            theResultPartNumber = this.getResultPartNumber();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "resultPartNumber", theResultPartNumber), currentHashCode, theResultPartNumber);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

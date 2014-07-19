@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -42,7 +45,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "query"
 })
 public class SubscriptionParametersType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Response_Type", defaultValue = "FULL")
@@ -170,6 +173,31 @@ public class SubscriptionParametersType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            ResponseTypeEnum theResponseType;
+            theResponseType = this.getResponseType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "responseType", theResponseType), currentHashCode, theResponseType);
+        }
+        {
+            List<ContentBindingIDType> theContentBinding;
+            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+        }
+        {
+            QueryType theQuery;
+            theQuery = this.getQuery();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "query", theQuery), currentHashCode, theQuery);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
@@ -50,7 +53,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIISubscriptionManagementRequestType
     extends RequestMessageType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Subscription_ID")
@@ -283,6 +286,46 @@ public class TAXIISubscriptionManagementRequestType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = super.hashCode(locator, strategy);
+        {
+            String theSubscriptionID;
+            theSubscriptionID = this.getSubscriptionID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionID", theSubscriptionID), currentHashCode, theSubscriptionID);
+        }
+        {
+            SubscriptionParametersType theSubscriptionParameters;
+            theSubscriptionParameters = this.getSubscriptionParameters();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionParameters", theSubscriptionParameters), currentHashCode, theSubscriptionParameters);
+        }
+        {
+            PushParameterType thePushParameters;
+            thePushParameters = this.getPushParameters();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pushParameters", thePushParameters), currentHashCode, thePushParameters);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        {
+            CollectionActionEnum theAction;
+            theAction = this.getAction();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "action", theAction), currentHashCode, theAction);
+        }
+        {
+            String theCollectionName;
+            theCollectionName = this.getCollectionName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionName", theCollectionName), currentHashCode, theCollectionName);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

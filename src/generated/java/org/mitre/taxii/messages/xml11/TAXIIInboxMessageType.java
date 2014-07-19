@@ -11,7 +11,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
@@ -55,7 +58,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIInboxMessageType
     extends RequestMessageType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Destination_Collection_Name")
@@ -333,6 +336,51 @@ public class TAXIIInboxMessageType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = super.hashCode(locator, strategy);
+        {
+            List<String> theDestinationCollectionName;
+            theDestinationCollectionName = (((this.destinationCollectionName!= null)&&(!this.destinationCollectionName.isEmpty()))?this.getDestinationCollectionName():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "destinationCollectionName", theDestinationCollectionName), currentHashCode, theDestinationCollectionName);
+        }
+        {
+            String theMessage;
+            theMessage = this.getMessage();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
+        }
+        {
+            SourceSubscriptionType theSourceSubscription;
+            theSourceSubscription = this.getSourceSubscription();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "sourceSubscription", theSourceSubscription), currentHashCode, theSourceSubscription);
+        }
+        {
+            RecordCountType theRecordCount;
+            theRecordCount = this.getRecordCount();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "recordCount", theRecordCount), currentHashCode, theRecordCount);
+        }
+        {
+            List<ContentBlockType> theContentBlock;
+            theContentBlock = (((this.contentBlock!= null)&&(!this.contentBlock.isEmpty()))?this.getContentBlock():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBlock", theContentBlock), currentHashCode, theContentBlock);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        {
+            String theResultId;
+            theResultId = this.getResultId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "resultId", theResultId), currentHashCode, theResultId);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

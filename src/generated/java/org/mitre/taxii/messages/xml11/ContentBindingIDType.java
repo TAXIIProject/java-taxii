@@ -11,7 +11,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -43,7 +46,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "subtype"
 })
 public class ContentBindingIDType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Subtype")
@@ -137,6 +140,26 @@ public class ContentBindingIDType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<SubtypeType> theSubtype;
+            theSubtype = (((this.subtype!= null)&&(!this.subtype.isEmpty()))?this.getSubtype():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subtype", theSubtype), currentHashCode, theSubtype);
+        }
+        {
+            String theBindingId;
+            theBindingId = this.getBindingId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "bindingId", theBindingId), currentHashCode, theBindingId);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

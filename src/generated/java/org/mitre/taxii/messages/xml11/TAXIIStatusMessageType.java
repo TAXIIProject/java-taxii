@@ -8,7 +8,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
@@ -46,7 +49,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
 })
 public class TAXIIStatusMessageType
     extends ResponseMessageType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Status_Detail")
@@ -207,6 +210,36 @@ public class TAXIIStatusMessageType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = super.hashCode(locator, strategy);
+        {
+            StatusDetailType theStatusDetail;
+            theStatusDetail = this.getStatusDetail();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "statusDetail", theStatusDetail), currentHashCode, theStatusDetail);
+        }
+        {
+            String theMessage;
+            theMessage = this.getMessage();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        {
+            String theStatusType;
+            theStatusType = this.getStatusType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "statusType", theStatusType), currentHashCode, theStatusType);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

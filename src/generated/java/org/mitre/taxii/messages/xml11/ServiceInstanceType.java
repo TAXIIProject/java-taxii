@@ -11,7 +11,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -53,7 +56,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "message"
 })
 public class ServiceInstanceType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Protocol_Binding", required = true)
@@ -404,6 +407,61 @@ public class ServiceInstanceType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theProtocolBinding;
+            theProtocolBinding = this.getProtocolBinding();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "protocolBinding", theProtocolBinding), currentHashCode, theProtocolBinding);
+        }
+        {
+            String theAddress;
+            theAddress = this.getAddress();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "address", theAddress), currentHashCode, theAddress);
+        }
+        {
+            List<String> theMessageBinding;
+            theMessageBinding = (((this.messageBinding!= null)&&(!this.messageBinding.isEmpty()))?this.getMessageBinding():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageBinding", theMessageBinding), currentHashCode, theMessageBinding);
+        }
+        {
+            List<SupportedQueryType> theSupportedQuery;
+            theSupportedQuery = (((this.supportedQuery!= null)&&(!this.supportedQuery.isEmpty()))?this.getSupportedQuery():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "supportedQuery", theSupportedQuery), currentHashCode, theSupportedQuery);
+        }
+        {
+            List<ContentBindingIDType> theContentBinding;
+            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+        }
+        {
+            String theMessage;
+            theMessage = this.getMessage();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
+        }
+        {
+            ServiceTypeEnum theServiceType;
+            theServiceType = this.getServiceType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "serviceType", theServiceType), currentHashCode, theServiceType);
+        }
+        {
+            Boolean theAvailable;
+            theAvailable = this.isAvailable();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "available", theAvailable), currentHashCode, theAvailable);
+        }
+        {
+            String theServiceVersion;
+            theServiceVersion = this.getServiceVersion();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "serviceVersion", theServiceVersion), currentHashCode, theServiceVersion);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

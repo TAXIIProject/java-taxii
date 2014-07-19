@@ -8,7 +8,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -39,7 +42,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "x509SerialNumber"
 })
 public class X509IssuerSerialType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "X509IssuerName", required = true)
@@ -127,6 +130,26 @@ public class X509IssuerSerialType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theX509IssuerName;
+            theX509IssuerName = this.getX509IssuerName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "x509IssuerName", theX509IssuerName), currentHashCode, theX509IssuerName);
+        }
+        {
+            BigInteger theX509SerialNumber;
+            theX509SerialNumber = this.getX509SerialNumber();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "x509SerialNumber", theX509SerialNumber), currentHashCode, theX509SerialNumber);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

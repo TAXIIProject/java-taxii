@@ -14,7 +14,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
@@ -46,7 +49,7 @@ import org.w3c.dom.Element;
     "content"
 })
 public class TransformType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElementRef(name = "XPath", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
@@ -75,10 +78,10 @@ public class TransformType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
      * {@link Object }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link Element }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link String }
      * 
      * 
      */
@@ -145,6 +148,26 @@ public class TransformType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<Object> theContent;
+            theContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "content", theContent), currentHashCode, theContent);
+        }
+        {
+            String theAlgorithm;
+            theAlgorithm = this.getAlgorithm();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "algorithm", theAlgorithm), currentHashCode, theAlgorithm);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

@@ -14,7 +14,10 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -50,7 +53,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "object"
 })
 public class SignatureType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "SignedInfo", required = true)
@@ -251,6 +254,41 @@ public class SignatureType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            SignedInfoType theSignedInfo;
+            theSignedInfo = this.getSignedInfo();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signedInfo", theSignedInfo), currentHashCode, theSignedInfo);
+        }
+        {
+            SignatureValueType theSignatureValue;
+            theSignatureValue = this.getSignatureValue();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signatureValue", theSignatureValue), currentHashCode, theSignatureValue);
+        }
+        {
+            KeyInfoType theKeyInfo;
+            theKeyInfo = this.getKeyInfo();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "keyInfo", theKeyInfo), currentHashCode, theKeyInfo);
+        }
+        {
+            List<ObjectType> theObject;
+            theObject = (((this.object!= null)&&(!this.object.isEmpty()))?this.getObject():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "object", theObject), currentHashCode, theObject);
+        }
+        {
+            String theId;
+            theId = this.getId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "id", theId), currentHashCode, theId);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

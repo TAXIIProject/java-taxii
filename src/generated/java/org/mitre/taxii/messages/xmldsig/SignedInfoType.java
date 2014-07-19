@@ -14,7 +14,10 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -48,7 +51,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "reference"
 })
 public class SignedInfoType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "CanonicalizationMethod", required = true)
@@ -214,6 +217,36 @@ public class SignedInfoType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            CanonicalizationMethodType theCanonicalizationMethod;
+            theCanonicalizationMethod = this.getCanonicalizationMethod();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "canonicalizationMethod", theCanonicalizationMethod), currentHashCode, theCanonicalizationMethod);
+        }
+        {
+            SignatureMethodType theSignatureMethod;
+            theSignatureMethod = this.getSignatureMethod();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signatureMethod", theSignatureMethod), currentHashCode, theSignatureMethod);
+        }
+        {
+            List<ReferenceType> theReference;
+            theReference = (((this.reference!= null)&&(!this.reference.isEmpty()))?this.getReference():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "reference", theReference), currentHashCode, theReference);
+        }
+        {
+            String theId;
+            theId = this.getId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "id", theId), currentHashCode, theId);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

@@ -12,7 +12,10 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
@@ -49,15 +52,15 @@ import org.w3c.dom.Element;
     "x509IssuerSerialOrX509SKIOrX509SubjectName"
 })
 public class X509DataType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509IssuerSerial", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509IssuerSerial", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     })
     @XmlAnyElement(lax = true)
     protected List<Object> x509IssuerSerialOrX509SKIOrX509SubjectName;
@@ -80,13 +83,13 @@ public class X509DataType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
+     * {@link Element }
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link Object }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * 
      * 
      */
@@ -120,6 +123,21 @@ public class X509DataType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<Object> theX509IssuerSerialOrX509SKIOrX509SubjectName;
+            theX509IssuerSerialOrX509SKIOrX509SubjectName = (((this.x509IssuerSerialOrX509SKIOrX509SubjectName!= null)&&(!this.x509IssuerSerialOrX509SKIOrX509SubjectName.isEmpty()))?this.getX509IssuerSerialOrX509SKIOrX509SubjectName():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "x509IssuerSerialOrX509SKIOrX509SubjectName", theX509IssuerSerialOrX509SKIOrX509SubjectName), currentHashCode, theX509IssuerSerialOrX509SKIOrX509SubjectName);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

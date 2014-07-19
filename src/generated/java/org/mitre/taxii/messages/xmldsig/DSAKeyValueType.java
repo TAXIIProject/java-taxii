@@ -7,7 +7,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -52,7 +55,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "pgenCounter"
 })
 public class DSAKeyValueType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "P")
@@ -301,6 +304,51 @@ public class DSAKeyValueType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            byte[] theP;
+            theP = this.getP();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "p", theP), currentHashCode, theP);
+        }
+        {
+            byte[] theQ;
+            theQ = this.getQ();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "q", theQ), currentHashCode, theQ);
+        }
+        {
+            byte[] theG;
+            theG = this.getG();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "g", theG), currentHashCode, theG);
+        }
+        {
+            byte[] theY;
+            theY = this.getY();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "y", theY), currentHashCode, theY);
+        }
+        {
+            byte[] theJ;
+            theJ = this.getJ();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "j", theJ), currentHashCode, theJ);
+        }
+        {
+            byte[] theSeed;
+            theSeed = this.getSeed();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "seed", theSeed), currentHashCode, theSeed);
+        }
+        {
+            byte[] thePgenCounter;
+            thePgenCounter = this.getPgenCounter();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pgenCounter", thePgenCounter), currentHashCode, thePgenCounter);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

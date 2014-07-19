@@ -8,7 +8,10 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.mitre.taxii.messages.xmldsig.SignatureType;
@@ -50,7 +53,7 @@ import org.mitre.taxii.messages.xmldsig.SignatureType;
     "signature"
 })
 public class ContentBlockType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Content_Binding", required = true)
@@ -278,6 +281,46 @@ public class ContentBlockType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            ContentInstanceType theContentBinding;
+            theContentBinding = this.getContentBinding();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+        }
+        {
+            AnyMixedContentType theContent;
+            theContent = this.getContent();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "content", theContent), currentHashCode, theContent);
+        }
+        {
+            XMLGregorianCalendar theTimestampLabel;
+            theTimestampLabel = this.getTimestampLabel();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "timestampLabel", theTimestampLabel), currentHashCode, theTimestampLabel);
+        }
+        {
+            String theMessage;
+            theMessage = this.getMessage();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
+        }
+        {
+            String thePadding;
+            thePadding = this.getPadding();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "padding", thePadding), currentHashCode, thePadding);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

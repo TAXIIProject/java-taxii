@@ -49,7 +49,7 @@ task generate << {
     ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true,
             extension: true, classpath: configurations.xjc.asPath) {
         // generate an equals method - this uses an XJC plugin
-        arg(value: '-Xequals')
+        arg(line: '-Xequals -XhashCode')
         binding(dir: srcXsdDir, includes: '*.xjb')
         schema(dir: srcXsdDir, includes: '*.xsd')
         produces(dir: srcGeneratedDir, includes: '**/*.java')

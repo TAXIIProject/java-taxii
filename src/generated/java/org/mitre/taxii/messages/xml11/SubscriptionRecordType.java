@@ -11,7 +11,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -50,7 +53,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "pollInstance"
 })
 public class SubscriptionRecordType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Subscription_ID", required = true)
@@ -253,6 +256,41 @@ public class SubscriptionRecordType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theSubscriptionID;
+            theSubscriptionID = this.getSubscriptionID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionID", theSubscriptionID), currentHashCode, theSubscriptionID);
+        }
+        {
+            SubscriptionParametersType theSubscriptionParameters;
+            theSubscriptionParameters = this.getSubscriptionParameters();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionParameters", theSubscriptionParameters), currentHashCode, theSubscriptionParameters);
+        }
+        {
+            PushParameterType thePushParameters;
+            thePushParameters = this.getPushParameters();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pushParameters", thePushParameters), currentHashCode, thePushParameters);
+        }
+        {
+            List<ServiceContactInfoType> thePollInstance;
+            thePollInstance = (((this.pollInstance!= null)&&(!this.pollInstance.isEmpty()))?this.getPollInstance():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pollInstance", thePollInstance), currentHashCode, thePollInstance);
+        }
+        {
+            SubscriptionStatusEnum theStatus;
+            theStatus = this.getStatus();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "status", theStatus), currentHashCode, theStatus);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

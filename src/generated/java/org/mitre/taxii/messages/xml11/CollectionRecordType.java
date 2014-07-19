@@ -12,7 +12,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -58,7 +61,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "receivingInboxService"
 })
 public class CollectionRecordType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Description", required = true)
@@ -457,6 +460,66 @@ public class CollectionRecordType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theDescription;
+            theDescription = this.getDescription();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "description", theDescription), currentHashCode, theDescription);
+        }
+        {
+            BigInteger theCollectionVolume;
+            theCollectionVolume = this.getCollectionVolume();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionVolume", theCollectionVolume), currentHashCode, theCollectionVolume);
+        }
+        {
+            List<ContentBindingIDType> theContentBinding;
+            theContentBinding = (((this.contentBinding!= null)&&(!this.contentBinding.isEmpty()))?this.getContentBinding():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBinding", theContentBinding), currentHashCode, theContentBinding);
+        }
+        {
+            List<PushMethodType> thePushMethod;
+            thePushMethod = (((this.pushMethod!= null)&&(!this.pushMethod.isEmpty()))?this.getPushMethod():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pushMethod", thePushMethod), currentHashCode, thePushMethod);
+        }
+        {
+            List<ServiceContactInfoType> thePollingService;
+            thePollingService = (((this.pollingService!= null)&&(!this.pollingService.isEmpty()))?this.getPollingService():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "pollingService", thePollingService), currentHashCode, thePollingService);
+        }
+        {
+            List<ServiceContactInfoType> theSubscriptionService;
+            theSubscriptionService = (((this.subscriptionService!= null)&&(!this.subscriptionService.isEmpty()))?this.getSubscriptionService():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionService", theSubscriptionService), currentHashCode, theSubscriptionService);
+        }
+        {
+            List<InboxServiceBindingsType> theReceivingInboxService;
+            theReceivingInboxService = (((this.receivingInboxService!= null)&&(!this.receivingInboxService.isEmpty()))?this.getReceivingInboxService():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "receivingInboxService", theReceivingInboxService), currentHashCode, theReceivingInboxService);
+        }
+        {
+            String theCollectionName;
+            theCollectionName = this.getCollectionName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionName", theCollectionName), currentHashCode, theCollectionName);
+        }
+        {
+            CollectionTypeEnum theCollectionType;
+            theCollectionType = this.getCollectionType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionType", theCollectionType), currentHashCode, theCollectionType);
+        }
+        {
+            Boolean theAvailable;
+            theAvailable = this.isAvailable();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "available", theAvailable), currentHashCode, theAvailable);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

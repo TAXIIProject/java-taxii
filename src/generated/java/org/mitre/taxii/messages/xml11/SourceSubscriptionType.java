@@ -10,7 +10,10 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -47,7 +50,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "inclusiveEndTimestamp"
 })
 public class SourceSubscriptionType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Subscription_ID", required = true)
@@ -207,6 +210,36 @@ public class SourceSubscriptionType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theSubscriptionID;
+            theSubscriptionID = this.getSubscriptionID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subscriptionID", theSubscriptionID), currentHashCode, theSubscriptionID);
+        }
+        {
+            XMLGregorianCalendar theExclusiveBeginTimestamp;
+            theExclusiveBeginTimestamp = this.getExclusiveBeginTimestamp();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "exclusiveBeginTimestamp", theExclusiveBeginTimestamp), currentHashCode, theExclusiveBeginTimestamp);
+        }
+        {
+            XMLGregorianCalendar theInclusiveEndTimestamp;
+            theInclusiveEndTimestamp = this.getInclusiveEndTimestamp();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "inclusiveEndTimestamp", theInclusiveEndTimestamp), currentHashCode, theInclusiveEndTimestamp);
+        }
+        {
+            String theCollectionName;
+            theCollectionName = this.getCollectionName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "collectionName", theCollectionName), currentHashCode, theCollectionName);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

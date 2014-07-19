@@ -10,7 +10,10 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -46,7 +49,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     ResponseMessageType.class
 })
 public abstract class MessageType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Extended_Headers")
@@ -135,6 +138,26 @@ public abstract class MessageType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            ExtendedHeadersType theExtendedHeaders;
+            theExtendedHeaders = this.getExtendedHeaders();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "extendedHeaders", theExtendedHeaders), currentHashCode, theExtendedHeaders);
+        }
+        {
+            String theMessageId;
+            theMessageId = this.getMessageId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "messageId", theMessageId), currentHashCode, theMessageId);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

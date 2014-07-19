@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -38,7 +41,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "transform"
 })
 public class TransformsType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Transform", required = true)
@@ -96,6 +99,21 @@ public class TransformsType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<TransformType> theTransform;
+            theTransform = (((this.transform!= null)&&(!this.transform.isEmpty()))?this.getTransform():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "transform", theTransform), currentHashCode, theTransform);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

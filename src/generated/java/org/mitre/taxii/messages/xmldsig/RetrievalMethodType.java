@@ -9,7 +9,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -40,7 +43,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "transforms"
 })
 public class RetrievalMethodType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Transforms")
@@ -165,6 +168,31 @@ public class RetrievalMethodType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            TransformsType theTransforms;
+            theTransforms = this.getTransforms();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "transforms", theTransforms), currentHashCode, theTransforms);
+        }
+        {
+            String theURI;
+            theURI = this.getURI();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "uri", theURI), currentHashCode, theURI);
+        }
+        {
+            String theType;
+            theType = this.getType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "type", theType), currentHashCode, theType);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }

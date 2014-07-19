@@ -12,7 +12,10 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
 import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
 import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
@@ -48,7 +51,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "digestValue"
 })
 public class ReferenceType
-    implements Equals
+    implements Equals, HashCode
 {
 
     @XmlElement(name = "Transforms")
@@ -279,6 +282,46 @@ public class ReferenceType
     public boolean equals(Object object) {
         final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
         return equals(null, null, object, strategy);
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            TransformsType theTransforms;
+            theTransforms = this.getTransforms();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "transforms", theTransforms), currentHashCode, theTransforms);
+        }
+        {
+            DigestMethodType theDigestMethod;
+            theDigestMethod = this.getDigestMethod();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "digestMethod", theDigestMethod), currentHashCode, theDigestMethod);
+        }
+        {
+            byte[] theDigestValue;
+            theDigestValue = this.getDigestValue();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "digestValue", theDigestValue), currentHashCode, theDigestValue);
+        }
+        {
+            String theId;
+            theId = this.getId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "id", theId), currentHashCode, theId);
+        }
+        {
+            String theURI;
+            theURI = this.getURI();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "uri", theURI), currentHashCode, theURI);
+        }
+        {
+            String theType;
+            theType = this.getType();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "type", theType), currentHashCode, theType);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
     }
 
 }
