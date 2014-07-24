@@ -120,8 +120,8 @@ public class StatusMessageTest {
     
     
     /** 
-     * Verify that an bad Invalid Response Part status message fails 
-     * validation.
+     * Verify that an bad Invalid Response Part status message with no status details
+     * fails validation.
      */
     @Test
     public void badInvalidResponsePart1() throws Exception {
@@ -130,6 +130,37 @@ public class StatusMessageTest {
         sm.setInResponseTo(Messages.generateMessageId());
         sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
 
+        // this should fail validation because it's missing any status details
+        try {
+            taxiiXml.validateFast(sm);
+            fail("Expected validation error!");
+        }
+        catch (SAXException e) {
+            assertTrue(e.getMessage().contains(StatusDetails.SDN_MAX_PART_NUMBER));
+        }
+    }
+    
+    
+    /** 
+     * Verify that an bad Invalid Response Part status message without a max
+     * part number fails validation.
+     */
+    @Test
+    public void badInvalidResponsePart2() throws Exception {
+        final StatusMessage sm = factory.createStatusMessage();
+        sm.setMessageId("badInvalidResponsePart2");
+        sm.setInResponseTo(Messages.generateMessageId());
+        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+
+        final StatusDetailType detailsHolder = factory.createStatusDetailType();
+        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
+        
+        final StatusDetailDetailType detaildetail = factory.createStatusDetailDetailType();
+        detaildetail.setName("custom header");
+        detaildetail.getContent().add("custom value");
+        details.add(detaildetail);
+        sm.setStatusDetail(detailsHolder);
+        
         // this should fail validation because it's missing the required
         // max part number
         try {
@@ -137,6 +168,9 @@ public class StatusMessageTest {
             fail("Expected validation error!");
         }
         catch (SAXException e) {
+            if (e.getMessage() == null) {
+                throw e;
+            }
             assertTrue(e.getMessage().contains(StatusDetails.SDN_MAX_PART_NUMBER));
         }
     }
