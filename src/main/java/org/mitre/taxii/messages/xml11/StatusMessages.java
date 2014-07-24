@@ -35,10 +35,13 @@ import java.util.List;
  * @author Jonathan W. Cranford 
  */
 public final class StatusMessages {
+    
+    private static final ObjectFactory factory = new ObjectFactory();
 
     // TODO look at mapping extended headers and status details using 
     // a map instead of a list - that would make it easier to find headers
-    // or status details by name
+    // or status details by name.
+    // See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
     
     /**
      * Returns the contents of the named status detail record.
@@ -59,5 +62,26 @@ public final class StatusMessages {
             }
         }
         return null;
+    }
+    
+    
+    /**
+     * Creates an Invalid Response Part Status Message with the given maximum
+     * part number.
+     */
+    public static StatusMessage createInvalidResponsePart(int maxPartNumber) {
+        final StatusMessage sm = factory.createStatusMessage();
+        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+        
+        final StatusDetailType detailsHolder = factory.createStatusDetailType();
+        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
+        
+        final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
+        detail1.setName(StatusDetails.SDN_MAX_PART_NUMBER);
+        detail1.getContent().add(String.valueOf(maxPartNumber));
+        details.add(detail1);
+        
+        sm.setStatusDetail(detailsHolder);
+        return sm;
     }
 }

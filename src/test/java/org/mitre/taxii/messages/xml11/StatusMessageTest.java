@@ -110,20 +110,9 @@ public class StatusMessageTest {
      */
     @Test
     public void goodInvalidResponsePart() throws Exception {
-        final StatusMessage sm = factory.createStatusMessage();
+        final StatusMessage sm = StatusMessages.createInvalidResponsePart(2345);
         sm.setMessageId("goodInvalidResponsePart");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
-
-        final StatusDetailType detailsHolder = factory.createStatusDetailType();
-        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
-        
-        final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
-        detail1.setName(StatusDetails.SDN_MAX_PART_NUMBER);
-        detail1.getContent().add("2345");
-        details.add(detail1);
-        
-        sm.setStatusDetail(detailsHolder);
         sm.setMessage("This is a valid test status message");
         
         roundTripMessage(sm);
