@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package org.mitre.taxii.messages.xml11;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.xml.XMLConstants;
@@ -34,17 +35,152 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.util.JAXBSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
+import org.mitre.taxii.util.Validation;
+import org.mitre.taxii.util.ValidationErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
- * JAXB utility class
+ * JAXB utility class.
  * 
- * @author JCRANFORD
+ * <p>
+ * Note that {@link #validateFast(MessageType)} and {@link #validateAll(MessageType)}
+ * perform validation checks beyond those done by the underlying XML schema; thus,
+ * these methods should be preferred over doing schema validation during 
+ * JAXB marshalling and unmarshalling.  Specifically, 
+ * {@link Marshaller#setSchema(Schema)} and 
+ * {@link Unmarshaller#setSchema(Schema)} should NOT be used for validation, as
+ * the additional code checks would not be performed;
+ * instead, {@link #validateFast(MessageType)} or 
+ * {@link #validateAll(MessageType)} should be called before marshalling 
+ * and after unmarshalling.
+ * </p> 
+ * 
+ * <p>
+ * The following examples show how validation should be done before marshalling
+ * or after unmarshalling.  
+ * </p>
+ * 
+ * 
+ * <h3>Fast Validation before Marshalling</h3>
+ *  
+ * <pre>
+ * try {
+ *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   Validation results = taxiiXml.validateFast(msg);
+ *   if (results.hasWarnings()) {
+ *     System.out.print("Validation ");
+ *     System.out.println(results.getAllWarnings());
+ *   }
+ *   Marshaller m = taxiiXml.createMarshaller(true);
+ *   m.marshal(msg, System.out);
+ * }
+ * catch (SAXParseException e) {
+ *   System.err.print("Validation error: ");
+ *   System.err.println(TaxiiXml.formatException(e));
+ * } 
+ * catch (SAXException e) {
+ *   System.err.print("Validation error: ");
+ *   e.printStackTrace();
+ * }
+ * </pre>
+ * 
+ * 
+ * <h3>Fast Validation after Unmarshalling</h3>
+ * 
+ * <pre>
+ * try {
+ *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
+ *   MessageType msg = (MessageType) u.unmarshal(input);
+ *   Validation results = taxiiXml.validateFast(msg);
+ *   if (results.hasWarnings()) {
+ *     System.out.print("Validation ");
+ *     System.out.println(results.getAllWarnings());
+ *   }
+ *   // do something with msg
+ * }
+ * catch (SAXParseException e) {
+ *   System.err.print("Validation error: ");
+ *   System.err.println(TaxiiXml.formatException(e));
+ * } 
+ * catch (SAXException e) {
+ *   System.err.print("Validation error: ");
+ *   e.printStackTrace();
+ * }
+ * </pre>
+ * 
+ *
+ * <h3>Comprehensive Validation before Marshalling</h3>
+ * 
+ * <pre>
+ * try {
+ *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   Validation results = taxiiXml.validateAll(msg);
+ *   if (results.isSuccess()) {
+ *     if (results.hasWarnings()) {
+ *       System.out.print("Validation ");
+ *       System.out.println(results.getAllWarnings());
+ *     }
+ *     Marshaller m = taxiiXml.createMarshaller(true);
+ *     m.marshal(msg, System.out);
+ *   }
+ *   else {  // validation errors
+ *     System.err.print("Validation ");
+ *     System.err.println(results.getAllErrorsAndWarnings());
+ *   }
+ * }
+ * catch (SAXParseException e) {
+ *   System.err.print("Fatal validation error: ");
+ *   System.err.println(TaxiiXml.formatException(e));
+ * } 
+ * catch (SAXException e) {
+ *   System.err.print("Fatal validation error: ");
+ *   e.printStackTrace();
+ * }
+ * </pre>
+ * 
+ * 
+ * <h3>Comprehensive Validation after Unmarshalling</h3>
+ * 
+ * <pre>
+ * try {
+ *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
+ *   MessageType msg = (MessageType) u.unmarshal(input);
+ *   Validation results = taxiiXml.validateAll(msg);
+ *   if (results.isSuccess()) {
+ *     if (results.hasWarnings()) {
+ *       System.out.print("Validation ");
+ *       System.out.println(results.getAllWarnings());
+ *     }
+ *     // do something with msg
+ *   }
+ *   else {  // validation errors
+ *     System.err.print("Validation ");
+ *     System.err.println(results.getAllErrorsAndWarnings());
+ *   }
+ * }
+ * catch (SAXParseException e) {
+ *   System.err.print("Fatal validation error: ");
+ *   System.err.println(TaxiiXml.formatException(e));
+ * } 
+ * catch (SAXException e) {
+ *   System.err.print("Fatal validation error: ");
+ *   e.printStackTrace();
+ * }
+ * </pre>
+ * 
+ * 
+ * @author Jonathan W. Cranford
  */
+// TODO copy the above code to a driver to test it out 
 public final class TaxiiXml {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-xjc.xsd";
@@ -56,7 +192,6 @@ public final class TaxiiXml {
         jaxbContext = context;
         taxiiSchema = schema;
     }
-    
     
     
     /**
@@ -78,7 +213,7 @@ public final class TaxiiXml {
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
-    public static JAXBContext newJAXBContext() {
+    private static JAXBContext newJAXBContext() {
         try {
             return JAXBContext.newInstance(TaxiiXml.class.getPackage().getName() + ":"
                             + Signature.class.getPackage().getName());
@@ -92,21 +227,15 @@ public final class TaxiiXml {
      * Returns a marshaller for the TAXII XML Message Binding 1.1
      * classes.
      * 
-     * @param validate
-     *              Returns a validating marshaller if true. 
      * @param prettyPrint
      *              Returns a marshaller that indents the output if true.
      * @throws JAXBException 
      *              if an error was encountered while creating the Marshaller
      */
     public Marshaller createMarshaller(
-            boolean validate, 
             boolean prettyPrint)
             throws JAXBException {
         final Marshaller m = jaxbContext.createMarshaller();
-        if (validate) {
-            m.setSchema(taxiiSchema);
-        }
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint);
         return m;
     }
@@ -120,7 +249,7 @@ public final class TaxiiXml {
      *              if a deployment error prevents the TAXII Schema from 
      *              being parsed
      */
-    public static Schema newSchema() {
+    private static Schema newSchema() {
         final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
             return sf.newSchema(ObjectFactory.class.getResource(TAXII_SCHEMA_RESOURCE));
@@ -128,12 +257,48 @@ public final class TaxiiXml {
             throw new RuntimeException("Deployment error: can't parse TAXII schema", e);
         }
     }
+
+    
+    /**
+     * Validates the given message, returning all accumulated errors and warnings.
+     * 
+     * @returns 
+     *       The validation results, including all errors and warnings.  
+     * @throws JAXBException 
+     *      If the message couldn't be validated because of an underlying JAXB error
+     * @throws IOException 
+     *      If the underlying {@link org.xml.sax.XMLReader} throws an
+     *      {@link IOException}.
+     * @throws SAXException 
+     *      on any fatal validation error 
+     */
+    public Validation validateAll(MessageType m) 
+            throws JAXBException, SAXException, IOException {
+        return validate(m, false);
+    }
     
     
-    // TODO - validate method using technique at 
-    // http://blog.bdoughan.com/2010/11/validate-jaxb-object-model-with-xml.html
-    // plus extra validation not done by the schema - see TODO.txt for details.
-   
+    /**
+     * Validates the given message, throwing a SAXException on the first
+     * validation error encountered.
+    * 
+    * @returns 
+    *       The validation results, including any warnings.  If this method 
+    *       returns successfully, then isSuccess() on the returned object will
+    *       always return true.  
+    * @throws JAXBException 
+    *      If the message couldn't be validated because of an underlying JAXB error
+    * @throws IOException 
+    *      If the underlying {@link org.xml.sax.XMLReader} throws an
+    *      {@link IOException}.
+    * @throws SAXException 
+    *      On the first validation error 
+     */
+    public Validation validateFast(MessageType m) 
+            throws JAXBException, SAXException, IOException {
+        return validate(m, true);
+    }
+    
 
     /**
      * Marshals a given TAXII Message to an XML String. 
@@ -149,20 +314,94 @@ public final class TaxiiXml {
     }
     
     
-    /** 
-     * Returns an Unmarshaller for the TAXII XML Message Binding 1.1 classes.
-     * 
-     * @param validate
-     *              Returns a validating unmarshaller if true.
-     * @throws JAXBException 
-     *              if an error occurs creating the Unmarshaller
+    public static String formatException(SAXParseException e) {
+        return String.format("(%s, line %d, column %d) %s",
+                    e.getSystemId(),
+                    e.getLineNumber(),
+                    e.getColumnNumber(),
+                    e.getMessage());
+    }
+
+
+    /**
+     * Returns the JAXB Context.
      */
-    public Unmarshaller createUnmarshaller(boolean validate) throws JAXBException {
-        final Unmarshaller u = jaxbContext.createUnmarshaller();
-        if (validate) {
-            u.setSchema(taxiiSchema);
+    public JAXBContext getJaxbContext() {
+        return jaxbContext;
+    }
+    
+    
+    // TODO - add extra validation not done by the schema - see TODO.txt for details.
+   /**
+    * Validates the given message.
+    * 
+    * <p>Technique derived from 
+    * <a href="http://blog.bdoughan.com/2010/11/validate-jaxb-object-model-with-xml.html">Validate a JAXB Object Model With an XML Schema</a>
+    * blog post.</p>
+    *
+    * @param failFast
+    *       If true, then a SAXException will be thrown on the first error 
+    *       encountered; otherwise,
+    *       all errors and warnings are returned in the Validation object.
+    * @returns 
+    *       The validation results.  If failFast is true,
+    *       then a successful return indicates success, results.isSuccess() will 
+    *       be true, and results will include any 
+    *       validation warnings. If failFast is false, then the 
+    *       results will include all errors and warnings.  
+    * @throws JAXBException 
+    *      If the message couldn't be validated because of an underlying JAXB error
+    * @throws IOException 
+    *      If the underlying {@link org.xml.sax.XMLReader} throws an
+    *      {@link IOException}.
+    * @throws SAXException 
+    *      If failFast is true, then a SAXException will be thrown on the first
+    *      validation error encountered. If failFast is false, then a 
+    *      SAXException indicates a fatal error. 
+    */
+    private Validation validate(MessageType m, boolean failFast) 
+            throws JAXBException, SAXException, IOException {
+        JAXBSource source = new JAXBSource(jaxbContext, m);
+        Validator validator = taxiiSchema.newValidator();
+        final Validation results = new Validation();
+        validator.setErrorHandler(new ValidationErrorHandler(results, failFast));
+        validator.validate(source);
+        
+        // check for StatusMessage co-constraints
+        if (m instanceof StatusMessage) {
+            validateStatusMessage(results, (StatusMessage) m, failFast);
         }
-        return u;
+        
+        return results;
+    }
+    
+    
+    /**
+     * Validates the status message.
+     * 
+     * @throws SAXException 
+     *      If failFast is true, then a SAXException will be thrown on the first
+     *      validation error encountered. If failFast is false, then a 
+     *      SAXException indicates a fatal error. 
+     */
+    private void validateStatusMessage(
+            Validation results, 
+            StatusMessage msg, 
+            boolean failFast) 
+    throws SAXException {
+        switch(msg.getStatusType()) {
+        case StatusTypes.ST_INVALID_RESPONSE_PART: 
+            if (msg.getStatusDetail() == null 
+                || msg.getStatusDetail().getDetails().size() < 1
+                || StatusMessages.findStatusDetailContentByName(msg, StatusDetails.SDN_MAX_PART_NUMBER) == null) 
+            {
+                final String error = "Missing required status detail: " + StatusDetails.SDN_MAX_PART_NUMBER;
+                results.addError(error);
+                if (failFast) {
+                    throw new SAXException(error);
+                }
+            }
+        }
     }
     
 }

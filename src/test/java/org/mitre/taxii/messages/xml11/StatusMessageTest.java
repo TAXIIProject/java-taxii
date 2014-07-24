@@ -26,6 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.mitre.taxii.messages.xml11;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -35,6 +36,8 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
 import org.mitre.taxii.Messages;
+import org.mitre.taxii.util.Validation;
+import org.xml.sax.SAXException;
 
 import static org.junit.Assert.*;
 
@@ -44,6 +47,8 @@ import static org.junit.Assert.*;
  * @author Jonathan W. Cranford
  */
 public class StatusMessageTest {
+    
+    private static final String INVALID_XML_RESOURCE = "/invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXml taxiiXml;
@@ -54,8 +59,12 @@ public class StatusMessageTest {
     }
     
     
+    /** 
+     * Verify that a custom status message can be created and round-tripped
+     * successfully.
+     */
     @Test
-    public void testCustom() throws JAXBException {
+    public void testCustom() throws Exception {
         /* test case from libtaxii:
          * 
          * sm01 = tm11.StatusMessage(
@@ -94,17 +103,87 @@ public class StatusMessageTest {
         roundTripMessage(sm);
     }
     
-    
-    private void roundTripMessage(MessageType msg) throws JAXBException {
-        final Marshaller m = taxiiXml.createMarshaller(true, true);
-        final Unmarshaller u = taxiiXml.createUnmarshaller(true);
+
+    /**
+     * Verify that an Invalid Response Part status message can be created
+     * and successfully round-tripped.
+     */
+    @Test
+    public void goodInvalidResponsePart() throws Exception {
+        final StatusMessage sm = factory.createStatusMessage();
+        sm.setMessageId("goodInvalidResponsePart");
+        sm.setInResponseTo(Messages.generateMessageId());
+        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+
+        final StatusDetailType detailsHolder = factory.createStatusDetailType();
+        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
         
+        final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
+        detail1.setName(StatusDetails.SDN_MAX_PART_NUMBER);
+        detail1.getContent().add("2345");
+        details.add(detail1);
+        
+        sm.setStatusDetail(detailsHolder);
+        sm.setMessage("This is a valid test status message");
+        
+        roundTripMessage(sm);
+    }
+    
+    
+    /** 
+     * Verify that an bad Invalid Response Part status message fails 
+     * validation.
+     */
+    @Test
+    public void badInvalidResponsePart1() throws Exception {
+        final StatusMessage sm = factory.createStatusMessage();
+        sm.setMessageId("badInvalidResponsePart1");
+        sm.setInResponseTo(Messages.generateMessageId());
+        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+
+        // this should fail validation because it's missing the required
+        // max part number
+        try {
+            taxiiXml.validateFast(sm);
+            fail("Expected validation error!");
+        }
+        catch (SAXException e) {
+            assertTrue(e.getMessage().contains(StatusDetails.SDN_MAX_PART_NUMBER));
+        }
+    }
+    
+    
+    /**
+     * Unmarshal some invalid XML and verify that validation fails.
+     * @throws JAXBException 
+     */
+    @Test
+    public void invalidXML() throws Exception {
+        final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
+        MessageType msg = (MessageType) u.unmarshal(getClass().getResource(INVALID_XML_RESOURCE));
+        
+        Validation results = taxiiXml.validateAll(msg);
+        assertTrue(results.isFailure());
+        if (debug) {
+            System.out.print("Validation ");
+            System.out.println(results.getAllErrorsAndWarnings());
+        }
+    }
+    
+    
+    private void roundTripMessage(MessageType msg) throws Exception {
+        final Marshaller m = taxiiXml.createMarshaller(true);
+        final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
+        
+        assertValid(msg);
         final String xmlString = taxiiXml.marshalToString(m, msg);
         final MessageType msgFromXml = 
                 (MessageType) u.unmarshal(new StringReader(xmlString));
+        assertValid(msgFromXml);
         final String xmlString2 = taxiiXml.marshalToString(m, msgFromXml);
         final MessageType thereAndBackAgain = 
                 (MessageType) u.unmarshal(new StringReader(xmlString2));
+        assertValid(thereAndBackAgain);
         
         if (debug) {
             System.out.println(xmlString);
@@ -123,6 +202,19 @@ public class StatusMessageTest {
         // object.
         assertEquals("round tripping from object to XML back to object failed! ",
                 msgFromXml, thereAndBackAgain);
+    }
+    
+    
+    private void assertValid(MessageType msg) 
+            throws JAXBException, SAXException, IOException {
+        final Validation results = taxiiXml.validateAll(msg);
+        if (results.isFailure()) {
+            fail(results.getAllErrorsAndWarnings());
+        }
+        if (results.hasWarnings()) {
+            System.out.print("Validation warnings: ");
+            System.out.println(results.getAllWarnings());
+        }
     }
     
 }

@@ -63,10 +63,8 @@ are both set in Poll_Request
 Things the schema doesn't check
 ==================================
 * co-occurence constraints between @status_type and <Status_Detail> and
-specific <Detail> elements - could be checked with Schematron, Relax-NG, or Java.
-A supplementary Relax-NG schema could just validate <Status_Detail> without duplicating
-the XML Schema.  Hmmmm, would have to write custom accessors in Java so that 
-you can only create valid messages via the API....
+specific <Detail> elements. Also write utility factory methods in Java to
+facilitate creating valid messages via the API.
 
 * Subscription_Management_Request/Subscription_ID: An XML AnyURI containing a 
 Subscription ID value. This field MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
@@ -87,5 +85,6 @@ MUST be greater than the value in <Exclusive_Begin_Timestamp>.
 Notes for Java
 ================
 * Supplement schema validation with in-code checks. 
-* validating digital signature on deserialization/unmarshalling?  does libtaxii do this?  
-how does it handle digital signatures?
+* validating digital signature on deserialization/unmarshalling?  does libtaxii do this?  how does it handle digital signatures?
+* Generate license blurb at top of each generated file.
+* Add to Travis CI.
