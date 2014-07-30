@@ -65,19 +65,30 @@ StatusMessage
 ----------------
 * co-occurrence constraints between @status_type and 
     specific <Detail> elements, expressed using XPath 2 
-    - @status_type = 'INVALID_RESPONSE_PART' and (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger) 
-    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']  castable as xs:positiveInteger) 
-    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']       castable as xs:anyURI)
-    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH']       castable as xs:boolean)
+    - @status_type = 'INVALID_RESPONSE_PART' 
+                    and (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger) 
+    - @status_type = 'PENDING'               
+                    and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']  castable as xs:positiveInteger) 
+    - @status_type = 'PENDING'
+                    and (taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']       castable as xs:anyURI)
+    - @status_type = 'PENDING'
+                    and (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH']       castable as xs:boolean)
 
 * type checking on predefined Status Detail fields
-    - @status_type = 'DESTINATION_COLLECTION_ERROR' and (taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'] castable as xs:anyURI)
-    - @status_type = 'NOT_FOUND'                    and (taxii:Status_Detail/taxii:Detail[@name='ITEM']                   castable as xs:anyURI)
-    - @status_type = 'RETRY'                        and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']         castable as xs:positiveInteger)
-    - @status_type = 'UNSUPPORTED_MESSAGE'          and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING']      castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_CONTENT'          and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT']      castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_PROTOCOL'         and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL']     castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_QUERY'            and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY']        castable as xs:anyURI)
+    - @status_type = 'DESTINATION_COLLECTION_ERROR'
+                    and (taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'] castable as xs:anyURI)
+    - @status_type = 'NOT_FOUND'
+                    and (taxii:Status_Detail/taxii:Detail[@name='ITEM']                   castable as xs:anyURI)
+    - @status_type = 'RETRY'         
+                    and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']         castable as xs:positiveInteger)
+    - @status_type = 'UNSUPPORTED_MESSAGE'   
+                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING']      castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_CONTENT'    
+                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT']      castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_PROTOCOL'   
+                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL']     castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_QUERY'   
+                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY']        castable as xs:anyURI)
 
 Subscription_Management_Request
 -----------------------------------
