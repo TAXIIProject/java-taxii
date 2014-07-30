@@ -93,9 +93,18 @@ public class StatusMessageTest {
         final StatusDetailDetailType detail2 = factory.createStatusDetailDetailType();
         detail2.setName("Custom_detail_2");
         final List<Object> d2Contents = detail2.getContent();
+        // TODO Fix this mapping - don't allow multiple strings to be added to a collection,
+        // since the list of strings collapse into a single text node on 
+        // marshalling.  Instead, multiple StatusDetailDetailTypes should
+        // be created with the same name, one value per StatusDetailDetailType.
         d2Contents.add("this one has");
-        d2Contents.add("multiple values");
+//        d2Contents.add("multiple values");
         details.add(detail2);
+        
+        final StatusDetailDetailType detail3 = factory.createStatusDetailDetailType();
+        detail3.setName("Custom_detail_2");
+        detail3.getContent().add("multiple values");
+        details.add(detail3);
         
         sm.setStatusDetail(detailsHolder);
         sm.setMessage("This is a test message");
@@ -277,9 +286,12 @@ public class StatusMessageTest {
     }
        
     
-    /** Verify a ... can be created and round-tripped successfully. */
+    /** 
+     * Verify a Destination Collection Error can be created and round-tripped 
+     * successfully. 
+     */
     @Test
-    public void destinationCollectionError() throws Exception {
+    public void goodDestinationCollectionError() throws Exception {
         /* test case from libtaxii:
          * 
         sm03 = tm11.StatusMessage(
@@ -291,6 +303,18 @@ public class StatusMessageTest {
         )
         round_trip_message(sm03)
         */
+//        final StatusMessage sm03 = new StatusMessage();
+//        sm03.setMessageId("SM03");
+//        sm03.setInResponseTo(Messages.generateMessageId());
+//        sm03.setStatusType(StatusTypes.ST_DESTINATION_COLLECTION_ERROR);
+//        
+//        final StatusDetailType detailsHolder = new StatusDetailType();
+//        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
+//        
+//        final StatusDetailDetailType detail1 = new StatusDetailDetailType();
+//        detail1.setName(StatusDetails.SDN_ACCEPTABLE_DESTINATION);
+//        detail1.getContent().add("Custom status detail value");
+//        details.add(detail1);
         
     }
     
@@ -304,9 +328,6 @@ public class StatusMessageTest {
                 (MessageType) u.unmarshal(new StringReader(xmlString));
         assertValid(msgFromXml);
         final String xmlString2 = taxiiXml.marshalToString(m, msgFromXml);
-        final MessageType thereAndBackAgain = 
-                (MessageType) u.unmarshal(new StringReader(xmlString2));
-        assertValid(thereAndBackAgain);
         
         if (debug) {
             System.out.println(xmlString);
@@ -316,15 +337,8 @@ public class StatusMessageTest {
         // easier to debug
         assertEquals("round tripping from XML to object back to XML failed",
                 xmlString, xmlString2);
-        
-        // Compare objects after they've been through a round trip.  The 
-        // challenge is that it's possible to create an object with mixed
-        // content using the API that collapses when marshalled so that the
-        // round trip doesn't match the original object.  But going through
-        // first round trip gets rid of those inconsistencies from the original 
-        // object.
         assertEquals("round tripping from object to XML back to object failed! ",
-                msgFromXml, thereAndBackAgain);
+                msg, msgFromXml);
     }
     
     

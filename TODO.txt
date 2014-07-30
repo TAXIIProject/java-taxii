@@ -89,5 +89,17 @@ Notes for Java
 * Run example code in TaxiiXml through a command-line driver to test it out.
 * look at mapping extended headers and status details using 
     a map instead of a list - that would make it easier to find headers
-    or status details by name.
+    or status details by name.  Look at using a multimap to allow a Status Detail
+    or Extended Header to have a collection of list of values and avoid 
+    marshalling problems in XML.
     See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
+* Prevent users from creating a StatusDetail or Extended Header with a list of
+    Strings as a value.  A list of strings in a mixed content field collapses
+    to a *single* text field when marshalled.  The right way to express a 
+    Status Detail or Extended Header with multiple values is to *repeat* the
+    name and give it another value.  The XML should look like this:
+    <Status_Detail>
+        <Detail name="custom_status_detail_name">Custom status detail value</Detail>
+        <Detail name="Custom_detail_2">this one has</Detail>
+        <Detail name="Custom_detail_2">multiple values</Detail>
+    </Status_Detail>
