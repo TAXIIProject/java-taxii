@@ -12,9 +12,6 @@ TAXII Default Query Spec 1.0
     bindings.
 
 0.3
-- add support for creating XML Signatures using Java XML Digital Signature API
-
-0.4
 TAXII HTTP Protocol Binding Spec 1.1
 - client-side interactions with server, using HTTP Protocol Binding
 
@@ -28,6 +25,7 @@ TAXII HTTP Protocol Binding Spec 1.1
 post-1.1.0
 - Add support for TAXII 1.0.
 - Add support for JSON Message Binding.
+- add support for creating XML Signatures using Java XML Digital Signature API
 
 
 Things to check on marshalling/API usage in unit tests
@@ -88,3 +86,8 @@ Notes for Java
 * validating digital signature on deserialization/unmarshalling?  does libtaxii do this?  how does it handle digital signatures?
 * Generate license blurb at top of each generated file.
 * Add to Travis CI.
+* Run example code in TaxiiXml through a command-line driver to test it out.
+* look at mapping extended headers and status details using 
+    a map instead of a list - that would make it easier to find headers
+    or status details by name.
+    See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
