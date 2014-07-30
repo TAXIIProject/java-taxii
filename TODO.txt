@@ -59,36 +59,53 @@ are both set in Poll_Request
     detect it?
 
 
-Things the schema doesn't check - need to add custom validation code for these
+Things the schema doesn't check - need to add custom conformance checks for these
 ===============================================================================
 StatusMessage
 ----------------
-* co-occurrence constraints between @status_type and 
-    specific <Detail> elements, expressed using XPath 2 
-    - @status_type = 'INVALID_RESPONSE_PART' 
-                    and (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger) 
-    - @status_type = 'PENDING'               
-                    and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']  castable as xs:positiveInteger) 
-    - @status_type = 'PENDING'
-                    and (taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']       castable as xs:anyURI)
-    - @status_type = 'PENDING'
-                    and (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH']       castable as xs:boolean)
+* co-occurrence constraints between @status_type and specific <Detail> elements, expressed using XPath 2.
+  This expression verifies that the required Detail record exists and is the right type. 
+    if (@status_type = 'INVALID_RESPONSE_PART') 
+    then (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger)
+    else  
+    if (@status_type = 'PENDING')
+    then (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']  castable as xs:positiveInteger)
+        and (taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']    castable as xs:anyURI)
+        and (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH']    castable as xs:boolean)
+    else true
+
 
 * type checking on predefined Status Detail fields
-    - @status_type = 'DESTINATION_COLLECTION_ERROR'
-                    and (taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'] castable as xs:anyURI)
-    - @status_type = 'NOT_FOUND'
-                    and (taxii:Status_Detail/taxii:Detail[@name='ITEM']                   castable as xs:anyURI)
-    - @status_type = 'RETRY'         
-                    and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']         castable as xs:positiveInteger)
-    - @status_type = 'UNSUPPORTED_MESSAGE'   
-                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING']      castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_CONTENT'    
-                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT']      castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_PROTOCOL'   
-                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL']     castable as xs:anyURI)
-    - @status_type = 'UNSUPPORTED_QUERY'   
-                    and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY']        castable as xs:anyURI)
+  This expression verifies that if a Detail record exists, then it is the right type.
+    if (@status_type = 'DESTINATION_COLLECTION_ERROR'
+        and taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'])
+    then (taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'] castable as xs:anyURI)
+    else
+    if (@status_type = 'NOT_FOUND'
+        and taxii:Status_Detail/taxii:Detail[@name='ITEM'])  
+    then (taxii:Status_Detail/taxii:Detail[@name='ITEM']                   castable as xs:anyURI)
+    else
+    if (@status_type = 'RETRY'
+        and taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'])
+    then (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']         castable as xs:positiveInteger)
+    else
+    if (@status_type = 'UNSUPPORTED_MESSAGE'
+        and taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING'])
+    then (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING']      castable as xs:anyURI)
+    else
+    if (@status_type = 'UNSUPPORTED_CONTENT'
+        and taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT'])
+    then (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT']      castable as xs:anyURI)
+    else
+    if (@status_type = 'UNSUPPORTED_PROTOCOL'
+        and taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL'])
+    then (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL']     castable as xs:anyURI)
+    else
+    if (@status_type = 'UNSUPPORTED_QUERY'
+        and taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY'])
+    then (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY']        castable as xs:anyURI)
+    else true
+  
 
 Subscription_Management_Request
 -----------------------------------
