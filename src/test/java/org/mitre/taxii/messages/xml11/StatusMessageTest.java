@@ -46,7 +46,7 @@ import static org.junit.Assert.*;
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTest {
+public class StatusMessageTest implements StatusDetails, StatusTypes {
     
     private static final String INVALID_XML_RESOURCE = "/invalid.xml";
 
@@ -80,7 +80,7 @@ public class StatusMessageTest {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("SM01");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypes.ST_SUCCESS);
+        sm.setStatusType(STATUS_TYPE_SUCCESS);
         
         final StatusDetailType detailsHolder = factory.createStatusDetailType();
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
@@ -137,7 +137,7 @@ public class StatusMessageTest {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("badInvalidResponsePart1");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+        sm.setStatusType(STATUS_TYPE_INVALID_RESPONSE_PART);
 
         // this should fail validation because it's missing any status details
         try {
@@ -150,7 +150,7 @@ public class StatusMessageTest {
             fail("Expected validation error!");
         }
         catch (SAXException e) {
-            assertTrue(e.getMessage().contains(StatusDetails.SDN_MAX_PART_NUMBER));
+            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
         }
     }
     
@@ -164,7 +164,7 @@ public class StatusMessageTest {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("badInvalidResponsePart2");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+        sm.setStatusType(STATUS_TYPE_INVALID_RESPONSE_PART);
 
         final StatusDetailType detailsHolder = factory.createStatusDetailType();
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
@@ -185,7 +185,7 @@ public class StatusMessageTest {
             if (e.getMessage() == null) {
                 throw e;
             }
-            assertTrue(e.getMessage().contains(StatusDetails.SDN_MAX_PART_NUMBER));
+            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
         }
     }
     
@@ -227,7 +227,7 @@ public class StatusMessageTest {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        sm02.setStatusType(STATUS_TYPE_SUCCESS);
         roundTripMessage(sm02);
     }
     
@@ -240,7 +240,7 @@ public class StatusMessageTest {
         final StatusMessage sm02 = factory.createStatusMessage();
 //        sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        sm02.setStatusType(STATUS_TYPE_SUCCESS);
         Validation results = taxiiXml.validateAll(sm02);
         assertTrue(results.isFailure());
         if (debug) {
@@ -258,7 +258,7 @@ public class StatusMessageTest {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
 //        sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        sm02.setStatusType(STATUS_TYPE_SUCCESS);
         Validation results = taxiiXml.validateAll(sm02);
         assertTrue(results.isFailure());
         if (debug) {
@@ -312,7 +312,7 @@ public class StatusMessageTest {
 //        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
 //        
 //        final StatusDetailDetailType detail1 = new StatusDetailDetailType();
-//        detail1.setName(StatusDetails.SDN_ACCEPTABLE_DESTINATION);
+//        detail1.setName(StatusDetails.STATUS_DETAIL_ACCEPTABLE_DESTINATION);
 //        detail1.getContent().add("Custom status detail value");
 //        details.add(detail1);
         

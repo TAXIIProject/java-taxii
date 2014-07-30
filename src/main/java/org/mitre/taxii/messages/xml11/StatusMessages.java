@@ -34,7 +34,7 @@ import java.util.List;
  * 
  * @author Jonathan W. Cranford 
  */
-public final class StatusMessages {
+public final class StatusMessages implements StatusDetails, StatusTypes {
     
     private static final ObjectFactory factory = new ObjectFactory();
 
@@ -71,13 +71,13 @@ public final class StatusMessages {
      */
     public static StatusMessage createInvalidResponsePart(int maxPartNumber) {
         final StatusMessage sm = factory.createStatusMessage();
-        sm.setStatusType(StatusTypes.ST_INVALID_RESPONSE_PART);
+        sm.setStatusType(STATUS_TYPE_INVALID_RESPONSE_PART);
         
         final StatusDetailType detailsHolder = factory.createStatusDetailType();
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
         
         final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
-        detail1.setName(StatusDetails.SDN_MAX_PART_NUMBER);
+        detail1.setName(STATUS_DETAIL_MAX_PART_NUMBER);
         detail1.getContent().add(String.valueOf(maxPartNumber));
         details.add(detail1);
         
