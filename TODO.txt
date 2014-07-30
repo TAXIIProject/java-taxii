@@ -25,7 +25,8 @@ TAXII HTTP Protocol Binding Spec 1.1
 post-1.1.0
 - Add support for TAXII 1.0.
 - Add support for JSON Message Binding.
-- add support for creating XML Signatures using Java XML Digital Signature API
+- add support for creating and validating XML Signatures using Java XML Digital 
+    Signature API
 
 
 Things to check on marshalling/API usage in unit tests
@@ -58,32 +59,53 @@ are both set in Poll_Request
     detect it?
 
 
-Things the schema doesn't check
-==================================
-* co-occurence constraints between @status_type and <Status_Detail> and
-specific <Detail> elements. Also write utility factory methods in Java to
-facilitate creating valid messages via the API.
+Things the schema doesn't check - need to add custom validation code for these
+===============================================================================
+StatusMessage
+----------------
+* co-occurrence constraints between @status_type and 
+    specific <Detail> elements, expressed using XPath 2 
+    - @status_type = 'INVALID_RESPONSE_PART' and (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger) 
+    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']  castable as xs:positiveInteger) 
+    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']       castable as xs:anyURI)
+    - @status_type = 'PENDING'               and (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH']       castable as xs:boolean)
 
-* Subscription_Management_Request/Subscription_ID: An XML AnyURI containing a 
-Subscription ID value. This field MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
+* type checking on predefined Status Detail fields
+    - @status_type = 'DESTINATION_COLLECTION_ERROR' and (taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'] castable as xs:anyURI)
+    - @status_type = 'NOT_FOUND'                    and (taxii:Status_Detail/taxii:Detail[@name='ITEM']                   castable as xs:anyURI)
+    - @status_type = 'RETRY'                        and (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']         castable as xs:positiveInteger)
+    - @status_type = 'UNSUPPORTED_MESSAGE'          and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_BINDING']      castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_CONTENT'          and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_CONTENT']      castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_PROTOCOL'         and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_PROTOCOL']     castable as xs:anyURI)
+    - @status_type = 'UNSUPPORTED_QUERY'            and (taxii:Status_Detail/taxii:Detail[@name='SUPPORTED_QUERY']        castable as xs:anyURI)
 
-* Subscription_Management_Request/Subscription_Parameters: 
-This field is present if and only if @action="SUBSCRIBE".
+Subscription_Management_Request
+-----------------------------------
+* co-occurrence constraints
+    - Subscription_ID MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
+    - Subscription_Parameters is present if and only if @action="SUBSCRIBE".
 
-* co-occurence constraint on Poll_Request: Note that if both <Exclusive_Begin_Timestamp> 
+Poll_Request
+---------------
+* co-occurrence constraint
+    - Note that if both <Exclusive_Begin_Timestamp> 
 and <Inclusive_End_Timestamp> are present in this message, the value in <Inclusive_End_Timestamp> 
 MUST be greater than the value in <Exclusive_Begin_Timestamp>.  
 
-* co-occurence constraint on Poll_Response: @result_id MUST be present if @more="true".
+Poll_Response
+-----------------
+* co-occurrence constraint: @result_id MUST be present if @more="true".
 
-* co-occurrence constraint: Context: Inbox_Message or Poll_Response
+
+Inbox_Message and Poll_Response
+-------------------------------- 
+* co-occurrence constraint: 
     Record_Count >= count(Content_Block)
 
 
-Notes for Java
+Additional tasks
 ================
-* Supplement schema validation with in-code checks. 
-* validating digital signature on deserialization/unmarshalling?  does libtaxii do this?  how does it handle digital signatures?
+* Write utility factory methods to facilitate creating valid messages via the API. 
 * Generate license blurb at top of each generated file.
 * Add to Travis CI.
 * Run example code in TaxiiXml through a command-line driver to test it out.
