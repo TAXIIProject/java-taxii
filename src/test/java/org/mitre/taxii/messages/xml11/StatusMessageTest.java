@@ -132,6 +132,11 @@ public class StatusMessageTest {
 
         // this should fail validation because it's missing any status details
         try {
+            // Here we call validateFast() to test it.  Note that other 
+            // tests call validateAll().  Both must be tested.  
+            // validateFast() throws an exception under more circumstances,
+            // so other tests prefer validateAll() so that more of the 
+            // validation code is tested.
             taxiiXml.validateFast(sm);
             fail("Expected validation error!");
         }
@@ -188,11 +193,106 @@ public class StatusMessageTest {
         Validation results = taxiiXml.validateAll(msg);
         assertTrue(results.isFailure());
         if (debug) {
-            System.out.print("Validation ");
+            System.out.print("Validation results: ");
             System.out.println(results.getAllErrorsAndWarnings());
         }
     }
     
+    
+    /**
+     * Verify a Success message can be created and round-tripped successfully.
+     */
+    @Test
+    public void goodSuccessMessage() throws Exception {
+        /* test case from libtaxii:
+         * 
+         * sm02 = tm11.StatusMessage(
+         *          message_id = 'SM02', #Required
+                in_response_to = tm11.generate_message_id(), #Required, should be the ID of the message that this is in response to
+                status_type = tm11.ST_SUCCESS, #Required
+                status_detail = None, #Required/optional depending on Status Type. See spec for details
+                message = None# Optional
+        )
+        round_trip_message(sm02)
+         */
+        final StatusMessage sm02 = factory.createStatusMessage();
+        sm02.setMessageId("SM02");
+        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        roundTripMessage(sm02);
+    }
+    
+    
+    /**
+     * Verify that a StatusMessage missing a message id fails validation.
+     */
+    @Test
+    public void missingMessageId() throws Exception {
+        final StatusMessage sm02 = factory.createStatusMessage();
+//        sm02.setMessageId("SM02");
+        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        Validation results = taxiiXml.validateAll(sm02);
+        assertTrue(results.isFailure());
+        if (debug) {
+            System.out.print("Validation results: ");
+            System.out.println(results.getAllErrorsAndWarnings());
+        }
+    }
+       
+    
+    /**
+     * Verify that a StatusMessage missing the InResponseTo field fails validation.
+     */
+    @Test
+    public void missingInResponseTo() throws Exception {
+        final StatusMessage sm02 = factory.createStatusMessage();
+        sm02.setMessageId("SM02");
+//        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        Validation results = taxiiXml.validateAll(sm02);
+        assertTrue(results.isFailure());
+        if (debug) {
+            System.out.print("Validation results: ");
+            System.out.println(results.getAllErrorsAndWarnings());
+        }
+    }
+       
+    
+    /**
+     * Verify that a StatusMessage missing a status type fails validation.
+     */
+    @Test
+    public void missingStatusType() throws Exception {
+        final StatusMessage sm02 = factory.createStatusMessage();
+        sm02.setMessageId("SM02");
+        sm02.setInResponseTo(Messages.generateMessageId());
+//        sm02.setStatusType(StatusTypes.ST_SUCCESS);
+        Validation results = taxiiXml.validateAll(sm02);
+        assertTrue(results.isFailure());
+        if (debug) {
+            System.out.print("Validation results: ");
+            System.out.println(results.getAllErrorsAndWarnings());
+        }
+    }
+       
+    
+    /** Verify a ... can be created and round-tripped successfully. */
+    @Test
+    public void destinationCollectionError() throws Exception {
+        /* test case from libtaxii:
+         * 
+        sm03 = tm11.StatusMessage(
+                message_id = 'SM03', #Required
+                in_response_to = tm11.generate_message_id(), #Required, should be the ID of the message that this is in response to
+                status_type = tm11.ST_DESTINATION_COLLECTION_ERROR, #Required
+                status_detail = {'ACCEPTABLE_DESTINATION': ['Collection1','Collection2']}, #Required/optional depending on Status Type. See spec for details
+                message = None# Optional
+        )
+        round_trip_message(sm03)
+        */
+        
+    }
     
     private void roundTripMessage(MessageType msg) throws Exception {
         final Marshaller m = taxiiXml.createMarshaller(true);
