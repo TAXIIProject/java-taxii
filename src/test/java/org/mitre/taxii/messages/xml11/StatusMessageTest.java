@@ -85,26 +85,20 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusDetailType detailsHolder = factory.createStatusDetailType();
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
         
-        final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
-        detail1.setName("custom_status_detail_name");
-        detail1.getContent().add("Custom status detail value");
-        details.add(detail1);
+        details.add(StatusMessages.createStatusDetailDetail("custom_status_detail_name", "Custom status detail value"));
+        details.add(StatusMessages.createStatusDetailDetail("Custom_detail_2", "this one has"));
+        details.add(StatusMessages.createStatusDetailDetail("Custom_detail_2", "multiple values"));
         
-        final StatusDetailDetailType detail2 = factory.createStatusDetailDetailType();
-        detail2.setName("Custom_detail_2");
-        final List<Object> d2Contents = detail2.getContent();
-        // TODO Fix this mapping - don't allow multiple strings to be added to a collection,
-        // since the list of strings collapse into a single text node on 
-        // marshalling.  Instead, multiple StatusDetailDetailTypes should
-        // be created with the same name, one value per StatusDetailDetailType.
-        d2Contents.add("this one has");
-//        d2Contents.add("multiple values");
-        details.add(detail2);
-        
-        final StatusDetailDetailType detail3 = factory.createStatusDetailDetailType();
-        detail3.setName("Custom_detail_2");
-        detail3.getContent().add("multiple values");
-        details.add(detail3);
+//        final StatusDetailDetailType detail2 = factory.createStatusDetailDetailType();
+//        detail2.setName("Custom_detail_2");
+//        final List<Object> d2Contents = detail2.getContent();
+//        // TODO Fix this mapping - don't allow multiple strings to be added to a collection,
+//        // since the list of strings collapse into a single text node on 
+//        // marshalling.  Instead, multiple StatusDetailDetailTypes should
+//        // be created with the same name, one value per StatusDetailDetailType.
+//        d2Contents.add("this one has");
+////        d2Contents.add("multiple values");
+//        details.add(detail2);
         
         sm.setStatusDetail(detailsHolder);
         sm.setMessage("This is a test message");
@@ -303,21 +297,21 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         )
         round_trip_message(sm03)
         */
-//        final StatusMessage sm03 = new StatusMessage();
-//        sm03.setMessageId("SM03");
-//        sm03.setInResponseTo(Messages.generateMessageId());
-//        sm03.setStatusType(StatusTypes.ST_DESTINATION_COLLECTION_ERROR);
-//        
-//        final StatusDetailType detailsHolder = new StatusDetailType();
-//        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
-//        
-//        final StatusDetailDetailType detail1 = new StatusDetailDetailType();
-//        detail1.setName(StatusDetails.STATUS_DETAIL_ACCEPTABLE_DESTINATION);
-//        detail1.getContent().add("Custom status detail value");
-//        details.add(detail1);
+        final StatusMessage sm03 = new StatusMessage();
+        sm03.setMessageId("SM03");
+        sm03.setInResponseTo(Messages.generateMessageId());
+        sm03.setStatusType(STATUS_TYPE_DESTINATION_COLLECTION_ERROR);
         
+        final StatusDetailType detailsHolder = new StatusDetailType();
+        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
+        details.add(StatusMessages.createStatusDetailDetail(STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection1"));
+        details.add(StatusMessages.createStatusDetailDetail(STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection2"));
+        sm03.setStatusDetail(detailsHolder);
+        
+        roundTripMessage(sm03);
     }
-    
+
+
     private void roundTripMessage(MessageType msg) throws Exception {
         final Marshaller m = taxiiXml.createMarshaller(true);
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();

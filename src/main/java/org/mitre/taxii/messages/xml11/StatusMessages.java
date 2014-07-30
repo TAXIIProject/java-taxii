@@ -66,8 +66,8 @@ public final class StatusMessages implements StatusDetails, StatusTypes {
     
     
     /**
-     * Creates an Invalid Response Part Status Message with the given maximum
-     * part number.
+     * Utility method to create an Invalid Response Part Status Message 
+     * with the given maximum part number.
      */
     public static StatusMessage createInvalidResponsePart(int maxPartNumber) {
         final StatusMessage sm = factory.createStatusMessage();
@@ -84,4 +84,21 @@ public final class StatusMessages implements StatusDetails, StatusTypes {
         sm.setStatusDetail(detailsHolder);
         return sm;
     }
+
+
+    /**
+     * Utility method to create a status detail with the given name and value.
+     */
+    public static StatusDetailDetailType createStatusDetailDetail(
+            final String name, 
+            final Object value) {
+        final StatusDetailDetailType detail1 = new StatusDetailDetailType();
+        detail1.setName(name);
+        detail1.getContent().add(value);
+        return detail1;
+    }
+    
+    
+    
+    
 }
