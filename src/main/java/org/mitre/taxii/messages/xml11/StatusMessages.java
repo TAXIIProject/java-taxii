@@ -88,6 +88,24 @@ public final class StatusMessages implements StatusDetails, StatusTypes {
 
     /**
      * Utility method to create a status detail with the given name and value.
+     * 
+     * <p>
+     * When dealing with Strings, this method is far preferable to using 
+     * the JAXB classes directly.  Specifically, adding multiple Strings 
+     * to the list returned by {@link StatusDetailDetailType#getContent()}
+     * results in the Strings being squashed into the same text node in the 
+     * resulting XML.  Instead, the right way to express a 
+     * Status Detail with multiple string values is to *repeat* the
+     * name and give it another value.  The XML should look like this:
+     * </p>
+     * 
+     * <xmp>
+    <Status_Detail>
+        <Detail name="custom_status_detail_name">Custom status detail value</Detail>
+        <Detail name="Custom_detail_2">this one has</Detail>
+        <Detail name="Custom_detail_2">multiple values</Detail>
+    </Status_Detail>
+     * </xmp>
      */
     public static StatusDetailDetailType createStatusDetailDetail(
             final String name, 
