@@ -16,11 +16,24 @@
   <!--
     Binding customizations defining package names for generated code.
   -->
-  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-xjc.xsd" node="/xsd:schema">
+  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd" node="/xsd:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xml11"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
+
+  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.0-xjc.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.mitre.taxii.messages.xml10"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  <jaxb:bindings schemaLocation="TAXII_DefaultQuery_Schema.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.mitre.taxii.query"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
   <jaxb:bindings schemaLocation="xmldsig-core-schema-xjc.xsd" node="/xsd:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xmldsig"/>
