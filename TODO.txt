@@ -2,9 +2,13 @@ ROADMAP
 =========
 0.1
 TAXII XML Message Binding Spec 1.1
-- create messages programmatically
-- marshal/unmarshal messages
-- marshal/unmarshal content blocks (to support content-block nesting)
+- Create messages programmatically
+    + Move TaxiiXml up a level so that it can be factory for 1.1 and 1.0 XML
+- Marshal/unmarshal messages
+- Marshal/unmarshal content blocks (to support content-block nesting)
+- add additional conformance checks using Schematron. Translate the Schematron
+	into XSLT and bundle the XSLT in with java-taxii.
+
 
 0.2
 TAXII Default Query Spec 1.0
@@ -143,13 +147,3 @@ Additional tasks
     or Extended Header to have a collection of list of values and avoid 
     marshalling problems in XML.
     See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
-* Prevent users from creating a StatusDetail or Extended Header with a list of
-    Strings as a value.  A list of strings in a mixed content field collapses
-    to a *single* text field when marshalled.  The right way to express a 
-    Status Detail or Extended Header with multiple values is to *repeat* the
-    name and give it another value.  The XML should look like this:
-    <Status_Detail>
-        <Detail name="custom_status_detail_name">Custom status detail value</Detail>
-        <Detail name="Custom_detail_2">this one has</Detail>
-        <Detail name="Custom_detail_2">multiple values</Detail>
-    </Status_Detail>
