@@ -5,3 +5,5 @@
 /build
 /.eclipse-bak
 /.settings
+/.nb-gradle/private/
+/private/
