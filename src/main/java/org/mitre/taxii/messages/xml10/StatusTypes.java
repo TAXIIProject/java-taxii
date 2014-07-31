@@ -33,39 +33,37 @@ package org.mitre.taxii.messages.xml10;
  */
 public interface StatusTypes {
 
-    /* # TAXII 1.0 Status Types */
-
     /* Constant identifying a Status Type of Bad Message */
-    String ST_BAD_MESSAGE = "BAD_MESSAGE";
+    String STATUS_TYPE_BAD_MESSAGE = "BAD_MESSAGE";
     
     /* Constant identifying a Status Type of Denied */
-    String ST_DENIED = "DENIED";
+    String STATUS_TYPE_DENIED = "DENIED";
 
     /* Constant identifying a Status Type of Failure */
-    String ST_FAILURE = "FAILURE";
+    String STATUS_TYPE_FAILURE = "FAILURE";
 
     /* Constant identifying a Status Type of Not Found */
-    String ST_NOT_FOUND = "NOT_FOUND";
+    String STATUS_TYPE_NOT_FOUND = "NOT_FOUND";
 
     /* Constant identifying a Status Type of Polling Unsupported */
-    String ST_POLLING_UNSUPPORTED = "POLLING_UNSUPPORTED";
+    String STATUS_TYPE_POLLING_UNSUPPORTED = "POLLING_UNSUPPORTED";
 
     /* Constant identifying a Status Type of Retry */
-    String ST_RETRY = "RETRY";
+    String STATUS_TYPE_RETRY = "RETRY";
 
     /* Constant identifying a Status Type of Success */
-    String ST_SUCCESS = "SUCCESS";
+    String STATUS_TYPE_SUCCESS = "SUCCESS";
 
     /* Constant identifying a Status Type of Unauthorized */
-    String ST_UNAUTHORIZED = "UNAUTHORIZED";
+    String STATUS_TYPE_UNAUTHORIZED = "UNAUTHORIZED";
 
     /* Constant identifying a Status Type of Unsupported Message Binding */
-    String ST_UNSUPPORTED_MESSAGE_BINDING = "UNSUPPORTED_MESSAGE";
+    String STATUS_TYPE_UNSUPPORTED_MESSAGE_BINDING = "UNSUPPORTED_MESSAGE";
 
     /* Constant identifying a Status Type of Unsupported Content Binding */
-    String ST_UNSUPPORTED_CONTENT_BINDING = "UNSUPPORTED_CONTENT";
+    String STATUS_TYPE_UNSUPPORTED_CONTENT_BINDING = "UNSUPPORTED_CONTENT";
 
     /* Constant identifying a Status Type of Unsupported Protocol Binding */
-    String ST_UNSUPPORTED_PROTOCOL = "UNSUPPORTED_PROTOCOL";
+    String STATUS_TYPE_UNSUPPORTED_PROTOCOL = "UNSUPPORTED_PROTOCOL";
 
 }

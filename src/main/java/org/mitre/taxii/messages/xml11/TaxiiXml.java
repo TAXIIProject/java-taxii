@@ -75,7 +75,7 @@ import org.xml.sax.SAXParseException;
  *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
  *   Validation results = taxiiXml.validateFast(msg);
  *   if (results.hasWarnings()) {
- *     System.out.print("Validation ");
+ *     System.out.print("Validation warnings: ");
  *     System.out.println(results.getAllWarnings());
  *   }
  *   Marshaller m = taxiiXml.createMarshaller(true);
@@ -101,7 +101,7 @@ import org.xml.sax.SAXParseException;
  *   MessageType msg = (MessageType) u.unmarshal(input);
  *   Validation results = taxiiXml.validateFast(msg);
  *   if (results.hasWarnings()) {
- *     System.out.print("Validation ");
+ *     System.out.print("Validation warnings: ");
  *     System.out.println(results.getAllWarnings());
  *   }
  *   // do something with msg
@@ -125,14 +125,14 @@ import org.xml.sax.SAXParseException;
  *   Validation results = taxiiXml.validateAll(msg);
  *   if (results.isSuccess()) {
  *     if (results.hasWarnings()) {
- *       System.out.print("Validation ");
+ *     System.out.print("Validation warnings: ");
  *       System.out.println(results.getAllWarnings());
  *     }
  *     Marshaller m = taxiiXml.createMarshaller(true);
  *     m.marshal(msg, System.out);
  *   }
- *   else {  // validation errors
- *     System.err.print("Validation ");
+ *   else {  // validation errors and warnings together
+ *     System.err.print("Validation results: ");
  *     System.err.println(results.getAllErrorsAndWarnings());
  *   }
  * }
@@ -157,13 +157,13 @@ import org.xml.sax.SAXParseException;
  *   Validation results = taxiiXml.validateAll(msg);
  *   if (results.isSuccess()) {
  *     if (results.hasWarnings()) {
- *       System.out.print("Validation ");
+ *       System.out.print("Validation warnings: ");
  *       System.out.println(results.getAllWarnings());
  *     }
  *     // do something with msg
  *   }
- *   else {  // validation errors
- *     System.err.print("Validation ");
+ *   else {  // validation errors and warnings together
+ *     System.err.print("Validation results: ");
  *     System.err.println(results.getAllErrorsAndWarnings());
  *   }
  * }
@@ -181,7 +181,7 @@ import org.xml.sax.SAXParseException;
  * @author Jonathan W. Cranford
  */
 // TODO copy the above code to a driver to test it out 
-public final class TaxiiXml {
+public final class TaxiiXml implements StatusDetails, StatusTypes {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-xjc.xsd";
     
@@ -389,16 +389,26 @@ public final class TaxiiXml {
             StatusMessage msg, 
             boolean failFast) 
     throws SAXException {
-        switch(msg.getStatusType()) {
-        case StatusTypes.ST_INVALID_RESPONSE_PART: 
-            if (msg.getStatusDetail() == null 
+        // If status type is null, then validation should have already failed.
+        // This situation should only occur when failFast is false.
+        if (msg.getStatusType() == null ) {
+            assert(!failFast && results.isFailure());
+        }
+        // Otherwise, validate co-constraints based on status type.
+        else {
+            switch(msg.getStatusType()) {
+            
+            // Invalid Response Part requires a Max Part Number
+            case STATUS_TYPE_INVALID_RESPONSE_PART: 
+                if (msg.getStatusDetail() == null 
                 || msg.getStatusDetail().getDetails().size() < 1
-                || StatusMessages.findStatusDetailContentByName(msg, StatusDetails.SDN_MAX_PART_NUMBER) == null) 
-            {
-                final String error = "Missing required status detail: " + StatusDetails.SDN_MAX_PART_NUMBER;
-                results.addError(error);
-                if (failFast) {
-                    throw new SAXException(error);
+                || StatusMessages.findStatusDetailContentByName(msg, STATUS_DETAIL_MAX_PART_NUMBER) == null) 
+                {
+                    final String error = "Missing required status detail: " + STATUS_DETAIL_MAX_PART_NUMBER;
+                    results.addError(error);
+                    if (failFast) {
+                        throw new SAXException(error);
+                    }
                 }
             }
         }

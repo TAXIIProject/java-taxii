@@ -36,26 +36,26 @@ package org.mitre.taxii.messages.xml11;
  * version 1.1.
  * </p>
  * 
- * @author JCRANFORD
+ * @author Jonathan W. Cranford
  */
 public interface StatusTypes extends org.mitre.taxii.messages.xml10.StatusTypes {
 
     /* Constant identifying a Status Type of Asynchronous Poll Error */
-    String ST_ASYNCHRONOUS_POLL_ERROR = "ASYNCHRONOUS_POLL_ERROR";
+    String STATUS_TYPE_ASYNCHRONOUS_POLL_ERROR = "ASYNCHRONOUS_POLL_ERROR";
     
     /* Constant identifying a Status Type of Destination Collection Error */
-    String ST_DESTINATION_COLLECTION_ERROR = "DESTINATION_COLLECTION_ERROR";
+    String STATUS_TYPE_DESTINATION_COLLECTION_ERROR = "DESTINATION_COLLECTION_ERROR";
 
     /* Constant identifying a Status Type of Invalid Response Part */
-    String ST_INVALID_RESPONSE_PART = "INVALID_RESPONSE_PART";
+    String STATUS_TYPE_INVALID_RESPONSE_PART = "INVALID_RESPONSE_PART";
 
     /* Constant identifying a Status Type of Network Error */
-    String ST_NETWORK_ERROR = "NETWORK_ERROR";
+    String STATUS_TYPE_NETWORK_ERROR = "NETWORK_ERROR";
 
     /* Constant identifying a Status Type of Pending */
-    String ST_PENDING = "PENDING";
+    String STATUS_TYPE_PENDING = "PENDING";
 
     /* Constant identifying a Status Type of Unsupported Query Format */
-    String ST_UNSUPPORTED_QUERY = "UNSUPPORTED_QUERY";
+    String STATUS_TYPE_UNSUPPORTED_QUERY = "UNSUPPORTED_QUERY";
 
 }
