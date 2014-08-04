@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -66,6 +67,26 @@ public class SubscriptionManagementResponse
     @XmlAttribute(name = "feed_name", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String feedName;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubscriptionManagementResponse() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubscriptionManagementResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final String message, final List<SubscriptionRecordType> subscriptions, final Signature signature, final String feedName) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.message = message;
+        this.subscriptions = subscriptions;
+        this.signature = signature;
+        this.feedName = feedName;
+    }
 
     /**
      * Gets the value of the message property.
@@ -251,6 +272,55 @@ public class SubscriptionManagementResponse
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubscriptionManagementResponse withMessage(String value) {
+        setMessage(value);
+        return this;
+    }
+
+    public SubscriptionManagementResponse withSubscriptions(SubscriptionRecordType... values) {
+        if (values!= null) {
+            for (SubscriptionRecordType value: values) {
+                getSubscriptions().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SubscriptionManagementResponse withSubscriptions(Collection<SubscriptionRecordType> values) {
+        if (values!= null) {
+            getSubscriptions().addAll(values);
+        }
+        return this;
+    }
+
+    public SubscriptionManagementResponse withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public SubscriptionManagementResponse withFeedName(String value) {
+        setFeedName(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementResponse withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementResponse withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementResponse withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

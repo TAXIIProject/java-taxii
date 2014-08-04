@@ -48,6 +48,22 @@ public abstract class RequestMessageType
 {
 
 
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public RequestMessageType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public RequestMessageType(final ExtendedHeadersType extendedHeaders, final String messageId) {
+        super(extendedHeaders, messageId);
+    }
+
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
         if (!(object instanceof RequestMessageType)) {
             return false;
@@ -74,6 +90,18 @@ public abstract class RequestMessageType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    @Override
+    public RequestMessageType withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public RequestMessageType withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

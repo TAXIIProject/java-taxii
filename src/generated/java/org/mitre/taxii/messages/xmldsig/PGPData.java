@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -63,6 +64,24 @@ public class PGPData implements Equals, HashCode
     protected byte[] pgpKeyPacket;
     @XmlAnyElement
     protected List<Element> anies;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PGPData() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PGPData(final byte[] pgpKeyID, final byte[] pgpKeyPacket, final List<Element> anies) {
+        this.pgpKeyID = pgpKeyID;
+        this.pgpKeyPacket = pgpKeyPacket;
+        this.anies = anies;
+    }
 
     /**
      * Gets the value of the pgpKeyID property.
@@ -203,6 +222,32 @@ public class PGPData implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PGPData withPGPKeyID(byte[] value) {
+        setPGPKeyID(value);
+        return this;
+    }
+
+    public PGPData withPGPKeyPacket(byte[] value) {
+        setPGPKeyPacket(value);
+        return this;
+    }
+
+    public PGPData withAnies(Element... values) {
+        if (values!= null) {
+            for (Element value: values) {
+                getAnies().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PGPData withAnies(Collection<Element> values) {
+        if (values!= null) {
+            getAnies().addAll(values);
+        }
+        return this;
     }
 
 }

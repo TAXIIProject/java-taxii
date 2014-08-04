@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -50,8 +51,7 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement(name = "Transform")
-public class Transform
-    implements Equals, HashCode
+public class Transform implements Equals, HashCode
 {
 
     @XmlElementRef(name = "XPath", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
@@ -61,6 +61,23 @@ public class Transform
     @XmlAttribute(name = "Algorithm", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String algorithm;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Transform() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Transform(final List<java.lang.Object> content, final String algorithm) {
+        this.content = content;
+        this.algorithm = algorithm;
+    }
 
     /**
      * Gets the value of the content property.
@@ -80,10 +97,10 @@ public class Transform
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link java.lang.Object }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link Element }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link String }
+     * {@link java.lang.Object }
      * 
      * 
      */
@@ -170,6 +187,27 @@ public class Transform
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Transform withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public Transform withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public Transform withAlgorithm(String value) {
+        setAlgorithm(value);
+        return this;
     }
 
 }

@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -39,11 +39,6 @@ import javax.xml.bind.util.JAXBSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.mitre.taxii.messages.xml11.MessageType;
-import org.mitre.taxii.messages.xml11.ObjectFactory;
-import org.mitre.taxii.messages.xml11.StatusDetails;
-import org.mitre.taxii.messages.xml11.StatusMessage;
-import org.mitre.taxii.messages.xml11.StatusMessageHelper;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
 import org.mitre.taxii.util.Validation;
@@ -186,7 +181,7 @@ import org.xml.sax.SAXParseException;
  * @author Jonathan W. Cranford
  */
 // TODO copy the above code to a driver to test it out 
-public final class TaxiiXml implements StatusDetails {
+public final class TaxiiXml {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd";
     
@@ -397,28 +392,11 @@ public final class TaxiiXml implements StatusDetails {
     throws SAXException {
         // If status type is null, then validation should have already failed.
         // This situation should only occur when failFast is false.
-        if (msg.getStatusType() == null ) {
+        if (null == msg.getStatusType()) {
             assert(!failFast && results.isFailure());
         }
-        // Otherwise, validate co-constraints based on status type.
-        else {
-            StatusTypeEnum ste = StatusTypeEnum.fromValue(msg.getStatusType());
-            switch(ste) {
-            
-            // Invalid Response Part requires a Max Part Number
-            case INVALID_RESPONSE_PART : 
-                if (msg.getStatusDetail() == null 
-                || msg.getStatusDetail().getDetails().size() < 1
-                || StatusMessageHelper.findStatusDetailContentByName(msg, STATUS_DETAIL_MAX_PART_NUMBER) == null) 
-                {
-                    final String error = "Missing required status detail: " + STATUS_DETAIL_MAX_PART_NUMBER;
-                    results.addError(error);
-                    if (failFast) {
-                        throw new SAXException(error);
-                    }
-                }
-            }
-        }
+        
+        // TODO: Add Schematron validation of Status Message.
     }
     
 }

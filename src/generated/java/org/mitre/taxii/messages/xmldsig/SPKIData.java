@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -52,6 +53,22 @@ public class SPKIData implements Equals, HashCode
     @XmlElementRef(name = "SPKISexp", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class)
     @XmlAnyElement
     protected List<java.lang.Object> spkiSexpsAndAnies;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SPKIData() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SPKIData(final List<java.lang.Object> spkiSexpsAndAnies) {
+        this.spkiSexpsAndAnies = spkiSexpsAndAnies;
+    }
 
     /**
      * Gets the value of the spkiSexpsAndAnies property.
@@ -121,6 +138,22 @@ public class SPKIData implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SPKIData withSPKISexpsAndAnies(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getSPKISexpsAndAnies().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SPKIData withSPKISexpsAndAnies(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getSPKISexpsAndAnies().addAll(values);
+        }
+        return this;
     }
 
 }

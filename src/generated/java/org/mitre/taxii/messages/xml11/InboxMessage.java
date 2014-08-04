@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -79,6 +80,29 @@ public class InboxMessage
     @XmlAttribute(name = "result_id")
     @XmlSchemaType(name = "anyURI")
     protected String resultId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public InboxMessage() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public InboxMessage(final ExtendedHeadersType extendedHeaders, final String messageId, final List<String> destinationCollectionNames, final String message, final SourceSubscriptionType sourceSubscription, final RecordCountType recordCount, final List<ContentBlockType> contentBlocks, final Signature signature, final String resultId) {
+        super(extendedHeaders, messageId);
+        this.destinationCollectionNames = destinationCollectionNames;
+        this.message = message;
+        this.sourceSubscription = sourceSubscription;
+        this.recordCount = recordCount;
+        this.contentBlocks = contentBlocks;
+        this.signature = signature;
+        this.resultId = resultId;
+    }
 
     /**
      * Gets the value of the destinationCollectionNames property.
@@ -383,6 +407,75 @@ public class InboxMessage
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public InboxMessage withDestinationCollectionNames(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getDestinationCollectionNames().add(value);
+            }
+        }
+        return this;
+    }
+
+    public InboxMessage withDestinationCollectionNames(Collection<String> values) {
+        if (values!= null) {
+            getDestinationCollectionNames().addAll(values);
+        }
+        return this;
+    }
+
+    public InboxMessage withMessage(String value) {
+        setMessage(value);
+        return this;
+    }
+
+    public InboxMessage withSourceSubscription(SourceSubscriptionType value) {
+        setSourceSubscription(value);
+        return this;
+    }
+
+    public InboxMessage withRecordCount(RecordCountType value) {
+        setRecordCount(value);
+        return this;
+    }
+
+    public InboxMessage withContentBlocks(ContentBlockType... values) {
+        if (values!= null) {
+            for (ContentBlockType value: values) {
+                getContentBlocks().add(value);
+            }
+        }
+        return this;
+    }
+
+    public InboxMessage withContentBlocks(Collection<ContentBlockType> values) {
+        if (values!= null) {
+            getContentBlocks().addAll(values);
+        }
+        return this;
+    }
+
+    public InboxMessage withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public InboxMessage withResultId(String value) {
+        setResultId(value);
+        return this;
+    }
+
+    @Override
+    public InboxMessage withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public InboxMessage withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

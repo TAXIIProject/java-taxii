@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -59,8 +60,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "pollingServices",
     "subscriptionServices"
 })
-public class FeedRecordType
-    implements Equals, HashCode
+public class FeedRecordType implements Equals, HashCode
 {
 
     @XmlElement(name = "Description", required = true)
@@ -79,6 +79,28 @@ public class FeedRecordType
     protected String feedName;
     @XmlAttribute(name = "available")
     protected Boolean available;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public FeedRecordType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public FeedRecordType(final String description, final List<String> contentBindings, final List<PushMethodType> pushMethods, final List<ServiceContactInfoType> pollingServices, final List<ServiceContactInfoType> subscriptionServices, final String feedName, final Boolean available) {
+        this.description = description;
+        this.contentBindings = contentBindings;
+        this.pushMethods = pushMethods;
+        this.pollingServices = pollingServices;
+        this.subscriptionServices = subscriptionServices;
+        this.feedName = feedName;
+        this.available = available;
+    }
 
     /**
      * Gets the value of the description property.
@@ -390,6 +412,85 @@ public class FeedRecordType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public FeedRecordType withDescription(String value) {
+        setDescription(value);
+        return this;
+    }
+
+    public FeedRecordType withContentBindings(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public FeedRecordType withContentBindings(Collection<String> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public FeedRecordType withPushMethods(PushMethodType... values) {
+        if (values!= null) {
+            for (PushMethodType value: values) {
+                getPushMethods().add(value);
+            }
+        }
+        return this;
+    }
+
+    public FeedRecordType withPushMethods(Collection<PushMethodType> values) {
+        if (values!= null) {
+            getPushMethods().addAll(values);
+        }
+        return this;
+    }
+
+    public FeedRecordType withPollingServices(ServiceContactInfoType... values) {
+        if (values!= null) {
+            for (ServiceContactInfoType value: values) {
+                getPollingServices().add(value);
+            }
+        }
+        return this;
+    }
+
+    public FeedRecordType withPollingServices(Collection<ServiceContactInfoType> values) {
+        if (values!= null) {
+            getPollingServices().addAll(values);
+        }
+        return this;
+    }
+
+    public FeedRecordType withSubscriptionServices(ServiceContactInfoType... values) {
+        if (values!= null) {
+            for (ServiceContactInfoType value: values) {
+                getSubscriptionServices().add(value);
+            }
+        }
+        return this;
+    }
+
+    public FeedRecordType withSubscriptionServices(Collection<ServiceContactInfoType> values) {
+        if (values!= null) {
+            getSubscriptionServices().addAll(values);
+        }
+        return this;
+    }
+
+    public FeedRecordType withFeedName(String value) {
+        setFeedName(value);
+        return this;
+    }
+
+    public FeedRecordType withAvailable(Boolean value) {
+        setAvailable(value);
+        return this;
     }
 
 }

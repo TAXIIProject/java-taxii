@@ -52,6 +52,23 @@ public class FeedInformationRequest
     protected Signature signature;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public FeedInformationRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public FeedInformationRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final Signature signature) {
+        super(extendedHeaders, messageId);
+        this.signature = signature;
+    }
+
+    /**
      * An XML Digital Signature scoped to this message.
      * 
      * @return
@@ -116,6 +133,23 @@ public class FeedInformationRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public FeedInformationRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public FeedInformationRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public FeedInformationRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

@@ -74,6 +74,28 @@ public class SubscriptionManagementRequest
     protected String collectionName;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubscriptionManagementRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubscriptionManagementRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final String subscriptionID, final SubscriptionParametersType subscriptionParameters, final PushParameterType pushParameters, final Signature signature, final CollectionActionEnum action, final String collectionName) {
+        super(extendedHeaders, messageId);
+        this.subscriptionID = subscriptionID;
+        this.subscriptionParameters = subscriptionParameters;
+        this.pushParameters = pushParameters;
+        this.signature = signature;
+        this.action = action;
+        this.collectionName = collectionName;
+    }
+
+    /**
      * Gets the value of the subscriptionID property.
      * 
      * @return
@@ -328,6 +350,48 @@ public class SubscriptionManagementRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubscriptionManagementRequest withSubscriptionID(String value) {
+        setSubscriptionID(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withSubscriptionParameters(SubscriptionParametersType value) {
+        setSubscriptionParameters(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withPushParameters(PushParameterType value) {
+        setPushParameters(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withAction(CollectionActionEnum value) {
+        setAction(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

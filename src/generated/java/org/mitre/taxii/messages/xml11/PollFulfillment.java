@@ -67,6 +67,26 @@ public class PollFulfillment
     protected BigInteger resultPartNumber;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public PollFulfillment() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PollFulfillment(final ExtendedHeadersType extendedHeaders, final String messageId, final Signature signature, final String collectionName, final String resultId, final BigInteger resultPartNumber) {
+        super(extendedHeaders, messageId);
+        this.signature = signature;
+        this.collectionName = collectionName;
+        this.resultId = resultId;
+        this.resultPartNumber = resultPartNumber;
+    }
+
+    /**
      * An XML Digital Signature scoped to this message.
      * 
      * @return
@@ -245,6 +265,38 @@ public class PollFulfillment
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PollFulfillment withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public PollFulfillment withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
+    }
+
+    public PollFulfillment withResultId(String value) {
+        setResultId(value);
+        return this;
+    }
+
+    public PollFulfillment withResultPartNumber(BigInteger value) {
+        setResultPartNumber(value);
+        return this;
+    }
+
+    @Override
+    public PollFulfillment withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public PollFulfillment withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

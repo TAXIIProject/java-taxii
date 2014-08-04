@@ -1,6 +1,8 @@
 
 package org.mitre.taxii.messages.xml11;
 
+import java.util.Collection;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -45,6 +47,23 @@ public class SupportedQueryType
     @XmlAttribute(name = "format_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String formatId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SupportedQueryType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SupportedQueryType(final List<Object> content, final String formatId) {
+        super(content);
+        this.formatId = formatId;
+    }
 
     /**
      * Gets the value of the formatId property.
@@ -111,6 +130,29 @@ public class SupportedQueryType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SupportedQueryType withFormatId(String value) {
+        setFormatId(value);
+        return this;
+    }
+
+    @Override
+    public SupportedQueryType withContent(Object... values) {
+        if (values!= null) {
+            for (Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public SupportedQueryType withContent(Collection<Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
     }
 
 }

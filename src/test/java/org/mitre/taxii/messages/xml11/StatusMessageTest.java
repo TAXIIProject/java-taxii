@@ -28,7 +28,11 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -46,19 +50,18 @@ import static org.junit.Assert.*;
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTest implements StatusDetails, StatusTypes {
+public class StatusMessageTest implements StatusDetails {
     
     private static final String INVALID_XML_RESOURCE = "/invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXml taxiiXml;
-    private final boolean debug = Boolean.getBoolean("debug"); 
+    private final boolean debug = true; // Boolean.getBoolean("debug"); 
     
     public StatusMessageTest() {
         taxiiXml = TaxiiXml.newInstance();
     }
-    
-    
+            
     /** 
      * Verify that a custom status message can be created and round-tripped
      * successfully.
@@ -80,14 +83,10 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("SM01");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(STATUS_TYPE_SUCCESS);
+        sm.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
-        final StatusDetailType detailsHolder = factory.createStatusDetailType();
-        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
-        
-        details.add(StatusMessages.createStatusDetailDetail("custom_status_detail_name", "Custom status detail value"));
-        details.add(StatusMessages.createStatusDetailDetail("Custom_detail_2", "this one has"));
-        details.add(StatusMessages.createStatusDetailDetail("Custom_detail_2", "multiple values"));
+        StatusMessageHelper.addDetail(sm, "custom_status_detail_name", "Custom status detail value");
+        StatusMessageHelper.addDetail(sm, "Custom_detail_2", "this one has", "multiple values");        
         
 //        final StatusDetailDetailType detail2 = factory.createStatusDetailDetailType();
 //        detail2.setName("Custom_detail_2");
@@ -100,28 +99,11 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
 ////        d2Contents.add("multiple values");
 //        details.add(detail2);
         
-        sm.setStatusDetail(detailsHolder);
         sm.setMessage("This is a test message");
         
         roundTripMessage(sm);
     }
-    
-
-    /**
-     * Verify that an Invalid Response Part status message can be created
-     * and successfully round-tripped.
-     */
-    @Test
-    public void goodInvalidResponsePart() throws Exception {
-        final StatusMessage sm = StatusMessages.createInvalidResponsePart(2345);
-        sm.setMessageId("goodInvalidResponsePart");
-        sm.setInResponseTo(Messages.generateMessageId());
-        sm.setMessage("This is a valid test status message");
-        
-        roundTripMessage(sm);
-    }
-    
-    
+            
     /** 
      * Verify that an bad Invalid Response Part status message with no status details
      * fails validation.
@@ -131,7 +113,7 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("badInvalidResponsePart1");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(STATUS_TYPE_INVALID_RESPONSE_PART);
+        sm.setStatusType(StatusTypeEnum.INVALID_RESPONSE_PART.toString());
 
         // this should fail validation because it's missing any status details
         try {
@@ -158,7 +140,7 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("badInvalidResponsePart2");
         sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(STATUS_TYPE_INVALID_RESPONSE_PART);
+        sm.setStatusType(StatusTypeEnum.INVALID_RESPONSE_PART.toString());
 
         final StatusDetailType detailsHolder = factory.createStatusDetailType();
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
@@ -221,7 +203,7 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(STATUS_TYPE_SUCCESS);
+        sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         roundTripMessage(sm02);
     }
     
@@ -234,7 +216,7 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm02 = factory.createStatusMessage();
 //        sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(STATUS_TYPE_SUCCESS);
+        sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         Validation results = taxiiXml.validateAll(sm02);
         assertTrue(results.isFailure());
         if (debug) {
@@ -252,7 +234,7 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
 //        sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(STATUS_TYPE_SUCCESS);
+        sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         Validation results = taxiiXml.validateAll(sm02);
         assertTrue(results.isFailure());
         if (debug) {
@@ -300,22 +282,112 @@ public class StatusMessageTest implements StatusDetails, StatusTypes {
         final StatusMessage sm03 = new StatusMessage();
         sm03.setMessageId("SM03");
         sm03.setInResponseTo(Messages.generateMessageId());
-        sm03.setStatusType(STATUS_TYPE_DESTINATION_COLLECTION_ERROR);
-        
-        final StatusDetailType detailsHolder = new StatusDetailType();
-        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
-        details.add(StatusMessages.createStatusDetailDetail(STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection1"));
-        details.add(StatusMessages.createStatusDetailDetail(STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection2"));
-        sm03.setStatusDetail(detailsHolder);
-        
+        sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
+                   
+        StatusMessageHelper.addDetail(sm03, STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection1", "Collection2");
+                
         roundTripMessage(sm03);
     }
 
+    /**
+     * Verify that an Invalid Response Part status message can be created
+     * and successfully round-tripped.
+     */
+    @Test
+    public void goodInvalidResponsePart() throws Exception, JAXBException, JAXBException, SAXException {
+    /**
+        def test_status_message_04(self):
+            sm04 = tm11.StatusMessage(
+            message_id='SM04',  # Required
+            in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+            status_type=tm11.ST_INVALID_RESPONSE_PART,  # Required
+            status_detail={'MAX_PART_NUMBER': 4},  # Required/optional depending on Status Type. See spec for details
+            message=None  # Optional
+        )
+        round_trip_message(sm04)
+    */
 
-    private void roundTripMessage(MessageType msg) throws Exception {
+        final StatusMessage sm04 = StatusMessageHelper.createInvalidResponsePart(4);
+        sm04.setMessageId("SM04");
+        sm04.setInResponseTo(Messages.generateMessageId());
+        sm04.setMessage("This is a valid test status message");
+        
+        roundTripMessage(sm04);
+    }
+    
+    @Test
+    public void goodNotFound() throws JAXBException, SAXException, IOException {
+        /**
+        def test_status_message_05(self):
+            sm05 = tm11.StatusMessage(
+                message_id='SM05',  # Required
+                in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+                status_type=tm11.ST_NOT_FOUND,  # Required
+                status_detail={'ITEM': 'Collection1'},  # Required/optional depending on Status Type. See spec for details
+                message=None  # Optional
+            )
+            round_trip_message(sm05)
+         */
+        
+        StatusMessage sm05 = new StatusMessage()
+                                    .withMessageId("SM05")
+                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
+        
+        StatusMessageHelper.addDetail(sm05, STATUS_DETAIL_ITEM, "Collection1");
+
+        roundTripMessage(sm05);        
+    }
+    
+    @Test
+    public void goodPending() throws JAXBException, SAXException, IOException, URISyntaxException {
+        /**
+        def test_status_message_06(self):
+            sm06 = tm11.StatusMessage(
+                    message_id='SM06',  # Required
+                    in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+                    status_type=tm11.ST_PENDING,  # Required
+                    status_detail={'ESTIMATED_WAIT': 900, 'RESULT_ID': 'Result1', 'WILL_PUSH': False},  # Required/optional depending on Status Type. See spec for details
+                    message=None  # Optional
+            )
+            round_trip_message(sm06)
+        */
+        
+        StatusMessage sm06 = StatusMessageHelper.createPending(900, new URI("Result1"), false);
+        sm06.setMessageId("SM06");
+        sm06.setInResponseTo(Messages.generateMessageId());
+        
+        /* The manual way.
+        StatusMessage sm06 = new StatusMessage()
+                                    .withMessageId("SM06")
+                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withStatusType(StatusTypeEnum.PENDING.toString());
+        
+        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_ESTIMATED_WAIT, 900);
+        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_RESULT_ID, "Result1");
+        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_WILL_PUSH, Boolean.FALSE);
+        */
+        
+        roundTripMessage(sm06);        
+    }
+    
+    /**
+     * Confirm that a JAXB MessageType Object matches itself when marshaled to
+     * a String and back.
+     * 
+     * @param msg
+     * @throws Exception 
+     */
+    private void roundTripMessage(MessageType msg) throws JAXBException, SAXException, IOException {
         final Marshaller m = taxiiXml.createMarshaller(true);
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
-        
+        final String rawString = taxiiXml.marshalToString(m, msg);
+
+        if (debug) {
+            System.out.println("raw unvalidated XML:\n");
+            System.out.println(rawString);
+        }
+
         assertValid(msg);
         final String xmlString = taxiiXml.marshalToString(m, msg);
         final MessageType msgFromXml = 

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -42,12 +43,27 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "ExtendedHeadersType", propOrder = {
     "extendedHeaders"
 })
-public class ExtendedHeadersType
-    implements Equals, HashCode
+public class ExtendedHeadersType implements Equals, HashCode
 {
 
     @XmlElement(name = "Extended_Header", required = true)
     protected List<ExtendedHeaderType> extendedHeaders;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ExtendedHeadersType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ExtendedHeadersType(final List<ExtendedHeaderType> extendedHeaders) {
+        this.extendedHeaders = extendedHeaders;
+    }
 
     /**
      * Gets the value of the extendedHeaders property.
@@ -116,6 +132,22 @@ public class ExtendedHeadersType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ExtendedHeadersType withExtendedHeaders(ExtendedHeaderType... values) {
+        if (values!= null) {
+            for (ExtendedHeaderType value: values) {
+                getExtendedHeaders().add(value);
+            }
+        }
+        return this;
+    }
+
+    public ExtendedHeadersType withExtendedHeaders(Collection<ExtendedHeaderType> values) {
+        if (values!= null) {
+            getExtendedHeaders().addAll(values);
+        }
+        return this;
     }
 
 }

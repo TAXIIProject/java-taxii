@@ -42,8 +42,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "RecordCountType", propOrder = {
     "value"
 })
-public class RecordCountType
-    implements Equals, HashCode
+public class RecordCountType implements Equals, HashCode
 {
 
     @XmlValue
@@ -51,6 +50,23 @@ public class RecordCountType
     protected BigInteger value;
     @XmlAttribute(name = "partial_count")
     protected Boolean partialCount;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public RecordCountType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public RecordCountType(final BigInteger value, final Boolean partialCount) {
+        this.value = value;
+        this.partialCount = partialCount;
+    }
 
     /**
      * Gets the value of the value property.
@@ -156,6 +172,16 @@ public class RecordCountType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public RecordCountType withValue(BigInteger value) {
+        setValue(value);
+        return this;
+    }
+
+    public RecordCountType withPartialCount(Boolean value) {
+        setPartialCount(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -52,8 +53,7 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement(name = "Object")
-public class Object
-    implements Equals, HashCode
+public class Object implements Equals, HashCode
 {
 
     @XmlMixed
@@ -69,6 +69,25 @@ public class Object
     @XmlAttribute(name = "Encoding")
     @XmlSchemaType(name = "anyURI")
     protected String encoding;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Object() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Object(final List<java.lang.Object> content, final String id, final String mimeType, final String encoding) {
+        this.content = content;
+        this.id = id;
+        this.mimeType = mimeType;
+        this.encoding = encoding;
+    }
 
     /**
      * Gets the value of the content property.
@@ -88,9 +107,9 @@ public class Object
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link String }
      * {@link Element }
      * {@link java.lang.Object }
-     * {@link String }
      * 
      * 
      */
@@ -253,6 +272,37 @@ public class Object
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Object withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public Object withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public Object withId(String value) {
+        setId(value);
+        return this;
+    }
+
+    public Object withMimeType(String value) {
+        setMimeType(value);
+        return this;
+    }
+
+    public Object withEncoding(String value) {
+        setEncoding(value);
+        return this;
     }
 
 }

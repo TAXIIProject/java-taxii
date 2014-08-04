@@ -78,6 +78,28 @@ public class PollRequest
     protected String collectionName;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public PollRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PollRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final PollParametersType pollParameters, final String subscriptionID, final Signature signature, final String collectionName) {
+        super(extendedHeaders, messageId);
+        this.exclusiveBeginTimestamp = exclusiveBeginTimestamp;
+        this.inclusiveEndTimestamp = inclusiveEndTimestamp;
+        this.pollParameters = pollParameters;
+        this.subscriptionID = subscriptionID;
+        this.signature = signature;
+        this.collectionName = collectionName;
+    }
+
+    /**
      * Gets the value of the exclusiveBeginTimestamp property.
      * 
      * @return
@@ -332,6 +354,48 @@ public class PollRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PollRequest withExclusiveBeginTimestamp(XMLGregorianCalendar value) {
+        setExclusiveBeginTimestamp(value);
+        return this;
+    }
+
+    public PollRequest withInclusiveEndTimestamp(XMLGregorianCalendar value) {
+        setInclusiveEndTimestamp(value);
+        return this;
+    }
+
+    public PollRequest withPollParameters(PollParametersType value) {
+        setPollParameters(value);
+        return this;
+    }
+
+    public PollRequest withSubscriptionID(String value) {
+        setSubscriptionID(value);
+        return this;
+    }
+
+    public PollRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public PollRequest withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
+    }
+
+    @Override
+    public PollRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public PollRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -51,8 +52,7 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement(name = "SignatureProperty")
-public class SignatureProperty
-    implements Equals, HashCode
+public class SignatureProperty implements Equals, HashCode
 {
 
     @XmlMixed
@@ -66,6 +66,24 @@ public class SignatureProperty
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SignatureProperty() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SignatureProperty(final List<java.lang.Object> content, final String target, final String id) {
+        this.content = content;
+        this.target = target;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the content property.
@@ -85,9 +103,9 @@ public class SignatureProperty
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link String }
      * {@link Element }
      * {@link java.lang.Object }
-     * {@link String }
      * 
      * 
      */
@@ -212,6 +230,32 @@ public class SignatureProperty
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SignatureProperty withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SignatureProperty withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public SignatureProperty withTarget(String value) {
+        setTarget(value);
+        return this;
+    }
+
+    public SignatureProperty withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

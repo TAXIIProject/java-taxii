@@ -49,8 +49,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "exclusiveBeginTimestamp",
     "inclusiveEndTimestamp"
 })
-public class SourceSubscriptionType
-    implements Equals, HashCode
+public class SourceSubscriptionType implements Equals, HashCode
 {
 
     @XmlElement(name = "Subscription_ID", required = true)
@@ -63,6 +62,25 @@ public class SourceSubscriptionType
     @XmlAttribute(name = "collection_name", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String collectionName;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SourceSubscriptionType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SourceSubscriptionType(final String subscriptionID, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final String collectionName) {
+        this.subscriptionID = subscriptionID;
+        this.exclusiveBeginTimestamp = exclusiveBeginTimestamp;
+        this.inclusiveEndTimestamp = inclusiveEndTimestamp;
+        this.collectionName = collectionName;
+    }
 
     /**
      * Gets the value of the subscriptionID property.
@@ -240,6 +258,26 @@ public class SourceSubscriptionType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SourceSubscriptionType withSubscriptionID(String value) {
+        setSubscriptionID(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withExclusiveBeginTimestamp(XMLGregorianCalendar value) {
+        setExclusiveBeginTimestamp(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withInclusiveEndTimestamp(XMLGregorianCalendar value) {
+        setInclusiveEndTimestamp(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
     }
 
 }

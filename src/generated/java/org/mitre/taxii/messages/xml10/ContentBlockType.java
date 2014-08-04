@@ -50,8 +50,7 @@ import org.mitre.taxii.messages.xmldsig.Signature;
     "padding",
     "signature"
 })
-public class ContentBlockType
-    implements Equals, HashCode
+public class ContentBlockType implements Equals, HashCode
 {
 
     @XmlElement(name = "Content_Binding", required = true)
@@ -64,6 +63,26 @@ public class ContentBlockType
     protected String padding;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ContentBlockType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ContentBlockType(final String contentBinding, final AnyMixedContentType content, final XMLGregorianCalendar timestampLabel, final String padding, final Signature signature) {
+        this.contentBinding = contentBinding;
+        this.content = content;
+        this.timestampLabel = timestampLabel;
+        this.padding = padding;
+        this.signature = signature;
+    }
 
     /**
      * Gets the value of the contentBinding property.
@@ -279,6 +298,31 @@ public class ContentBlockType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ContentBlockType withContentBinding(String value) {
+        setContentBinding(value);
+        return this;
+    }
+
+    public ContentBlockType withContent(AnyMixedContentType value) {
+        setContent(value);
+        return this;
+    }
+
+    public ContentBlockType withTimestampLabel(XMLGregorianCalendar value) {
+        setTimestampLabel(value);
+        return this;
+    }
+
+    public ContentBlockType withPadding(String value) {
+        setPadding(value);
+        return this;
+    }
+
+    public ContentBlockType withSignature(Signature value) {
+        setSignature(value);
+        return this;
     }
 
 }

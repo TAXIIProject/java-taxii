@@ -52,6 +52,23 @@ public class CollectionInformationRequest
     protected Signature signature;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public CollectionInformationRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CollectionInformationRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final Signature signature) {
+        super(extendedHeaders, messageId);
+        this.signature = signature;
+    }
+
+    /**
      * An XML Digital Signature scoped to this message.
      * 
      * @return
@@ -116,6 +133,23 @@ public class CollectionInformationRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CollectionInformationRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public CollectionInformationRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public CollectionInformationRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,8 +48,7 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement(name = "DigestMethod")
-public class DigestMethod
-    implements Equals, HashCode
+public class DigestMethod implements Equals, HashCode
 {
 
     @XmlMixed
@@ -57,6 +57,23 @@ public class DigestMethod
     @XmlAttribute(name = "Algorithm", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String algorithm;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public DigestMethod() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DigestMethod(final List<java.lang.Object> content, final String algorithm) {
+        this.content = content;
+        this.algorithm = algorithm;
+    }
 
     /**
      * Gets the value of the content property.
@@ -76,9 +93,9 @@ public class DigestMethod
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link String }
      * {@link Element }
      * {@link java.lang.Object }
-     * {@link String }
      * 
      * 
      */
@@ -165,6 +182,27 @@ public class DigestMethod
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DigestMethod withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public DigestMethod withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public DigestMethod withAlgorithm(String value) {
+        setAlgorithm(value);
+        return this;
     }
 
 }

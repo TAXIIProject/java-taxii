@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,16 +45,33 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "contentBindings",
     "query"
 })
-public class SubscriptionParametersType
-    implements Equals, HashCode
+public class SubscriptionParametersType implements Equals, HashCode
 {
 
     @XmlElement(name = "Response_Type", defaultValue = "FULL")
-    protected ResponseTypeEnum responseType;
+    protected ResponseTypeEnum responseType = ResponseTypeEnum.FULL;
     @XmlElement(name = "Content_Binding")
     protected List<ContentBindingIDType> contentBindings;
     @XmlElement(name = "Query")
     protected QueryType query;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubscriptionParametersType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubscriptionParametersType(final ResponseTypeEnum responseType, final List<ContentBindingIDType> contentBindings, final QueryType query) {
+        this.responseType = responseType;
+        this.contentBindings = contentBindings;
+        this.query = query;
+    }
 
     /**
      * Gets the value of the responseType property.
@@ -198,6 +216,32 @@ public class SubscriptionParametersType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubscriptionParametersType withResponseType(ResponseTypeEnum value) {
+        setResponseType(value);
+        return this;
+    }
+
+    public SubscriptionParametersType withContentBindings(ContentBindingIDType... values) {
+        if (values!= null) {
+            for (ContentBindingIDType value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SubscriptionParametersType withContentBindings(Collection<ContentBindingIDType> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public SubscriptionParametersType withQuery(QueryType value) {
+        setQuery(value);
+        return this;
     }
 
 }

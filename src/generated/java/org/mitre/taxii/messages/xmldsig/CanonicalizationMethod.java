@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -46,8 +47,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "content"
 })
 @XmlRootElement(name = "CanonicalizationMethod")
-public class CanonicalizationMethod
-    implements Equals, HashCode
+public class CanonicalizationMethod implements Equals, HashCode
 {
 
     @XmlMixed
@@ -56,6 +56,23 @@ public class CanonicalizationMethod
     @XmlAttribute(name = "Algorithm", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String algorithm;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public CanonicalizationMethod() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CanonicalizationMethod(final List<java.lang.Object> content, final String algorithm) {
+        this.content = content;
+        this.algorithm = algorithm;
+    }
 
     /**
      * Gets the value of the content property.
@@ -163,6 +180,27 @@ public class CanonicalizationMethod
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CanonicalizationMethod withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CanonicalizationMethod withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public CanonicalizationMethod withAlgorithm(String value) {
+        setAlgorithm(value);
+        return this;
     }
 
 }

@@ -43,8 +43,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "value"
 })
 @XmlRootElement(name = "SignatureValue")
-public class SignatureValue
-    implements Equals, HashCode
+public class SignatureValue implements Equals, HashCode
 {
 
     @XmlValue
@@ -54,6 +53,23 @@ public class SignatureValue
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SignatureValue() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SignatureValue(final byte[] value, final String id) {
+        this.value = value;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the value property.
@@ -153,6 +169,16 @@ public class SignatureValue
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SignatureValue withValue(byte[] value) {
+        setValue(value);
+        return this;
+    }
+
+    public SignatureValue withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

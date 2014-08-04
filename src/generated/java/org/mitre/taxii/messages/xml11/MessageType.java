@@ -48,8 +48,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     ResponseMessageType.class,
     RequestMessageType.class
 })
-public abstract class MessageType
-    implements Equals, HashCode
+public abstract class MessageType implements Equals, HashCode
 {
 
     @XmlElement(name = "Extended_Headers")
@@ -57,6 +56,23 @@ public abstract class MessageType
     @XmlAttribute(name = "message_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String messageId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public MessageType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public MessageType(final ExtendedHeadersType extendedHeaders, final String messageId) {
+        this.extendedHeaders = extendedHeaders;
+        this.messageId = messageId;
+    }
 
     /**
      * Gets the value of the extendedHeaders property.
@@ -158,6 +174,16 @@ public abstract class MessageType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public MessageType withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    public MessageType withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

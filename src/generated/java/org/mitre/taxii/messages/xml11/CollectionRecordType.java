@@ -3,6 +3,7 @@ package org.mitre.taxii.messages.xml11;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -60,8 +61,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "subscriptionServices",
     "receivingInboxServices"
 })
-public class CollectionRecordType
-    implements Equals, HashCode
+public class CollectionRecordType implements Equals, HashCode
 {
 
     @XmlElement(name = "Description", required = true)
@@ -86,6 +86,31 @@ public class CollectionRecordType
     protected CollectionTypeEnum collectionType;
     @XmlAttribute(name = "available")
     protected Boolean available;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public CollectionRecordType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CollectionRecordType(final String description, final BigInteger collectionVolume, final List<ContentBindingIDType> contentBindings, final List<PushMethodType> pushMethods, final List<ServiceContactInfoType> pollingServices, final List<ServiceContactInfoType> subscriptionServices, final List<InboxServiceBindingsType> receivingInboxServices, final String collectionName, final CollectionTypeEnum collectionType, final Boolean available) {
+        this.description = description;
+        this.collectionVolume = collectionVolume;
+        this.contentBindings = contentBindings;
+        this.pushMethods = pushMethods;
+        this.pollingServices = pollingServices;
+        this.subscriptionServices = subscriptionServices;
+        this.receivingInboxServices = receivingInboxServices;
+        this.collectionName = collectionName;
+        this.collectionType = collectionType;
+        this.available = available;
+    }
 
     /**
      * Gets the value of the description property.
@@ -520,6 +545,111 @@ public class CollectionRecordType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CollectionRecordType withDescription(String value) {
+        setDescription(value);
+        return this;
+    }
+
+    public CollectionRecordType withCollectionVolume(BigInteger value) {
+        setCollectionVolume(value);
+        return this;
+    }
+
+    public CollectionRecordType withContentBindings(ContentBindingIDType... values) {
+        if (values!= null) {
+            for (ContentBindingIDType value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionRecordType withContentBindings(Collection<ContentBindingIDType> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionRecordType withPushMethods(PushMethodType... values) {
+        if (values!= null) {
+            for (PushMethodType value: values) {
+                getPushMethods().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionRecordType withPushMethods(Collection<PushMethodType> values) {
+        if (values!= null) {
+            getPushMethods().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionRecordType withPollingServices(ServiceContactInfoType... values) {
+        if (values!= null) {
+            for (ServiceContactInfoType value: values) {
+                getPollingServices().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionRecordType withPollingServices(Collection<ServiceContactInfoType> values) {
+        if (values!= null) {
+            getPollingServices().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionRecordType withSubscriptionServices(ServiceContactInfoType... values) {
+        if (values!= null) {
+            for (ServiceContactInfoType value: values) {
+                getSubscriptionServices().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionRecordType withSubscriptionServices(Collection<ServiceContactInfoType> values) {
+        if (values!= null) {
+            getSubscriptionServices().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionRecordType withReceivingInboxServices(InboxServiceBindingsType... values) {
+        if (values!= null) {
+            for (InboxServiceBindingsType value: values) {
+                getReceivingInboxServices().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionRecordType withReceivingInboxServices(Collection<InboxServiceBindingsType> values) {
+        if (values!= null) {
+            getReceivingInboxServices().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionRecordType withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
+    }
+
+    public CollectionRecordType withCollectionType(CollectionTypeEnum value) {
+        setCollectionType(value);
+        return this;
+    }
+
+    public CollectionRecordType withAvailable(Boolean value) {
+        setAvailable(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.query;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +46,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "preferredScopes",
     "allowedScopes"
 })
-public class TargetingExpressionInfoType
-    implements Equals, HashCode
+public class TargetingExpressionInfoType implements Equals, HashCode
 {
 
     @XmlElement(name = "Preferred_Scope")
@@ -56,6 +56,24 @@ public class TargetingExpressionInfoType
     @XmlAttribute(name = "targeting_expression_id")
     @XmlSchemaType(name = "anyURI")
     protected String targetingExpressionId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public TargetingExpressionInfoType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public TargetingExpressionInfoType(final List<String> preferredScopes, final List<String> allowedScopes, final String targetingExpressionId) {
+        this.preferredScopes = preferredScopes;
+        this.allowedScopes = allowedScopes;
+        this.targetingExpressionId = targetingExpressionId;
+    }
 
     /**
      * Gets the value of the preferredScopes property.
@@ -205,6 +223,43 @@ public class TargetingExpressionInfoType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public TargetingExpressionInfoType withPreferredScopes(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getPreferredScopes().add(value);
+            }
+        }
+        return this;
+    }
+
+    public TargetingExpressionInfoType withPreferredScopes(Collection<String> values) {
+        if (values!= null) {
+            getPreferredScopes().addAll(values);
+        }
+        return this;
+    }
+
+    public TargetingExpressionInfoType withAllowedScopes(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getAllowedScopes().add(value);
+            }
+        }
+        return this;
+    }
+
+    public TargetingExpressionInfoType withAllowedScopes(Collection<String> values) {
+        if (values!= null) {
+            getAllowedScopes().addAll(values);
+        }
+        return this;
+    }
+
+    public TargetingExpressionInfoType withTargetingExpressionId(String value) {
+        setTargetingExpressionId(value);
+        return this;
     }
 
 }

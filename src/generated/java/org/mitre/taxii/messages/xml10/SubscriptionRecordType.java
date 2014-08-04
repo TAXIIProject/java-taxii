@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,8 +48,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "pushParameters",
     "pollInstances"
 })
-public class SubscriptionRecordType
-    implements Equals, HashCode
+public class SubscriptionRecordType implements Equals, HashCode
 {
 
     @XmlElement(name = "Push_Parameters")
@@ -58,6 +58,24 @@ public class SubscriptionRecordType
     @XmlAttribute(name = "subscription_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String subscriptionId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubscriptionRecordType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubscriptionRecordType(final PushParameterType pushParameters, final List<ServiceContactInfoType> pollInstances, final String subscriptionId) {
+        this.pushParameters = pushParameters;
+        this.pollInstances = pollInstances;
+        this.subscriptionId = subscriptionId;
+    }
 
     /**
      * Gets the value of the pushParameters property.
@@ -202,6 +220,32 @@ public class SubscriptionRecordType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubscriptionRecordType withPushParameters(PushParameterType value) {
+        setPushParameters(value);
+        return this;
+    }
+
+    public SubscriptionRecordType withPollInstances(ServiceContactInfoType... values) {
+        if (values!= null) {
+            for (ServiceContactInfoType value: values) {
+                getPollInstances().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SubscriptionRecordType withPollInstances(Collection<ServiceContactInfoType> values) {
+        if (values!= null) {
+            getPollInstances().addAll(values);
+        }
+        return this;
+    }
+
+    public SubscriptionRecordType withSubscriptionId(String value) {
+        setSubscriptionId(value);
+        return this;
     }
 
 }

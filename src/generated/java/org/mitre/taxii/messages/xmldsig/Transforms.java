@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -42,12 +43,27 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "transforms"
 })
 @XmlRootElement(name = "Transforms")
-public class Transforms
-    implements Equals, HashCode
+public class Transforms implements Equals, HashCode
 {
 
     @XmlElement(name = "Transform", required = true)
     protected List<Transform> transforms;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Transforms() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Transforms(final List<Transform> transforms) {
+        this.transforms = transforms;
+    }
 
     /**
      * Gets the value of the transforms property.
@@ -116,6 +132,22 @@ public class Transforms
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Transforms withTransforms(Transform... values) {
+        if (values!= null) {
+            for (Transform value: values) {
+                getTransforms().add(value);
+            }
+        }
+        return this;
+    }
+
+    public Transforms withTransforms(Collection<Transform> values) {
+        if (values!= null) {
+            getTransforms().addAll(values);
+        }
+        return this;
     }
 
 }

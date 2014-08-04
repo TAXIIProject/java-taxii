@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -52,8 +53,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "references"
 })
 @XmlRootElement(name = "SignedInfo")
-public class SignedInfo
-    implements Equals, HashCode
+public class SignedInfo implements Equals, HashCode
 {
 
     @XmlElement(name = "CanonicalizationMethod", required = true)
@@ -67,6 +67,25 @@ public class SignedInfo
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SignedInfo() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SignedInfo(final CanonicalizationMethod canonicalizationMethod, final SignatureMethod signatureMethod, final List<Reference> references, final String id) {
+        this.canonicalizationMethod = canonicalizationMethod;
+        this.signatureMethod = signatureMethod;
+        this.references = references;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the canonicalizationMethod property.
@@ -249,6 +268,37 @@ public class SignedInfo
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SignedInfo withCanonicalizationMethod(CanonicalizationMethod value) {
+        setCanonicalizationMethod(value);
+        return this;
+    }
+
+    public SignedInfo withSignatureMethod(SignatureMethod value) {
+        setSignatureMethod(value);
+        return this;
+    }
+
+    public SignedInfo withReferences(Reference... values) {
+        if (values!= null) {
+            for (Reference value: values) {
+                getReferences().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SignedInfo withReferences(Collection<Reference> values) {
+        if (values!= null) {
+            getReferences().addAll(values);
+        }
+        return this;
+    }
+
+    public SignedInfo withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

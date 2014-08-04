@@ -42,14 +42,30 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "ContentInstanceType", propOrder = {
     "subtype"
 })
-public class ContentInstanceType
-    implements Equals, HashCode
+public class ContentInstanceType implements Equals, HashCode
 {
 
     @XmlElement(name = "Subtype")
     protected SubtypeType subtype;
     @XmlAttribute(name = "binding_id", required = true)
     protected String bindingId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ContentInstanceType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ContentInstanceType(final SubtypeType subtype, final String bindingId) {
+        this.subtype = subtype;
+        this.bindingId = bindingId;
+    }
 
     /**
      * Gets the value of the subtype property.
@@ -151,6 +167,16 @@ public class ContentInstanceType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ContentInstanceType withSubtype(SubtypeType value) {
+        setSubtype(value);
+        return this;
+    }
+
+    public ContentInstanceType withBindingId(String value) {
+        setBindingId(value);
+        return this;
     }
 
 }

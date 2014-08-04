@@ -2,6 +2,7 @@
 package org.mitre.taxii.query;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +46,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "capabilityModules"
 })
 @XmlRootElement(name = "Default_Query_Info")
-public class DefaultQueryInfo
-    implements Equals, HashCode
+public class DefaultQueryInfo implements Equals, HashCode
 {
 
     @XmlElement(name = "Targeting_Expression_Info", required = true)
@@ -54,6 +54,23 @@ public class DefaultQueryInfo
     @XmlElement(name = "Capability_Module", required = true)
     @XmlSchemaType(name = "anyURI")
     protected List<String> capabilityModules;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public DefaultQueryInfo() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DefaultQueryInfo(final TargetingExpressionInfoType targetingExpressionInfo, final List<String> capabilityModules) {
+        this.targetingExpressionInfo = targetingExpressionInfo;
+        this.capabilityModules = capabilityModules;
+    }
 
     /**
      * Gets the value of the targetingExpressionInfo property.
@@ -160,6 +177,27 @@ public class DefaultQueryInfo
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DefaultQueryInfo withTargetingExpressionInfo(TargetingExpressionInfoType value) {
+        setTargetingExpressionInfo(value);
+        return this;
+    }
+
+    public DefaultQueryInfo withCapabilityModules(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getCapabilityModules().add(value);
+            }
+        }
+        return this;
+    }
+
+    public DefaultQueryInfo withCapabilityModules(Collection<String> values) {
+        if (values!= null) {
+            getCapabilityModules().addAll(values);
+        }
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -56,6 +57,24 @@ public class FeedInformationResponse
     protected List<FeedRecordType> feeds;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public FeedInformationResponse() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public FeedInformationResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final List<FeedRecordType> feeds, final Signature signature) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.feeds = feeds;
+        this.signature = signature;
+    }
 
     /**
      * Gets the value of the feeds property.
@@ -165,6 +184,45 @@ public class FeedInformationResponse
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public FeedInformationResponse withFeeds(FeedRecordType... values) {
+        if (values!= null) {
+            for (FeedRecordType value: values) {
+                getFeeds().add(value);
+            }
+        }
+        return this;
+    }
+
+    public FeedInformationResponse withFeeds(Collection<FeedRecordType> values) {
+        if (values!= null) {
+            getFeeds().addAll(values);
+        }
+        return this;
+    }
+
+    public FeedInformationResponse withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public FeedInformationResponse withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public FeedInformationResponse withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public FeedInformationResponse withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

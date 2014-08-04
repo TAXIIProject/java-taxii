@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +46,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "protocolBinding",
     "messageBindings"
 })
-public class PushMethodType
-    implements Equals, HashCode
+public class PushMethodType implements Equals, HashCode
 {
 
     @XmlElement(name = "Protocol_Binding", required = true)
@@ -55,6 +55,23 @@ public class PushMethodType
     @XmlElement(name = "Message_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
     protected List<String> messageBindings;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PushMethodType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PushMethodType(final String protocolBinding, final List<String> messageBindings) {
+        this.protocolBinding = protocolBinding;
+        this.messageBindings = messageBindings;
+    }
 
     /**
      * Gets the value of the protocolBinding property.
@@ -161,6 +178,27 @@ public class PushMethodType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PushMethodType withProtocolBinding(String value) {
+        setProtocolBinding(value);
+        return this;
+    }
+
+    public PushMethodType withMessageBindings(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getMessageBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PushMethodType withMessageBindings(Collection<String> values) {
+        if (values!= null) {
+            getMessageBindings().addAll(values);
+        }
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -49,8 +50,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "messageBinding",
     "contentBindings"
 })
-public class PushParameterType
-    implements Equals, HashCode
+public class PushParameterType implements Equals, HashCode
 {
 
     @XmlElement(name = "Protocol_Binding", required = true)
@@ -64,6 +64,25 @@ public class PushParameterType
     @XmlElement(name = "Content_Binding")
     @XmlSchemaType(name = "anyURI")
     protected List<String> contentBindings;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PushParameterType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PushParameterType(final String protocolBinding, final String address, final String messageBinding, final List<String> contentBindings) {
+        this.protocolBinding = protocolBinding;
+        this.address = address;
+        this.messageBinding = messageBinding;
+        this.contentBindings = contentBindings;
+    }
 
     /**
      * Gets the value of the protocolBinding property.
@@ -246,6 +265,37 @@ public class PushParameterType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PushParameterType withProtocolBinding(String value) {
+        setProtocolBinding(value);
+        return this;
+    }
+
+    public PushParameterType withAddress(String value) {
+        setAddress(value);
+        return this;
+    }
+
+    public PushParameterType withMessageBinding(String value) {
+        setMessageBinding(value);
+        return this;
+    }
+
+    public PushParameterType withContentBindings(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PushParameterType withContentBindings(Collection<String> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
     }
 
 }

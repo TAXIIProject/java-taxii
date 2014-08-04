@@ -37,13 +37,28 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SubtypeType")
-public class SubtypeType
-    implements Equals, HashCode
+public class SubtypeType implements Equals, HashCode
 {
 
     @XmlAttribute(name = "subtype_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String subtypeId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubtypeType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubtypeType(final String subtypeId) {
+        this.subtypeId = subtypeId;
+    }
 
     /**
      * Gets the value of the subtypeId property.
@@ -107,6 +122,11 @@ public class SubtypeType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubtypeType withSubtypeId(String value) {
+        setSubtypeId(value);
+        return this;
     }
 
 }

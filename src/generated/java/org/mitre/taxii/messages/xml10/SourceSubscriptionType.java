@@ -47,8 +47,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "inclusiveBeginTimestamp",
     "inclusiveEndTimestamp"
 })
-public class SourceSubscriptionType
-    implements Equals, HashCode
+public class SourceSubscriptionType implements Equals, HashCode
 {
 
     @XmlElement(name = "Inclusive_Begin_Timestamp")
@@ -61,6 +60,25 @@ public class SourceSubscriptionType
     @XmlAttribute(name = "subscription_id")
     @XmlSchemaType(name = "anyURI")
     protected String subscriptionId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SourceSubscriptionType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SourceSubscriptionType(final XMLGregorianCalendar inclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final String feedName, final String subscriptionId) {
+        this.inclusiveBeginTimestamp = inclusiveBeginTimestamp;
+        this.inclusiveEndTimestamp = inclusiveEndTimestamp;
+        this.feedName = feedName;
+        this.subscriptionId = subscriptionId;
+    }
 
     /**
      * Gets the value of the inclusiveBeginTimestamp property.
@@ -238,6 +256,26 @@ public class SourceSubscriptionType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SourceSubscriptionType withInclusiveBeginTimestamp(XMLGregorianCalendar value) {
+        setInclusiveBeginTimestamp(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withInclusiveEndTimestamp(XMLGregorianCalendar value) {
+        setInclusiveEndTimestamp(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withFeedName(String value) {
+        setFeedName(value);
+        return this;
+    }
+
+    public SourceSubscriptionType withSubscriptionId(String value) {
+        setSubscriptionId(value);
+        return this;
     }
 
 }

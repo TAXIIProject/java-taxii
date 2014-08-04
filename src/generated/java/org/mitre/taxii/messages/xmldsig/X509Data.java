@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -57,14 +58,30 @@ public class X509Data implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509IssuerSerial", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     })
     @XmlAnyElement
     protected List<java.lang.Object> x509IssuerSerialsAndX509SKISAndX509SubjectNames;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public X509Data() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public X509Data(final List<java.lang.Object> x509IssuerSerialsAndX509SKISAndX509SubjectNames) {
+        this.x509IssuerSerialsAndX509SKISAndX509SubjectNames = x509IssuerSerialsAndX509SKISAndX509SubjectNames;
+    }
 
     /**
      * Gets the value of the x509IssuerSerialsAndX509SKISAndX509SubjectNames property.
@@ -84,12 +101,12 @@ public class X509Data implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link Element }
+     * {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * 
      * 
      */
@@ -138,6 +155,22 @@ public class X509Data implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public X509Data withX509IssuerSerialsAndX509SKISAndX509SubjectNames(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getX509IssuerSerialsAndX509SKISAndX509SubjectNames().add(value);
+            }
+        }
+        return this;
+    }
+
+    public X509Data withX509IssuerSerialsAndX509SKISAndX509SubjectNames(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getX509IssuerSerialsAndX509SKISAndX509SubjectNames().addAll(values);
+        }
+        return this;
     }
 
 }

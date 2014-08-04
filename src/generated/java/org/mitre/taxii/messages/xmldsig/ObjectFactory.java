@@ -28,20 +28,92 @@ public class ObjectFactory {
     private final static QName _MgmtData_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "MgmtData");
     private final static QName _KeyName_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "KeyName");
     private final static QName _DigestValue_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "DigestValue");
-    private final static QName _SignatureMethodHMACOutputLength_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "HMACOutputLength");
     private final static QName _X509DataX509IssuerSerial_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509IssuerSerial");
     private final static QName _X509DataX509Certificate_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509Certificate");
     private final static QName _X509DataX509SKI_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SKI");
     private final static QName _X509DataX509SubjectName_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SubjectName");
     private final static QName _X509DataX509CRL_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509CRL");
-    private final static QName _TransformXPath_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "XPath");
+    private final static QName _SignatureMethodHMACOutputLength_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "HMACOutputLength");
     private final static QName _SPKIDataSPKISexp_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "SPKISexp");
+    private final static QName _TransformXPath_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "XPath");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.mitre.taxii.messages.xmldsig
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link Signature }
+     * 
+     */
+    public Signature createSignature() {
+        return new Signature();
+    }
+
+    /**
+     * Create an instance of {@link SignedInfo }
+     * 
+     */
+    public SignedInfo createSignedInfo() {
+        return new SignedInfo();
+    }
+
+    /**
+     * Create an instance of {@link CanonicalizationMethod }
+     * 
+     */
+    public CanonicalizationMethod createCanonicalizationMethod() {
+        return new CanonicalizationMethod();
+    }
+
+    /**
+     * Create an instance of {@link SignatureMethod }
+     * 
+     */
+    public SignatureMethod createSignatureMethod() {
+        return new SignatureMethod();
+    }
+
+    /**
+     * Create an instance of {@link Reference }
+     * 
+     */
+    public Reference createReference() {
+        return new Reference();
+    }
+
+    /**
+     * Create an instance of {@link Transforms }
+     * 
+     */
+    public Transforms createTransforms() {
+        return new Transforms();
+    }
+
+    /**
+     * Create an instance of {@link Transform }
+     * 
+     */
+    public Transform createTransform() {
+        return new Transform();
+    }
+
+    /**
+     * Create an instance of {@link DigestMethod }
+     * 
+     */
+    public DigestMethod createDigestMethod() {
+        return new DigestMethod();
+    }
+
+    /**
+     * Create an instance of {@link SignatureValue }
+     * 
+     */
+    public SignatureValue createSignatureValue() {
+        return new SignatureValue();
     }
 
     /**
@@ -85,22 +157,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Transforms }
-     * 
-     */
-    public Transforms createTransforms() {
-        return new Transforms();
-    }
-
-    /**
-     * Create an instance of {@link Transform }
-     * 
-     */
-    public Transform createTransform() {
-        return new Transform();
-    }
-
-    /**
      * Create an instance of {@link X509Data }
      * 
      */
@@ -130,62 +186,6 @@ public class ObjectFactory {
      */
     public SPKIData createSPKIData() {
         return new SPKIData();
-    }
-
-    /**
-     * Create an instance of {@link SignedInfo }
-     * 
-     */
-    public SignedInfo createSignedInfo() {
-        return new SignedInfo();
-    }
-
-    /**
-     * Create an instance of {@link CanonicalizationMethod }
-     * 
-     */
-    public CanonicalizationMethod createCanonicalizationMethod() {
-        return new CanonicalizationMethod();
-    }
-
-    /**
-     * Create an instance of {@link SignatureMethod }
-     * 
-     */
-    public SignatureMethod createSignatureMethod() {
-        return new SignatureMethod();
-    }
-
-    /**
-     * Create an instance of {@link Reference }
-     * 
-     */
-    public Reference createReference() {
-        return new Reference();
-    }
-
-    /**
-     * Create an instance of {@link DigestMethod }
-     * 
-     */
-    public DigestMethod createDigestMethod() {
-        return new DigestMethod();
-    }
-
-    /**
-     * Create an instance of {@link Signature }
-     * 
-     */
-    public Signature createSignature() {
-        return new Signature();
-    }
-
-    /**
-     * Create an instance of {@link SignatureValue }
-     * 
-     */
-    public SignatureValue createSignatureValue() {
-        return new SignatureValue();
     }
 
     /**
@@ -248,15 +248,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "HMACOutputLength", scope = SignatureMethod.class)
-    public JAXBElement<BigInteger> createSignatureMethodHMACOutputLength(BigInteger value) {
-        return new JAXBElement<BigInteger>(_SignatureMethodHMACOutputLength_QNAME, BigInteger.class, SignatureMethod.class, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}}
      * 
      */
@@ -302,12 +293,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link BigInteger }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "XPath", scope = Transform.class)
-    public JAXBElement<String> createTransformXPath(String value) {
-        return new JAXBElement<String>(_TransformXPath_QNAME, String.class, Transform.class, value);
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "HMACOutputLength", scope = SignatureMethod.class)
+    public JAXBElement<BigInteger> createSignatureMethodHMACOutputLength(BigInteger value) {
+        return new JAXBElement<BigInteger>(_SignatureMethodHMACOutputLength_QNAME, BigInteger.class, SignatureMethod.class, value);
     }
 
     /**
@@ -317,6 +308,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "SPKISexp", scope = SPKIData.class)
     public JAXBElement<byte[]> createSPKIDataSPKISexp(byte[] value) {
         return new JAXBElement<byte[]>(_SPKIDataSPKISexp_QNAME, byte[].class, SPKIData.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "XPath", scope = Transform.class)
+    public JAXBElement<String> createTransformXPath(String value) {
+        return new JAXBElement<String>(_TransformXPath_QNAME, String.class, Transform.class, value);
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -48,8 +49,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "signatureProperties"
 })
 @XmlRootElement(name = "SignatureProperties")
-public class SignatureProperties
-    implements Equals, HashCode
+public class SignatureProperties implements Equals, HashCode
 {
 
     @XmlElement(name = "SignatureProperty", required = true)
@@ -59,6 +59,23 @@ public class SignatureProperties
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SignatureProperties() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SignatureProperties(final List<SignatureProperty> signatureProperties, final String id) {
+        this.signatureProperties = signatureProperties;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the signatureProperties property.
@@ -165,6 +182,27 @@ public class SignatureProperties
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SignatureProperties withSignatureProperties(SignatureProperty... values) {
+        if (values!= null) {
+            for (SignatureProperty value: values) {
+                getSignatureProperties().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SignatureProperties withSignatureProperties(Collection<SignatureProperty> values) {
+        if (values!= null) {
+            getSignatureProperties().addAll(values);
+        }
+        return this;
+    }
+
+    public SignatureProperties withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

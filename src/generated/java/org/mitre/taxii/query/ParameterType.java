@@ -37,14 +37,30 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "ParameterType", propOrder = {
     "value"
 })
-public class ParameterType
-    implements Equals, HashCode
+public class ParameterType implements Equals, HashCode
 {
 
     @XmlValue
     protected String value;
     @XmlAttribute(name = "name", required = true)
     protected String name;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ParameterType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ParameterType(final String value, final String name) {
+        this.value = value;
+        this.name = name;
+    }
 
     /**
      * Gets the value of the value property.
@@ -146,6 +162,16 @@ public class ParameterType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ParameterType withValue(String value) {
+        setValue(value);
+        return this;
+    }
+
+    public ParameterType withName(String value) {
+        setName(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -56,6 +57,24 @@ public class CollectionInformationResponse
     protected List<CollectionRecordType> collections;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public CollectionInformationResponse() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CollectionInformationResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final List<CollectionRecordType> collections, final Signature signature) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.collections = collections;
+        this.signature = signature;
+    }
 
     /**
      * Gets the value of the collections property.
@@ -165,6 +184,45 @@ public class CollectionInformationResponse
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CollectionInformationResponse withCollections(CollectionRecordType... values) {
+        if (values!= null) {
+            for (CollectionRecordType value: values) {
+                getCollections().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CollectionInformationResponse withCollections(Collection<CollectionRecordType> values) {
+        if (values!= null) {
+            getCollections().addAll(values);
+        }
+        return this;
+    }
+
+    public CollectionInformationResponse withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public CollectionInformationResponse withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public CollectionInformationResponse withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public CollectionInformationResponse withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

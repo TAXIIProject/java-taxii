@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -48,8 +49,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "references"
 })
 @XmlRootElement(name = "Manifest")
-public class Manifest
-    implements Equals, HashCode
+public class Manifest implements Equals, HashCode
 {
 
     @XmlElement(name = "Reference", required = true)
@@ -59,6 +59,23 @@ public class Manifest
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Manifest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Manifest(final List<Reference> references, final String id) {
+        this.references = references;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the references property.
@@ -165,6 +182,27 @@ public class Manifest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Manifest withReferences(Reference... values) {
+        if (values!= null) {
+            for (Reference value: values) {
+                getReferences().add(value);
+            }
+        }
+        return this;
+    }
+
+    public Manifest withReferences(Collection<Reference> values) {
+        if (values!= null) {
+            getReferences().addAll(values);
+        }
+        return this;
+    }
+
+    public Manifest withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

@@ -1,6 +1,8 @@
 
 package org.mitre.taxii.messages.xml11;
 
+import java.util.Collection;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -46,6 +48,23 @@ public class StatusDetailDetailType
     @XmlAttribute(name = "name", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String name;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public StatusDetailDetailType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public StatusDetailDetailType(final List<Object> content, final String name) {
+        super(content);
+        this.name = name;
+    }
 
     /**
      * Gets the value of the name property.
@@ -112,6 +131,29 @@ public class StatusDetailDetailType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public StatusDetailDetailType withName(String value) {
+        setName(value);
+        return this;
+    }
+
+    @Override
+    public StatusDetailDetailType withContent(Object... values) {
+        if (values!= null) {
+            for (Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public StatusDetailDetailType withContent(Collection<Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
     }
 
 }

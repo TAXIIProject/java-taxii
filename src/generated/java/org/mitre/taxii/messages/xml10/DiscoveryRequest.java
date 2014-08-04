@@ -52,6 +52,23 @@ public class DiscoveryRequest
     protected Signature signature;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public DiscoveryRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DiscoveryRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final Signature signature) {
+        super(extendedHeaders, messageId);
+        this.signature = signature;
+    }
+
+    /**
      * An XML Digital Signature scoped to this message.
      * 
      * @return
@@ -116,6 +133,23 @@ public class DiscoveryRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DiscoveryRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public DiscoveryRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public DiscoveryRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

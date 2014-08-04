@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -55,8 +56,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "contentBindings",
     "message"
 })
-public class ServiceInstanceType
-    implements Equals, HashCode
+public class ServiceInstanceType implements Equals, HashCode
 {
 
     @XmlElement(name = "Protocol_Binding", required = true)
@@ -80,6 +80,30 @@ public class ServiceInstanceType
     @XmlAttribute(name = "service_version", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String serviceVersion;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ServiceInstanceType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ServiceInstanceType(final String protocolBinding, final String address, final List<String> messageBindings, final List<SupportedQueryType> supportedQueries, final List<ContentBindingIDType> contentBindings, final String message, final ServiceTypeEnum serviceType, final Boolean available, final String serviceVersion) {
+        this.protocolBinding = protocolBinding;
+        this.address = address;
+        this.messageBindings = messageBindings;
+        this.supportedQueries = supportedQueries;
+        this.contentBindings = contentBindings;
+        this.message = message;
+        this.serviceType = serviceType;
+        this.available = available;
+        this.serviceVersion = serviceVersion;
+    }
 
     /**
      * Gets the value of the protocolBinding property.
@@ -462,6 +486,84 @@ public class ServiceInstanceType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ServiceInstanceType withProtocolBinding(String value) {
+        setProtocolBinding(value);
+        return this;
+    }
+
+    public ServiceInstanceType withAddress(String value) {
+        setAddress(value);
+        return this;
+    }
+
+    public ServiceInstanceType withMessageBindings(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getMessageBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withMessageBindings(Collection<String> values) {
+        if (values!= null) {
+            getMessageBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withSupportedQueries(SupportedQueryType... values) {
+        if (values!= null) {
+            for (SupportedQueryType value: values) {
+                getSupportedQueries().add(value);
+            }
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withSupportedQueries(Collection<SupportedQueryType> values) {
+        if (values!= null) {
+            getSupportedQueries().addAll(values);
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withContentBindings(ContentBindingIDType... values) {
+        if (values!= null) {
+            for (ContentBindingIDType value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withContentBindings(Collection<ContentBindingIDType> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public ServiceInstanceType withMessage(String value) {
+        setMessage(value);
+        return this;
+    }
+
+    public ServiceInstanceType withServiceType(ServiceTypeEnum value) {
+        setServiceType(value);
+        return this;
+    }
+
+    public ServiceInstanceType withAvailable(Boolean value) {
+        setAvailable(value);
+        return this;
+    }
+
+    public ServiceInstanceType withServiceVersion(String value) {
+        setServiceVersion(value);
+        return this;
     }
 
 }

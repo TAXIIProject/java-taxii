@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -42,12 +43,27 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "StatusDetailType", propOrder = {
     "details"
 })
-public class StatusDetailType
-    implements Equals, HashCode
+public class StatusDetailType implements Equals, HashCode
 {
 
     @XmlElement(name = "Detail", required = true)
     protected List<StatusDetailDetailType> details;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public StatusDetailType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public StatusDetailType(final List<StatusDetailDetailType> details) {
+        this.details = details;
+    }
 
     /**
      * Gets the value of the details property.
@@ -116,6 +132,22 @@ public class StatusDetailType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public StatusDetailType withDetails(StatusDetailDetailType... values) {
+        if (values!= null) {
+            for (StatusDetailDetailType value: values) {
+                getDetails().add(value);
+            }
+        }
+        return this;
+    }
+
+    public StatusDetailType withDetails(Collection<StatusDetailDetailType> values) {
+        if (values!= null) {
+            getDetails().addAll(values);
+        }
+        return this;
     }
 
 }

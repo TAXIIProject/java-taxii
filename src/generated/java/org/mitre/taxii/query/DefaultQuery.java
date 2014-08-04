@@ -43,8 +43,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "criteria"
 })
 @XmlRootElement(name = "Default_Query")
-public class DefaultQuery
-    implements Equals, HashCode
+public class DefaultQuery implements Equals, HashCode
 {
 
     @XmlElement(name = "Criteria", required = true)
@@ -52,6 +51,23 @@ public class DefaultQuery
     @XmlAttribute(name = "targeting_expression_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String targetingExpressionId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public DefaultQuery() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DefaultQuery(final CriteriaType criteria, final String targetingExpressionId) {
+        this.criteria = criteria;
+        this.targetingExpressionId = targetingExpressionId;
+    }
 
     /**
      * Gets the value of the criteria property.
@@ -153,6 +169,16 @@ public class DefaultQuery
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DefaultQuery withCriteria(CriteriaType value) {
+        setCriteria(value);
+        return this;
+    }
+
+    public DefaultQuery withTargetingExpressionId(String value) {
+        setTargetingExpressionId(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -60,18 +61,17 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement(name = "KeyInfo")
-public class KeyInfo
-    implements Equals, HashCode
+public class KeyInfo implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "KeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = KeyValue.class, required = false),
         @XmlElementRef(name = "PGPData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = PGPData.class, required = false),
-        @XmlElementRef(name = "KeyName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "RetrievalMethod", namespace = "http://www.w3.org/2000/09/xmldsig#", type = RetrievalMethod.class, required = false),
         @XmlElementRef(name = "X509Data", namespace = "http://www.w3.org/2000/09/xmldsig#", type = X509Data.class, required = false),
+        @XmlElementRef(name = "KeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = KeyValue.class, required = false),
+        @XmlElementRef(name = "SPKIData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = SPKIData.class, required = false),
+        @XmlElementRef(name = "RetrievalMethod", namespace = "http://www.w3.org/2000/09/xmldsig#", type = RetrievalMethod.class, required = false),
         @XmlElementRef(name = "MgmtData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "SPKIData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = SPKIData.class, required = false)
+        @XmlElementRef(name = "KeyName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     })
     @XmlMixed
     @XmlAnyElement(lax = true)
@@ -81,6 +81,23 @@ public class KeyInfo
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public KeyInfo() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public KeyInfo(final List<java.lang.Object> content, final String id) {
+        this.content = content;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the content property.
@@ -100,16 +117,16 @@ public class KeyInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link KeyValue }
      * {@link PGPData }
-     * {@link java.lang.Object }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link RetrievalMethod }
      * {@link X509Data }
-     * {@link String }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link Element }
+     * {@link KeyValue }
      * {@link SPKIData }
+     * {@link String }
+     * {@link java.lang.Object }
+     * {@link RetrievalMethod }
+     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 
      */
@@ -196,6 +213,27 @@ public class KeyInfo
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public KeyInfo withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public KeyInfo withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public KeyInfo withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

@@ -3,6 +3,7 @@ package org.mitre.taxii.messages.xml11;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -96,6 +97,33 @@ public class PollResponse
     @XmlAttribute(name = "result_part_number")
     @XmlSchemaType(name = "positiveInteger")
     protected BigInteger resultPartNumber;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PollResponse() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PollResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final String subscriptionID, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final RecordCountType recordCount, final String message, final List<ContentBlockType> contentBlocks, final Signature signature, final String collectionName, final Boolean more, final String resultId, final BigInteger resultPartNumber) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.subscriptionID = subscriptionID;
+        this.exclusiveBeginTimestamp = exclusiveBeginTimestamp;
+        this.inclusiveEndTimestamp = inclusiveEndTimestamp;
+        this.recordCount = recordCount;
+        this.message = message;
+        this.contentBlocks = contentBlocks;
+        this.signature = signature;
+        this.collectionName = collectionName;
+        this.more = more;
+        this.resultId = resultId;
+        this.resultPartNumber = resultPartNumber;
+    }
 
     /**
      * Gets the value of the subscriptionID property.
@@ -555,6 +583,90 @@ public class PollResponse
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PollResponse withSubscriptionID(String value) {
+        setSubscriptionID(value);
+        return this;
+    }
+
+    public PollResponse withExclusiveBeginTimestamp(XMLGregorianCalendar value) {
+        setExclusiveBeginTimestamp(value);
+        return this;
+    }
+
+    public PollResponse withInclusiveEndTimestamp(XMLGregorianCalendar value) {
+        setInclusiveEndTimestamp(value);
+        return this;
+    }
+
+    public PollResponse withRecordCount(RecordCountType value) {
+        setRecordCount(value);
+        return this;
+    }
+
+    public PollResponse withMessage(String value) {
+        setMessage(value);
+        return this;
+    }
+
+    public PollResponse withContentBlocks(ContentBlockType... values) {
+        if (values!= null) {
+            for (ContentBlockType value: values) {
+                getContentBlocks().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PollResponse withContentBlocks(Collection<ContentBlockType> values) {
+        if (values!= null) {
+            getContentBlocks().addAll(values);
+        }
+        return this;
+    }
+
+    public PollResponse withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public PollResponse withCollectionName(String value) {
+        setCollectionName(value);
+        return this;
+    }
+
+    public PollResponse withMore(Boolean value) {
+        setMore(value);
+        return this;
+    }
+
+    public PollResponse withResultId(String value) {
+        setResultId(value);
+        return this;
+    }
+
+    public PollResponse withResultPartNumber(BigInteger value) {
+        setResultPartNumber(value);
+        return this;
+    }
+
+    @Override
+    public PollResponse withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public PollResponse withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public PollResponse withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

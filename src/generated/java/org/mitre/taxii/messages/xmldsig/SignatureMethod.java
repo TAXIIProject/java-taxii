@@ -3,6 +3,7 @@ package org.mitre.taxii.messages.xmldsig;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -50,8 +51,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "content"
 })
 @XmlRootElement(name = "SignatureMethod")
-public class SignatureMethod
-    implements Equals, HashCode
+public class SignatureMethod implements Equals, HashCode
 {
 
     @XmlElementRef(name = "HMACOutputLength", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
@@ -61,6 +61,23 @@ public class SignatureMethod
     @XmlAttribute(name = "Algorithm", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String algorithm;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public SignatureMethod() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SignatureMethod(final List<java.lang.Object> content, final String algorithm) {
+        this.content = content;
+        this.algorithm = algorithm;
+    }
 
     /**
      * Gets the value of the content property.
@@ -81,8 +98,8 @@ public class SignatureMethod
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JAXBElement }{@code <}{@link BigInteger }{@code >}
-     * {@link java.lang.Object }
      * {@link String }
+     * {@link java.lang.Object }
      * 
      * 
      */
@@ -169,6 +186,27 @@ public class SignatureMethod
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SignatureMethod withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public SignatureMethod withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
+    }
+
+    public SignatureMethod withAlgorithm(String value) {
+        setAlgorithm(value);
+        return this;
     }
 
 }

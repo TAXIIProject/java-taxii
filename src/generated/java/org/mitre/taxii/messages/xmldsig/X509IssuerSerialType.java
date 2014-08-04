@@ -41,14 +41,30 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "x509IssuerName",
     "x509SerialNumber"
 })
-public class X509IssuerSerialType
-    implements Equals, HashCode
+public class X509IssuerSerialType implements Equals, HashCode
 {
 
     @XmlElement(name = "X509IssuerName", required = true)
     protected String x509IssuerName;
     @XmlElement(name = "X509SerialNumber", required = true)
     protected BigInteger x509SerialNumber;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public X509IssuerSerialType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public X509IssuerSerialType(final String x509IssuerName, final BigInteger x509SerialNumber) {
+        this.x509IssuerName = x509IssuerName;
+        this.x509SerialNumber = x509SerialNumber;
+    }
 
     /**
      * Gets the value of the x509IssuerName property.
@@ -150,6 +166,16 @@ public class X509IssuerSerialType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public X509IssuerSerialType withX509IssuerName(String value) {
+        setX509IssuerName(value);
+        return this;
+    }
+
+    public X509IssuerSerialType withX509SerialNumber(BigInteger value) {
+        setX509SerialNumber(value);
+        return this;
     }
 
 }

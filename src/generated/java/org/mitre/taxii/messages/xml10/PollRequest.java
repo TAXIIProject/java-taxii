@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -76,6 +77,28 @@ public class PollRequest
     @XmlAttribute(name = "subscription_id")
     @XmlSchemaType(name = "anyURI")
     protected String subscriptionId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PollRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PollRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final List<String> contentBindings, final Signature signature, final String feedName, final String subscriptionId) {
+        super(extendedHeaders, messageId);
+        this.exclusiveBeginTimestamp = exclusiveBeginTimestamp;
+        this.inclusiveEndTimestamp = inclusiveEndTimestamp;
+        this.contentBindings = contentBindings;
+        this.signature = signature;
+        this.feedName = feedName;
+        this.subscriptionId = subscriptionId;
+    }
 
     /**
      * Gets the value of the exclusiveBeginTimestamp property.
@@ -337,6 +360,59 @@ public class PollRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PollRequest withExclusiveBeginTimestamp(XMLGregorianCalendar value) {
+        setExclusiveBeginTimestamp(value);
+        return this;
+    }
+
+    public PollRequest withInclusiveEndTimestamp(XMLGregorianCalendar value) {
+        setInclusiveEndTimestamp(value);
+        return this;
+    }
+
+    public PollRequest withContentBindings(String... values) {
+        if (values!= null) {
+            for (String value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PollRequest withContentBindings(Collection<String> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public PollRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public PollRequest withFeedName(String value) {
+        setFeedName(value);
+        return this;
+    }
+
+    public PollRequest withSubscriptionId(String value) {
+        setSubscriptionId(value);
+        return this;
+    }
+
+    @Override
+    public PollRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public PollRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

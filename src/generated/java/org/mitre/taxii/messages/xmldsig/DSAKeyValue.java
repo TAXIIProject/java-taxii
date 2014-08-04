@@ -75,6 +75,28 @@ public class DSAKeyValue implements Equals, HashCode
     protected byte[] pgenCounter;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public DSAKeyValue() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DSAKeyValue(final byte[] p, final byte[] q, final byte[] g, final byte[] y, final byte[] j, final byte[] seed, final byte[] pgenCounter) {
+        this.p = p;
+        this.q = q;
+        this.g = g;
+        this.y = y;
+        this.j = j;
+        this.seed = seed;
+        this.pgenCounter = pgenCounter;
+    }
+
+    /**
      * Gets the value of the p property.
      * 
      * @return
@@ -350,6 +372,41 @@ public class DSAKeyValue implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DSAKeyValue withP(byte[] value) {
+        setP(value);
+        return this;
+    }
+
+    public DSAKeyValue withQ(byte[] value) {
+        setQ(value);
+        return this;
+    }
+
+    public DSAKeyValue withG(byte[] value) {
+        setG(value);
+        return this;
+    }
+
+    public DSAKeyValue withY(byte[] value) {
+        setY(value);
+        return this;
+    }
+
+    public DSAKeyValue withJ(byte[] value) {
+        setJ(value);
+        return this;
+    }
+
+    public DSAKeyValue withSeed(byte[] value) {
+        setSeed(value);
+        return this;
+    }
+
+    public DSAKeyValue withPgenCounter(byte[] value) {
+        setPgenCounter(value);
+        return this;
     }
 
 }

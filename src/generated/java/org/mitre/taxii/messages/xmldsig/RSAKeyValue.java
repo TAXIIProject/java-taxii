@@ -51,6 +51,23 @@ public class RSAKeyValue implements Equals, HashCode
     protected byte[] exponent;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public RSAKeyValue() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public RSAKeyValue(final byte[] modulus, final byte[] exponent) {
+        this.modulus = modulus;
+        this.exponent = exponent;
+    }
+
+    /**
      * Gets the value of the modulus property.
      * 
      * @return
@@ -146,6 +163,16 @@ public class RSAKeyValue implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public RSAKeyValue withModulus(byte[] value) {
+        setModulus(value);
+        return this;
+    }
+
+    public RSAKeyValue withExponent(byte[] value) {
+        setExponent(value);
+        return this;
     }
 
 }

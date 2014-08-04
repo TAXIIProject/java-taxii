@@ -45,8 +45,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "address",
     "messageBinding"
 })
-public class PushParameterType
-    implements Equals, HashCode
+public class PushParameterType implements Equals, HashCode
 {
 
     @XmlElement(name = "Protocol_Binding", required = true)
@@ -57,6 +56,24 @@ public class PushParameterType
     @XmlElement(name = "Message_Binding", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String messageBinding;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PushParameterType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PushParameterType(final String protocolBinding, final String address, final String messageBinding) {
+        this.protocolBinding = protocolBinding;
+        this.address = address;
+        this.messageBinding = messageBinding;
+    }
 
     /**
      * Gets the value of the protocolBinding property.
@@ -196,6 +213,21 @@ public class PushParameterType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PushParameterType withProtocolBinding(String value) {
+        setProtocolBinding(value);
+        return this;
+    }
+
+    public PushParameterType withAddress(String value) {
+        setAddress(value);
+        return this;
+    }
+
+    public PushParameterType withMessageBinding(String value) {
+        setMessageBinding(value);
+        return this;
     }
 
 }

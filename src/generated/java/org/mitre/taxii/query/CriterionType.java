@@ -53,6 +53,24 @@ public class CriterionType implements Equals, HashCode
     protected Boolean negate;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public CriterionType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CriterionType(final String target, final TestType test, final Boolean negate) {
+        this.target = target;
+        this.test = test;
+        this.negate = negate;
+    }
+
+    /**
      * Gets the value of the target property.
      * 
      * @return
@@ -194,6 +212,21 @@ public class CriterionType implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CriterionType withTarget(String value) {
+        setTarget(value);
+        return this;
+    }
+
+    public CriterionType withTest(TestType value) {
+        setTest(value);
+        return this;
+    }
+
+    public CriterionType withNegate(Boolean value) {
+        setNegate(value);
+        return this;
     }
 
 }

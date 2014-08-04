@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -51,13 +52,28 @@ import org.w3c.dom.Element;
     StatusDetailDetailType.class,
     ExtendedHeaderType.class
 })
-public class AnyMixedContentType
-    implements Equals, HashCode
+public class AnyMixedContentType implements Equals, HashCode
 {
 
     @XmlMixed
     @XmlAnyElement(lax = true)
     protected List<Object> content;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public AnyMixedContentType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public AnyMixedContentType(final List<Object> content) {
+        this.content = content;
+    }
 
     /**
      * Type for fields that may contain any string and may contain additional XML.Gets the value of the content property.
@@ -77,9 +93,9 @@ public class AnyMixedContentType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link String }
      * {@link Element }
      * {@link Object }
-     * {@link String }
      * 
      * 
      */
@@ -128,6 +144,22 @@ public class AnyMixedContentType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public AnyMixedContentType withContent(Object... values) {
+        if (values!= null) {
+            for (Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public AnyMixedContentType withContent(Collection<Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
     }
 
 }

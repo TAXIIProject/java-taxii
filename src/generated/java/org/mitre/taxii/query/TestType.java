@@ -2,6 +2,7 @@
 package org.mitre.taxii.query;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,8 +45,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "TestType", propOrder = {
     "parameters"
 })
-public class TestType
-    implements Equals, HashCode
+public class TestType implements Equals, HashCode
 {
 
     @XmlElement(name = "Parameter")
@@ -55,6 +55,24 @@ public class TestType
     protected String capabilityId;
     @XmlAttribute(name = "relationship", required = true)
     protected String relationship;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public TestType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public TestType(final List<ParameterType> parameters, final String capabilityId, final String relationship) {
+        this.parameters = parameters;
+        this.capabilityId = capabilityId;
+        this.relationship = relationship;
+    }
 
     /**
      * Gets the value of the parameters property.
@@ -199,6 +217,32 @@ public class TestType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public TestType withParameters(ParameterType... values) {
+        if (values!= null) {
+            for (ParameterType value: values) {
+                getParameters().add(value);
+            }
+        }
+        return this;
+    }
+
+    public TestType withParameters(Collection<ParameterType> values) {
+        if (values!= null) {
+            getParameters().addAll(values);
+        }
+        return this;
+    }
+
+    public TestType withCapabilityId(String value) {
+        setCapabilityId(value);
+        return this;
+    }
+
+    public TestType withRelationship(String value) {
+        setRelationship(value);
+        return this;
     }
 
 }

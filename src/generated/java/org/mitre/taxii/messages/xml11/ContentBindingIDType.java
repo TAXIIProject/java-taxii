@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +46,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlType(name = "ContentBindingIDType", propOrder = {
     "subtypes"
 })
-public class ContentBindingIDType
-    implements Equals, HashCode
+public class ContentBindingIDType implements Equals, HashCode
 {
 
     @XmlElement(name = "Subtype")
@@ -54,6 +54,23 @@ public class ContentBindingIDType
     @XmlAttribute(name = "binding_id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String bindingId;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ContentBindingIDType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ContentBindingIDType(final List<SubtypeType> subtypes, final String bindingId) {
+        this.subtypes = subtypes;
+        this.bindingId = bindingId;
+    }
 
     /**
      * Gets the value of the subtypes property.
@@ -160,6 +177,27 @@ public class ContentBindingIDType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ContentBindingIDType withSubtypes(SubtypeType... values) {
+        if (values!= null) {
+            for (SubtypeType value: values) {
+                getSubtypes().add(value);
+            }
+        }
+        return this;
+    }
+
+    public ContentBindingIDType withSubtypes(Collection<SubtypeType> values) {
+        if (values!= null) {
+            getSubtypes().addAll(values);
+        }
+        return this;
+    }
+
+    public ContentBindingIDType withBindingId(String value) {
+        setBindingId(value);
+        return this;
     }
 
 }

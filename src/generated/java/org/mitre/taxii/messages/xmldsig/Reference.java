@@ -52,8 +52,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "digestValue"
 })
 @XmlRootElement(name = "Reference")
-public class Reference
-    implements Equals, HashCode
+public class Reference implements Equals, HashCode
 {
 
     @XmlElement(name = "Transforms")
@@ -73,6 +72,27 @@ public class Reference
     @XmlAttribute(name = "Type")
     @XmlSchemaType(name = "anyURI")
     protected String type;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Reference() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Reference(final Transforms transforms, final DigestMethod digestMethod, final byte[] digestValue, final String id, final String uri, final String type) {
+        this.transforms = transforms;
+        this.digestMethod = digestMethod;
+        this.digestValue = digestValue;
+        this.id = id;
+        this.uri = uri;
+        this.type = type;
+    }
 
     /**
      * Gets the value of the transforms property.
@@ -324,6 +344,36 @@ public class Reference
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Reference withTransforms(Transforms value) {
+        setTransforms(value);
+        return this;
+    }
+
+    public Reference withDigestMethod(DigestMethod value) {
+        setDigestMethod(value);
+        return this;
+    }
+
+    public Reference withDigestValue(byte[] value) {
+        setDigestValue(value);
+        return this;
+    }
+
+    public Reference withId(String value) {
+        setId(value);
+        return this;
+    }
+
+    public Reference withURI(String value) {
+        setURI(value);
+        return this;
+    }
+
+    public Reference withType(String value) {
+        setType(value);
+        return this;
     }
 
 }

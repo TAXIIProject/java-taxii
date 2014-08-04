@@ -55,6 +55,23 @@ public abstract class ResponseMessageType
     protected String inResponseTo;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public ResponseMessageType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ResponseMessageType(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo) {
+        super(extendedHeaders, messageId);
+        this.inResponseTo = inResponseTo;
+    }
+
+    /**
      * Gets the value of the inResponseTo property.
      * 
      * @return
@@ -119,6 +136,23 @@ public abstract class ResponseMessageType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ResponseMessageType withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public ResponseMessageType withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public ResponseMessageType withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,8 +55,7 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "objects"
 })
 @XmlRootElement(name = "Signature")
-public class Signature
-    implements Equals, HashCode
+public class Signature implements Equals, HashCode
 {
 
     @XmlElement(name = "SignedInfo", required = true)
@@ -71,6 +71,26 @@ public class Signature
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public Signature() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public Signature(final SignedInfo signedInfo, final SignatureValue signatureValue, final KeyInfo keyInfo, final List<org.mitre.taxii.messages.xmldsig.Object> objects, final String id) {
+        this.signedInfo = signedInfo;
+        this.signatureValue = signatureValue;
+        this.keyInfo = keyInfo;
+        this.objects = objects;
+        this.id = id;
+    }
 
     /**
      * Gets the value of the signedInfo property.
@@ -291,6 +311,42 @@ public class Signature
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public Signature withSignedInfo(SignedInfo value) {
+        setSignedInfo(value);
+        return this;
+    }
+
+    public Signature withSignatureValue(SignatureValue value) {
+        setSignatureValue(value);
+        return this;
+    }
+
+    public Signature withKeyInfo(KeyInfo value) {
+        setKeyInfo(value);
+        return this;
+    }
+
+    public Signature withObjects(org.mitre.taxii.messages.xmldsig.Object... values) {
+        if (values!= null) {
+            for (org.mitre.taxii.messages.xmldsig.Object value: values) {
+                getObjects().add(value);
+            }
+        }
+        return this;
+    }
+
+    public Signature withObjects(Collection<org.mitre.taxii.messages.xmldsig.Object> values) {
+        if (values!= null) {
+            getObjects().addAll(values);
+        }
+        return this;
+    }
+
+    public Signature withId(String value) {
+        setId(value);
+        return this;
     }
 
 }

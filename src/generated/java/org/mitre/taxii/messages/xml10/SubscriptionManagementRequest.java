@@ -69,6 +69,27 @@ public class SubscriptionManagementRequest
     protected String subscriptionId;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public SubscriptionManagementRequest() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public SubscriptionManagementRequest(final ExtendedHeadersType extendedHeaders, final String messageId, final PushParameterType pushParameters, final Signature signature, final FeedActionEnum action, final String feedName, final String subscriptionId) {
+        super(extendedHeaders, messageId);
+        this.pushParameters = pushParameters;
+        this.signature = signature;
+        this.action = action;
+        this.feedName = feedName;
+        this.subscriptionId = subscriptionId;
+    }
+
+    /**
      * Gets the value of the pushParameters property.
      * 
      * @return
@@ -285,6 +306,43 @@ public class SubscriptionManagementRequest
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public SubscriptionManagementRequest withPushParameters(PushParameterType value) {
+        setPushParameters(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withAction(FeedActionEnum value) {
+        setAction(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withFeedName(String value) {
+        setFeedName(value);
+        return this;
+    }
+
+    public SubscriptionManagementRequest withSubscriptionId(String value) {
+        setSubscriptionId(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementRequest withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public SubscriptionManagementRequest withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

@@ -1,6 +1,8 @@
 
 package org.mitre.taxii.messages.xml11;
 
+import java.util.Collection;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -45,6 +47,23 @@ public class ExtendedHeaderType
     @XmlAttribute(name = "name", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String name;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public ExtendedHeaderType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public ExtendedHeaderType(final List<Object> content, final String name) {
+        super(content);
+        this.name = name;
+    }
 
     /**
      * Gets the value of the name property.
@@ -111,6 +130,29 @@ public class ExtendedHeaderType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public ExtendedHeaderType withName(String value) {
+        setName(value);
+        return this;
+    }
+
+    @Override
+    public ExtendedHeaderType withContent(Object... values) {
+        if (values!= null) {
+            for (Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public ExtendedHeaderType withContent(Collection<Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
     }
 
 }

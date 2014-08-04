@@ -64,6 +64,26 @@ public class StatusMessage
     protected String statusType;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public StatusMessage() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public StatusMessage(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final StatusDetailType statusDetail, final String message, final Signature signature, final String statusType) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.statusDetail = statusDetail;
+        this.message = message;
+        this.signature = signature;
+        this.statusType = statusType;
+    }
+
+    /**
      * Gets the value of the statusDetail property.
      * 
      * @return
@@ -242,6 +262,44 @@ public class StatusMessage
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public StatusMessage withStatusDetail(StatusDetailType value) {
+        setStatusDetail(value);
+        return this;
+    }
+
+    public StatusMessage withMessage(String value) {
+        setMessage(value);
+        return this;
+    }
+
+    public StatusMessage withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    public StatusMessage withStatusType(String value) {
+        setStatusType(value);
+        return this;
+    }
+
+    @Override
+    public StatusMessage withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public StatusMessage withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public StatusMessage withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

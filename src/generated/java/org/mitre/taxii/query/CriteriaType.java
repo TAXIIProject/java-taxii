@@ -2,6 +2,7 @@
 package org.mitre.taxii.query;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -61,6 +62,23 @@ public class CriteriaType implements Equals, HashCode
     protected List<Object> criteriasAndCriterions;
     @XmlAttribute(name = "operator", required = true)
     protected String operator;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public CriteriaType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public CriteriaType(final List<Object> criteriasAndCriterions, final String operator) {
+        this.criteriasAndCriterions = criteriasAndCriterions;
+        this.operator = operator;
+    }
 
     /**
      * Gets the value of the criteriasAndCriterions property.
@@ -168,6 +186,27 @@ public class CriteriaType implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public CriteriaType withCriteriasAndCriterions(Object... values) {
+        if (values!= null) {
+            for (Object value: values) {
+                getCriteriasAndCriterions().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CriteriaType withCriteriasAndCriterions(Collection<Object> values) {
+        if (values!= null) {
+            getCriteriasAndCriterions().addAll(values);
+        }
+        return this;
+    }
+
+    public CriteriaType withOperator(String value) {
+        setOperator(value);
+        return this;
     }
 
 }

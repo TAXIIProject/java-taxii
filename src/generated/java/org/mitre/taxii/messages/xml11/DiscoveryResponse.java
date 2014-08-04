@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -56,6 +57,24 @@ public class DiscoveryResponse
     protected List<ServiceInstanceType> serviceInstances;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public DiscoveryResponse() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public DiscoveryResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final List<ServiceInstanceType> serviceInstances, final Signature signature) {
+        super(extendedHeaders, messageId, inResponseTo);
+        this.serviceInstances = serviceInstances;
+        this.signature = signature;
+    }
 
     /**
      * Gets the value of the serviceInstances property.
@@ -165,6 +184,45 @@ public class DiscoveryResponse
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public DiscoveryResponse withServiceInstances(ServiceInstanceType... values) {
+        if (values!= null) {
+            for (ServiceInstanceType value: values) {
+                getServiceInstances().add(value);
+            }
+        }
+        return this;
+    }
+
+    public DiscoveryResponse withServiceInstances(Collection<ServiceInstanceType> values) {
+        if (values!= null) {
+            getServiceInstances().addAll(values);
+        }
+        return this;
+    }
+
+    public DiscoveryResponse withSignature(Signature value) {
+        setSignature(value);
+        return this;
+    }
+
+    @Override
+    public DiscoveryResponse withInResponseTo(String value) {
+        setInResponseTo(value);
+        return this;
+    }
+
+    @Override
+    public DiscoveryResponse withExtendedHeaders(ExtendedHeadersType value) {
+        setExtendedHeaders(value);
+        return this;
+    }
+
+    @Override
+    public DiscoveryResponse withMessageId(String value) {
+        setMessageId(value);
+        return this;
     }
 
 }

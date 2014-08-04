@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xmldsig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -52,12 +53,28 @@ public class KeyValue implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "DSAKeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = DSAKeyValue.class, required = false),
-        @XmlElementRef(name = "RSAKeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = RSAKeyValue.class, required = false)
+        @XmlElementRef(name = "RSAKeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = RSAKeyValue.class, required = false),
+        @XmlElementRef(name = "DSAKeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = DSAKeyValue.class, required = false)
     })
     @XmlMixed
     @XmlAnyElement(lax = true)
     protected List<java.lang.Object> content;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public KeyValue() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public KeyValue(final List<java.lang.Object> content) {
+        this.content = content;
+    }
 
     /**
      * Gets the value of the content property.
@@ -78,10 +95,10 @@ public class KeyValue implements Equals, HashCode
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link RSAKeyValue }
-     * {@link String }
      * {@link DSAKeyValue }
-     * {@link java.lang.Object }
      * {@link Element }
+     * {@link String }
+     * {@link java.lang.Object }
      * 
      * 
      */
@@ -130,6 +147,22 @@ public class KeyValue implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public KeyValue withContent(java.lang.Object... values) {
+        if (values!= null) {
+            for (java.lang.Object value: values) {
+                getContent().add(value);
+            }
+        }
+        return this;
+    }
+
+    public KeyValue withContent(Collection<java.lang.Object> values) {
+        if (values!= null) {
+            getContent().addAll(values);
+        }
+        return this;
     }
 
 }

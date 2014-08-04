@@ -57,6 +57,24 @@ public class RetrievalMethod implements Equals, HashCode
     protected String type;
 
     /**
+     * Default no-arg constructor
+     * 
+     */
+    public RetrievalMethod() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public RetrievalMethod(final Transforms transforms, final String uri, final String type) {
+        this.transforms = transforms;
+        this.uri = uri;
+        this.type = type;
+    }
+
+    /**
      * Gets the value of the transforms property.
      * 
      * @return
@@ -194,6 +212,21 @@ public class RetrievalMethod implements Equals, HashCode
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public RetrievalMethod withTransforms(Transforms value) {
+        setTransforms(value);
+        return this;
+    }
+
+    public RetrievalMethod withURI(String value) {
+        setURI(value);
+        return this;
+    }
+
+    public RetrievalMethod withType(String value) {
+        setType(value);
+        return this;
     }
 
 }

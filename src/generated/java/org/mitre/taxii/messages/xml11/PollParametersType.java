@@ -2,6 +2,7 @@
 package org.mitre.taxii.messages.xml11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -50,12 +51,11 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
     "query",
     "deliveryParameters"
 })
-public class PollParametersType
-    implements Equals, HashCode
+public class PollParametersType implements Equals, HashCode
 {
 
     @XmlElement(name = "Response_Type", defaultValue = "FULL")
-    protected ResponseTypeEnum responseType;
+    protected ResponseTypeEnum responseType = ResponseTypeEnum.FULL;
     @XmlElement(name = "Content_Binding")
     protected List<ContentBindingIDType> contentBindings;
     @XmlElement(name = "Query")
@@ -64,6 +64,26 @@ public class PollParametersType
     protected PushParameterType deliveryParameters;
     @XmlAttribute(name = "allow_asynch")
     protected Boolean allowAsynch;
+
+    /**
+     * Default no-arg constructor
+     * 
+     */
+    public PollParametersType() {
+        super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public PollParametersType(final ResponseTypeEnum responseType, final List<ContentBindingIDType> contentBindings, final QueryType query, final PushParameterType deliveryParameters, final Boolean allowAsynch) {
+        this.responseType = responseType;
+        this.contentBindings = contentBindings;
+        this.query = query;
+        this.deliveryParameters = deliveryParameters;
+        this.allowAsynch = allowAsynch;
+    }
 
     /**
      * Gets the value of the responseType property.
@@ -288,6 +308,42 @@ public class PollParametersType
     public int hashCode() {
         final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
         return this.hashCode(null, strategy);
+    }
+
+    public PollParametersType withResponseType(ResponseTypeEnum value) {
+        setResponseType(value);
+        return this;
+    }
+
+    public PollParametersType withContentBindings(ContentBindingIDType... values) {
+        if (values!= null) {
+            for (ContentBindingIDType value: values) {
+                getContentBindings().add(value);
+            }
+        }
+        return this;
+    }
+
+    public PollParametersType withContentBindings(Collection<ContentBindingIDType> values) {
+        if (values!= null) {
+            getContentBindings().addAll(values);
+        }
+        return this;
+    }
+
+    public PollParametersType withQuery(QueryType value) {
+        setQuery(value);
+        return this;
+    }
+
+    public PollParametersType withDeliveryParameters(PushParameterType value) {
+        setDeliveryParameters(value);
+        return this;
+    }
+
+    public PollParametersType withAllowAsynch(Boolean value) {
+        setAllowAsynch(value);
+        return this;
     }
 
 }
