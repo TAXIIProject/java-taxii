@@ -63,7 +63,7 @@ are both set in Poll_Request
     detect it?
 
 
-Things the schema doesn't check - need to add custom conformance checks for these
+Things the XSD schema doesn't check - Add these to a Schematron schema
 ===============================================================================
 StatusMessage
 ----------------
@@ -117,12 +117,14 @@ Subscription_Management_Request
     - Subscription_ID MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
     - Subscription_Parameters is present if and only if @action="SUBSCRIBE".
 
+
 Poll_Request
 ---------------
 * co-occurrence constraint
     - Note that if both <Exclusive_Begin_Timestamp> 
 and <Inclusive_End_Timestamp> are present in this message, the value in <Inclusive_End_Timestamp> 
 MUST be greater than the value in <Exclusive_Begin_Timestamp>.  
+
 
 Poll_Response
 -----------------
@@ -147,3 +149,4 @@ Additional tasks
     or Extended Header to have a collection of list of values and avoid 
     marshalling problems in XML.
     See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
+* Enhance the XSD schema by adding length checks to simple types - detect empty strings
