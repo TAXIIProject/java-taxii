@@ -30,9 +30,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -40,23 +38,22 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
 import org.mitre.taxii.Messages;
+import org.mitre.taxii.Versions;
 import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
 
 import static org.junit.Assert.*;
+import org.mitre.taxii.ContentBindings;
 
 /**
  * Unit tests for XML Message Binding 1.1.
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTest implements StatusDetails {
+public class StatusMessageTest implements StatusDetails, Versions, ContentBindings {
     
-    private static final String INVALID_XML_RESOURCE = "/invalid.xml";
-
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXml taxiiXml;
-    private final boolean debug = true; // Boolean.getBoolean("debug"); 
     
     public StatusMessageTest() {
         taxiiXml = TaxiiXml.newInstance();
@@ -67,7 +64,7 @@ public class StatusMessageTest implements StatusDetails {
      * successfully.
      */
     @Test
-    public void testCustom() throws Exception {
+    public void goodSuccess() throws Exception {
         /* test case from libtaxii:
          * 
          * sm01 = tm11.StatusMessage(
@@ -85,105 +82,14 @@ public class StatusMessageTest implements StatusDetails {
         sm.setInResponseTo(Messages.generateMessageId());
         sm.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
-        StatusMessageHelper.addDetail(sm, "custom_status_detail_name", "Custom status detail value");
-        StatusMessageHelper.addDetail(sm, "Custom_detail_2", "this one has", "multiple values");        
-        
-//        final StatusDetailDetailType detail2 = factory.createStatusDetailDetailType();
-//        detail2.setName("Custom_detail_2");
-//        final List<Object> d2Contents = detail2.getContent();
-//        // TODO Fix this mapping - don't allow multiple strings to be added to a collection,
-//        // since the list of strings collapse into a single text node on 
-//        // marshalling.  Instead, multiple StatusDetailDetailTypes should
-//        // be created with the same name, one value per StatusDetailDetailType.
-//        d2Contents.add("this one has");
-////        d2Contents.add("multiple values");
-//        details.add(detail2);
-        
+        StatusMessageHelper.addDetail(sm, new URI("custom_status_detail_name"), "Custom status detail value");
+        StatusMessageHelper.addDetail(sm, new URI("Custom_detail_2"), "this one has", "multiple values");        
+                
         sm.setMessage("This is a test message");
         
-        roundTripMessage(sm);
+        TestUtil.roundTripMessage(taxiiXml, sm);
     }
-            
-    /** 
-     * Verify that an bad Invalid Response Part status message with no status details
-     * fails validation.
-     */
-    @Test
-    public void badInvalidResponsePart1() throws Exception {
-        final StatusMessage sm = factory.createStatusMessage();
-        sm.setMessageId("badInvalidResponsePart1");
-        sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypeEnum.INVALID_RESPONSE_PART.toString());
-
-        // this should fail validation because it's missing any status details
-        try {
-            // Here we call validateFast() to test it.  Note that other 
-            // tests call validateAll().  Both must be tested.  
-            // validateFast() throws an exception under more circumstances,
-            // so other tests prefer validateAll() so that more of the 
-            // validation code is tested.
-            taxiiXml.validateFast(sm);
-            fail("Expected validation error!");
-        }
-        catch (SAXException e) {
-            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
-        }
-    }
-    
-    
-    /** 
-     * Verify that an bad Invalid Response Part status message without a max
-     * part number fails validation.
-     */
-    @Test
-    public void badInvalidResponsePart2() throws Exception {
-        final StatusMessage sm = factory.createStatusMessage();
-        sm.setMessageId("badInvalidResponsePart2");
-        sm.setInResponseTo(Messages.generateMessageId());
-        sm.setStatusType(StatusTypeEnum.INVALID_RESPONSE_PART.toString());
-
-        final StatusDetailType detailsHolder = factory.createStatusDetailType();
-        final List<StatusDetailDetailType> details = detailsHolder.getDetails();
-        
-        final StatusDetailDetailType detaildetail = factory.createStatusDetailDetailType();
-        detaildetail.setName("custom header");
-        detaildetail.getContent().add("custom value");
-        details.add(detaildetail);
-        sm.setStatusDetail(detailsHolder);
-        
-        // this should fail validation because it's missing the required
-        // max part number
-        try {
-            taxiiXml.validateFast(sm);
-            fail("Expected validation error!");
-        }
-        catch (SAXException e) {
-            if (e.getMessage() == null) {
-                throw e;
-            }
-            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
-        }
-    }
-    
-    
-    /**
-     * Unmarshal some invalid XML and verify that validation fails.
-     * @throws JAXBException 
-     */
-    @Test
-    public void invalidXML() throws Exception {
-        final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
-        MessageType msg = (MessageType) u.unmarshal(getClass().getResource(INVALID_XML_RESOURCE));
-        
-        Validation results = taxiiXml.validateAll(msg);
-        assertTrue(results.isFailure());
-        if (debug) {
-            System.out.print("Validation results: ");
-            System.out.println(results.getAllErrorsAndWarnings());
-        }
-    }
-    
-    
+                    
     /**
      * Verify a Success message can be created and round-tripped successfully.
      */
@@ -204,64 +110,10 @@ public class StatusMessageTest implements StatusDetails {
         sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        roundTripMessage(sm02);
+        
+        TestUtil.roundTripMessage(taxiiXml, sm02);
     }
-    
-    
-    /**
-     * Verify that a StatusMessage missing a message id fails validation.
-     */
-    @Test
-    public void missingMessageId() throws Exception {
-        final StatusMessage sm02 = factory.createStatusMessage();
-//        sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        Validation results = taxiiXml.validateAll(sm02);
-        assertTrue(results.isFailure());
-        if (debug) {
-            System.out.print("Validation results: ");
-            System.out.println(results.getAllErrorsAndWarnings());
-        }
-    }
-       
-    
-    /**
-     * Verify that a StatusMessage missing the InResponseTo field fails validation.
-     */
-    @Test
-    public void missingInResponseTo() throws Exception {
-        final StatusMessage sm02 = factory.createStatusMessage();
-        sm02.setMessageId("SM02");
-//        sm02.setInResponseTo(Messages.generateMessageId());
-        sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        Validation results = taxiiXml.validateAll(sm02);
-        assertTrue(results.isFailure());
-        if (debug) {
-            System.out.print("Validation results: ");
-            System.out.println(results.getAllErrorsAndWarnings());
-        }
-    }
-       
-    
-    /**
-     * Verify that a StatusMessage missing a status type fails validation.
-     */
-    @Test
-    public void missingStatusType() throws Exception {
-        final StatusMessage sm02 = factory.createStatusMessage();
-        sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
-//        sm02.setStatusType(StatusTypes.ST_SUCCESS);
-        Validation results = taxiiXml.validateAll(sm02);
-        assertTrue(results.isFailure());
-        if (debug) {
-            System.out.print("Validation results: ");
-            System.out.println(results.getAllErrorsAndWarnings());
-        }
-    }
-       
-    
+               
     /** 
      * Verify a Destination Collection Error can be created and round-tripped 
      * successfully. 
@@ -284,9 +136,9 @@ public class StatusMessageTest implements StatusDetails {
         sm03.setInResponseTo(Messages.generateMessageId());
         sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
                    
-        StatusMessageHelper.addDetail(sm03, STATUS_DETAIL_ACCEPTABLE_DESTINATION, "Collection1", "Collection2");
+        StatusMessageHelper.addDetail(sm03, new URI(STATUS_DETAIL_ACCEPTABLE_DESTINATION), "Collection1", "Collection2");
                 
-        roundTripMessage(sm03);
+        TestUtil.roundTripMessage(taxiiXml, sm03);
     }
 
     /**
@@ -312,11 +164,11 @@ public class StatusMessageTest implements StatusDetails {
         sm04.setInResponseTo(Messages.generateMessageId());
         sm04.setMessage("This is a valid test status message");
         
-        roundTripMessage(sm04);
+        TestUtil.roundTripMessage(taxiiXml, sm04);
     }
     
     @Test
-    public void goodNotFound() throws JAXBException, SAXException, IOException {
+    public void goodNotFound() throws JAXBException, SAXException, IOException, URISyntaxException {
         /**
         def test_status_message_05(self):
             sm05 = tm11.StatusMessage(
@@ -334,9 +186,9 @@ public class StatusMessageTest implements StatusDetails {
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
         
-        StatusMessageHelper.addDetail(sm05, STATUS_DETAIL_ITEM, "Collection1");
+        StatusMessageHelper.addDetail(sm05, new URI(STATUS_DETAIL_ITEM), "Collection1");
 
-        roundTripMessage(sm05);        
+        TestUtil.roundTripMessage(taxiiXml, sm05);        
     }
     
     @Test
@@ -358,6 +210,7 @@ public class StatusMessageTest implements StatusDetails {
         sm06.setInResponseTo(Messages.generateMessageId());
         
         /* The manual way.
+        
         StatusMessage sm06 = new StatusMessage()
                                     .withMessageId("SM06")
                                     .withInResponseTo(Messages.generateMessageId())
@@ -368,56 +221,78 @@ public class StatusMessageTest implements StatusDetails {
         StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_WILL_PUSH, Boolean.FALSE);
         */
         
-        roundTripMessage(sm06);        
+        TestUtil.roundTripMessage(taxiiXml, sm06);        
     }
     
-    /**
-     * Confirm that a JAXB MessageType Object matches itself when marshaled to
-     * a String and back.
-     * 
-     * @param msg
-     * @throws Exception 
-     */
-    private void roundTripMessage(MessageType msg) throws JAXBException, SAXException, IOException {
-        final Marshaller m = taxiiXml.createMarshaller(true);
-        final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
-        final String rawString = taxiiXml.marshalToString(m, msg);
+    @Test
+    public void goodRetry() throws JAXBException, SAXException, IOException, URISyntaxException {
+        /**
+        def test_status_message_07(self):
+            sm07 = tm11.StatusMessage(
+                message_id='SM07',  # Required
+                in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+                status_type=tm11.ST_RETRY,  # Required
+                status_detail={'ESTIMATED_WAIT': 900},  # Required/optional depending on Status Type. See spec for details
+                message=None  # Optional
+            )
+        round_trip_message(sm07)
 
-        if (debug) {
-            System.out.println("raw unvalidated XML:\n");
-            System.out.println(rawString);
-        }
-
-        assertValid(msg);
-        final String xmlString = taxiiXml.marshalToString(m, msg);
-        final MessageType msgFromXml = 
-                (MessageType) u.unmarshal(new StringReader(xmlString));
-        assertValid(msgFromXml);
-        final String xmlString2 = taxiiXml.marshalToString(m, msgFromXml);
+        */
         
-        if (debug) {
-            System.out.println(xmlString);
-        }
+        StatusMessage sm07 = new StatusMessage()
+                                    .withMessageId("SM07")
+                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withStatusType(StatusTypeEnum.RETRY.toString());
+        StatusMessageHelper.addDetail(sm07, new URI(STATUS_DETAIL_ESTIMATED_WAIT), 900);
         
-        // do the XML-object-XML round trip comparison first because it's
-        // easier to debug
-        assertEquals("round tripping from XML to object back to XML failed",
-                xmlString, xmlString2);
-        assertEquals("round tripping from object to XML back to object failed! ",
-                msg, msgFromXml);
+        TestUtil.roundTripMessage(taxiiXml, sm07);
     }
     
-    
-    private void assertValid(MessageType msg) 
-            throws JAXBException, SAXException, IOException {
-        final Validation results = taxiiXml.validateAll(msg);
-        if (results.isFailure()) {
-            fail(results.getAllErrorsAndWarnings());
-        }
-        if (results.hasWarnings()) {
-            System.out.print("Validation warnings: ");
-            System.out.println(results.getAllWarnings());
-        }
+    @Test
+    public void goodUnsupportedMessageBinding() throws JAXBException, SAXException, IOException, URISyntaxException {
+        /*
+        def test_status_message_08(self):
+            sm08 = tm11.StatusMessage(
+                    message_id='SM08',  # Required
+                    in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+                    status_type=tm11.ST_UNSUPPORTED_MESSAGE_BINDING,  # Required
+                    status_detail={'SUPPORTED_BINDING': [t.VID_TAXII_XML_10, t.VID_TAXII_XML_11]},  # Required/optional depending on Status Type. See spec for details
+                    message=None  # Optional
+            )
+            round_trip_message(sm08)               
+        */
+        StatusMessage sm08 = new StatusMessage()
+                                    .withMessageId("SM08")
+                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
+        StatusMessageHelper.addDetail(sm08, new URI(STATUS_DETAIL_SUPPORTED_BINDING), VID_TAXII_XML_10, VID_TAXII_XML_11);
+        
+        TestUtil.roundTripMessage(taxiiXml, sm08);        
     }
     
+    @Test
+    public void goodUnsupportedContentBinding() throws JAXBException, SAXException, IOException, URISyntaxException {
+        /*
+        def test_status_message_09(self):
+        sm09 = tm11.StatusMessage(
+                message_id='SM09',  # Required
+                in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
+                status_type=tm11.ST_UNSUPPORTED_CONTENT_BINDING,  # Required
+                status_detail={'SUPPORTED_CONTENT': ['%s>%s,%s' % (tm11.ContentBinding, 'subtype1', 'subtype2'), t.CB_STIX_XML_101]},  # Required/optional depending on Status Type. See spec for details
+                message=None  # Optional
+        )
+        round_trip_message(sm09)                
+        */
+        
+        StatusMessage sm09 = new StatusMessage()
+                                    .withMessageId("SM09")
+                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
+        StatusMessageHelper.addDetail(sm09, new URI(STATUS_DETAIL_SUPPORTED_CONTENT), CB_STIX_XML_101);
+        
+        TestUtil.roundTripMessage(taxiiXml, sm09);                
+    }
+    
+    //======================================
+        
 }

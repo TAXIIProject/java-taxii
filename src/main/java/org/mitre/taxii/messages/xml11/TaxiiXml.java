@@ -39,11 +39,6 @@ import javax.xml.bind.util.JAXBSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.mitre.taxii.messages.xml11.MessageType;
-import org.mitre.taxii.messages.xml11.ObjectFactory;
-import org.mitre.taxii.messages.xml11.StatusDetails;
-import org.mitre.taxii.messages.xml11.StatusMessage;
-import org.mitre.taxii.messages.xml11.StatusMessageHelper;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
 import org.mitre.taxii.util.Validation;
