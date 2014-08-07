@@ -153,7 +153,7 @@ public final class DefaultQueryXml {
     public  Element toElement() {
             DOMResult res = new DOMResult();
         try {
-            Marshaller m = createMarshaller(true);
+            Marshaller m = createMarshaller(false);
             m.marshal(dqi, res);
         } catch (JAXBException ex) {
             Logger.getLogger(DefaultQueryXml.class.getName()).log(Level.SEVERE, null, ex);
