@@ -29,6 +29,8 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -185,14 +187,16 @@ public final class TaxiiXml implements StatusDetails {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd";
     
-    private final JAXBContext jaxbContext;
+    private JAXBContext jaxbContext;
     private final Schema taxiiSchema;
     
-    private TaxiiXml(JAXBContext context, Schema schema) {
-        jaxbContext = context;
-        taxiiSchema = schema;
+    private ArrayList<String>contextEntries;
+              
+    private TaxiiXml() {
+        initializeJaxbContextEntries();
+        taxiiSchema = newSchema();
+        // NOTE: At this point the object has no JAXB Context, which is needed to work.
     }
-    
     
     /**
      * Creates a new instance of the TaxiiXml utility class.
@@ -202,34 +206,69 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents the underlying JAXBContext
      *              from being created or the Schema from being parsed
      */
-    public static TaxiiXml newInstance() {
-        return new TaxiiXml(newJAXBContext(), newSchema());
+    protected static TaxiiXml newInstance() {        
+        return new TaxiiXml();
     }
     
+    /**
+     * Initialize the JAXB Context with known contexts that every instance of
+     * TaxiiXml will need to know.
+     * 
+     */
+    private void initializeJaxbContextEntries() {
+        contextEntries = new ArrayList<>();
+        contextEntries.add(TaxiiXml.class.getPackage().getName());
+        contextEntries.add(Signature.class.getPackage().getName());        
+    }
+
+    /**
+     * Add some things to the list of context path entries to later be
+     * used in initializing the JAXBContext.
+     * 
+     * @param cp 
+     */
+    protected void addJaxbContextPath(List<String> cp) {
+        contextEntries.addAll(cp);
+    }
     
     /**
-     * Returns a JAXBContext for the TAXII XML Message Binding 1.1 classes.
+     * set the JAXBContext for the TAXII XML Message Binding 1.1 classes.
      * 
      * @throws RuntimeException 
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
-    private static JAXBContext newJAXBContext() {
-        try {
-            return JAXBContext.newInstance(TaxiiXml.class.getPackage().getName() + ":"
-                            + Signature.class.getPackage().getName());
+    protected void initializeJaxbContext() {
+        try {            
+            this.jaxbContext =  JAXBContext.newInstance(buildJaxbContextString());
         } catch (JAXBException e) {
             throw new RuntimeException("Deployment error", e);
         }
     }
-
     
+    private String buildJaxbContextString() {
+        // NOTE: Java 8 provides the String.join() method that does the below natively.
+        // Also Apache Commons StringUtils will do it.
+        // Doing it myself here to reduce dependencies and support older Java.
+        StringBuilder sb = new StringBuilder();
+        
+        if ((null != contextEntries) && !contextEntries.isEmpty()) {
+            for(String s : contextEntries.subList(0, contextEntries.size()-1)) {
+                sb.append(s);
+                sb.append(":");
+            }        
+            sb.append(contextEntries.get(contextEntries.size()-1));
+        }
+        return sb.toString();
+    }
+            
     /**
      * Returns a marshaller for the TAXII XML Message Binding 1.1
      * classes.
      * 
      * @param prettyPrint
      *              Returns a marshaller that indents the output if true.
+     * @return 
      * @throws JAXBException 
      *              if an error was encountered while creating the Marshaller
      */

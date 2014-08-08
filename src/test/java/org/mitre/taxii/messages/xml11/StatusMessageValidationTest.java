@@ -46,11 +46,13 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
     private static final String INVALID_XML_RESOURCE = "/invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
+    private final TaxiiXmlFactory txf;
     private final TaxiiXml taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
     
     public StatusMessageValidationTest() {
-        taxiiXml = TaxiiXml.newInstance();        
+        txf = new TaxiiXmlFactory();
+        taxiiXml = txf.getTaxiiXml();
     }
 
         /** 

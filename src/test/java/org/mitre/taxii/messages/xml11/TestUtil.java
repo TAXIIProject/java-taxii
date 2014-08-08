@@ -29,7 +29,7 @@ public class TestUtil {
      */
     public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
 
-        final Marshaller m = taxiiXml.createMarshaller(false);
+        final Marshaller m = taxiiXml.createMarshaller(false); // Whether to pretty print.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         
         m.setProperty(Marshaller.JAXB_FRAGMENT, true); // Don't generate xml declaration.

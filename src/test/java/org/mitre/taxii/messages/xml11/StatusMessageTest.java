@@ -27,23 +27,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
-import java.io.StringReader;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
+
+import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.Messages;
 import org.mitre.taxii.Versions;
-import org.mitre.taxii.util.Validation;
-import org.xml.sax.SAXException;
 
-import static org.junit.Assert.*;
-import org.mitre.taxii.ContentBindings;
+import org.xml.sax.SAXException;
 
 /**
  * Unit tests for XML Message Binding 1.1.
@@ -53,10 +49,12 @@ import org.mitre.taxii.ContentBindings;
 public class StatusMessageTest implements StatusDetails, Versions, ContentBindings {
     
     private final ObjectFactory factory = new ObjectFactory();
+    private final TaxiiXmlFactory txf;
     private final TaxiiXml taxiiXml;
     
     public StatusMessageTest() {
-        taxiiXml = TaxiiXml.newInstance();
+        txf = new TaxiiXmlFactory();
+        taxiiXml = txf.getTaxiiXml();
     }
             
     /** 

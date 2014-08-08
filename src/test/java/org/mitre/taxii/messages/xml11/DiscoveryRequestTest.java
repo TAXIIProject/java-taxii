@@ -19,11 +19,13 @@ import org.xml.sax.SAXException;
  */
 public class DiscoveryRequestTest {
 
+    private final TaxiiXmlFactory txf;
     private final TaxiiXml taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug"); 
     
     public DiscoveryRequestTest() {
-        taxiiXml = TaxiiXml.newInstance();
+        txf = new TaxiiXmlFactory();
+        taxiiXml = txf.getTaxiiXml();
     }
     
     @Test

@@ -13,7 +13,6 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.mitre.taxii.messages.xmldsig.Signature;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
@@ -55,11 +54,12 @@ public final class DefaultQueryXml {
     // Status Type indicating an unsupported targeting expression id
     public static final String ST_UNSUPPORTED_TARGETING_EXPRESSION_ID = "UNSUPPORTED_TARGETING_EXPRESSION_ID";
     
-    private final JAXBContext jaxbContext;
-    private final Schema defaultQuerySchema;
+//    private final JAXBContext jaxbContext;
+//    private final Schema defaultQuerySchema;
     
     DefaultQueryInfo dqi;
-    
+
+/*    
     private DefaultQueryXml(JAXBContext context, Schema schema) {
         this.jaxbContext = context;
         this.defaultQuerySchema = schema;
@@ -68,6 +68,7 @@ public final class DefaultQueryXml {
     public static DefaultQueryXml newInstance() {
         return new DefaultQueryXml(newJAXBContext(), newSchema());
     }
+  */
     
     public void setDefaultQueryInfo(DefaultQueryInfo dqi) {
         this.dqi = dqi;
@@ -84,6 +85,7 @@ public final class DefaultQueryXml {
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
+/*    
     private static JAXBContext newJAXBContext() {
         try {
             return JAXBContext.newInstance(DefaultQueryXml.class.getPackage().getName() + ":"
@@ -92,7 +94,7 @@ public final class DefaultQueryXml {
             throw new RuntimeException("Deployment error", e);
         }
     }
-    
+*/    
     /**
      * Returns a JAXP Schema that can be used to validate against the TAXII
      * XML Message Binding 1.1 schema.
@@ -101,6 +103,7 @@ public final class DefaultQueryXml {
      *              if a deployment error prevents the TAXII Schema from 
      *              being parsed
      */
+/*    
     private static Schema newSchema() {
         final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
@@ -109,7 +112,7 @@ public final class DefaultQueryXml {
             throw new RuntimeException("Deployment error: can't parse TAXII schema", e);
         }
     }
-    
+*/    
     /**
      * Returns a marshaller for the TAXII Default Query binding.
      * classes.
@@ -120,6 +123,7 @@ public final class DefaultQueryXml {
      * @throws JAXBException 
      *              if an error was encountered while creating the Marshaller
      */
+/*    
     public Marshaller createMarshaller(
             boolean prettyPrint)
             throws JAXBException {
@@ -127,12 +131,13 @@ public final class DefaultQueryXml {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint);
         return m;
     }
-    
+*/    
     /**
      * Marshals the DefaultQueryInfo to an XML String. 
      * 
      * @return 
      */
+/*    
     @Override
     public String toString() {
         final StringWriter sw = new StringWriter();
@@ -144,12 +149,13 @@ public final class DefaultQueryXml {
         }
         return sw.toString();
     }
-    
+*/    
     /**
      * Marshals the DefaultQueryInfo to a DOM Element.
      * 
      * @return 
      */
+/*    
     public  Element toElement() {
             DOMResult res = new DOMResult();
         try {
@@ -163,5 +169,5 @@ public final class DefaultQueryXml {
        
         return el;
     }
-    
+*/    
 }

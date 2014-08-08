@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.query.DefaultQueryXml;
 import org.mitre.taxii.Versions;
+import org.mitre.taxii.query.DefaultQuery;
 import org.mitre.taxii.query.DefaultQueryInfo;
 import org.mitre.taxii.query.TargetingExpressionInfoType;
 import org.xml.sax.SAXException;
@@ -18,20 +19,23 @@ import org.xml.sax.SAXException;
 public class DiscoveryResponseTest {
 
     private final ObjectFactory factory = new ObjectFactory();
+    private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
     private final TaxiiXml taxiiXml;    
     private final boolean debug = true; // Boolean.getBoolean("debug");
     
     private ServiceInstanceType si1, si2, si3, si4, si5;
-    private DefaultQueryXml tdq1, tdq2;
+    private DefaultQueryInfo tdq1, tdq2;
     private TargetingExpressionInfoType tei1, tei2;
     
     public DiscoveryResponseTest() {
-        taxiiXml = TaxiiXml.newInstance();
+        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
+        taxiiXml = txf.getTaxiiXml();
         setupDefaultQueries();
         setupServiceInstances();               
     }
     
     private void setupDefaultQueries() {
+                            
         tei1 = new TargetingExpressionInfoType()
                     .withTargetingExpressionId(ContentBindings.CB_STIX_XML_10)
                     .withAllowedScopes("**");
@@ -40,20 +44,13 @@ public class DiscoveryResponseTest {
                     .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11)
                     .withPreferredScopes("STIX_Package/Indicators/Indicator/**");
         
-        DefaultQueryInfo dqi1 = new DefaultQueryInfo()
+        tdq1 = new DefaultQueryInfo()
                     .withTargetingExpressionInfo(tei1)
                     .withCapabilityModules(DefaultQueryXml.CM_CORE);
         
-        DefaultQueryInfo dqi2 = new DefaultQueryInfo()
+        tdq2 = new DefaultQueryInfo()
                     .withTargetingExpressionInfo(tei2)
-                    .withCapabilityModules(DefaultQueryXml.CM_REGEX);
-        
-        tdq1 = DefaultQueryXml.newInstance();
-        tdq1.setDefaultQueryInfo(dqi1);
-        
-        tdq2 = DefaultQueryXml.newInstance();
-        tdq2.setDefaultQueryInfo(dqi2);
-        
+                    .withCapabilityModules(DefaultQueryXml.CM_REGEX);                
     }    
     
     private void setupServiceInstances() {
@@ -67,7 +64,7 @@ public class DiscoveryResponseTest {
                         .withMessage("This is a message.");
         SupportedQueryType sqt = new SupportedQueryType()
                                         .withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10)
-                                        .withContent(tdq1.toElement());                                        
+                                        .withContent(tdq1);                                                
         si1.getSupportedQueries().add(sqt);                
     }
     
