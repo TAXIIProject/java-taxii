@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="SUCCESS" in_response_to="urn:uuid:8fef148a-b186-45a0-a2da-9915daf621b1"
+    message_id="SM02" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"/>

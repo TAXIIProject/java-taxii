@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription_Management_Request
+ xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ action="PAUSE" collection_name="test" message_id="pause-valid">
+  <Subscription_ID>valid-subscription-id</Subscription_ID>
+ <!-- 
+   This test message is valid because it has a Subscription ID. 
+ -->
+</Subscription_Management_Request>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="PENDING"
+    in_response_to="urn:uuid:313bc88b-ab89-4bd6-b9b8-c1998626bd08"
+    message_id="invalid-PENDING7" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1">
+    <Status_Detail>
+        <Detail name="ESTIMATED_WAIT">5</Detail>
+        <Detail name="RESULT_ID">urn:1234abcd</Detail>
+        <Detail name="WILL_PUSH">bad value</Detail>
+    </Status_Detail>
+    <Message>This is a invalid PENDING message because the WILL_PUSH Status 
+        Detail is not a valid value.</Message>
+</Status_Message>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="RETRY"
+    in_response_to="urn:uuid:313bc88b-ab89-4bd6-b9b8-c1998626bd08"
+    message_id="valid-RETRY" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1">
+    <Status_Detail>
+        <Detail name="ESTIMATED_WAIT">5</Detail>
+    </Status_Detail>
+    <Message>This is a valid RETRY message because the ESTIMATED_WAIT 
+       Status Detail has a valid value.</Message>
+</Status_Message>

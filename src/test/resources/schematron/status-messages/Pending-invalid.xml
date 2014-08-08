@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="PENDING"
+    in_response_to="urn:uuid:313bc88b-ab89-4bd6-b9b8-c1998626bd08"
+    message_id="invalid-PENDING" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1">
+    <Message>This is a invalid PENDING message because there are no Status Details.</Message>
+</Status_Message>

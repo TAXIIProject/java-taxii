@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+    status_type="INVALID_RESPONSE_PART"
+    in_response_to="urn:uuid:0c068db7-664e-48dd-bac4-d8242ff47ab5"
+    message_id="badInvalidResponsePart3">
+    <Status_Detail>
+        <Detail name="MAX_PART_NUMBER">string value</Detail>
+    </Status_Detail>
+    <Message>This is invalid because the MAX_PART_NUMBER Detail is not a number.</Message>
+</Status_Message>

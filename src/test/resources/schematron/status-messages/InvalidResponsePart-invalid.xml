@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+    status_type="INVALID_RESPONSE_PART"
+    in_response_to="urn:uuid:cbd40a19-8213-4030-a5a2-c3a010d14c39"
+    message_id="badInvalidResponsePart1"/>
