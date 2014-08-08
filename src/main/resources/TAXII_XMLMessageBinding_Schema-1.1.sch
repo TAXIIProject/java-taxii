@@ -56,5 +56,23 @@
                 Subscription Parameters MUST be present in SUBSCRIBE actions.
             </sch:assert>
         </sch:rule>
+        
+        <sch:rule context="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]">
+            <sch:assert test="taxii:Inclusive_End_Timestamp > taxii:Exclusive_Begin_Timestamp">
+                If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
+                are present in a Poll_Request, the Inclusive_End_Timestamp 
+                MUST be greater than Exclusive_Begin_Timestamp.
+            </sch:assert>
+        </sch:rule>
+        
+        <sch:rule context="/taxii:Poll_Response">
+            <sch:assert test="if (@more = true()) then (string-length(@result_id) > 0) else true()">
+                The @result_id attribute MUST be present if @more is true.
+            </sch:assert>
+            <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
+                Record_Count MUST be greater than or equal to the number of 
+                Content Blocks.
+            </sch:assert>
+        </sch:rule>
     </sch:pattern>
 </sch:schema>

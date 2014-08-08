@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Response xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ collection_name="test-collection" in_response_to="1235" message_id="valid5">
+ <Record_Count>0</Record_Count>
+ <Message>This Poll_Response is valid because there
+  is no Content_Block and Record_Count is a valid value.</Message>
+</Poll_Response>
