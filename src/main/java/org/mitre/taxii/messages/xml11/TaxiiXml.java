@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -189,50 +190,38 @@ public final class TaxiiXml implements StatusDetails {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd";
     
-    private JAXBContext jaxbContext;
+    private final JAXBContext jaxbContext;
     private final Schema taxiiSchema;
     
-    private ArrayList<String>contextEntries;
-              
-    private TaxiiXml() {
-        initializeJaxbContextEntries();
-        taxiiSchema = newSchema();
-        // NOTE: At this point the object has no JAXB Context, which is needed to work.
-    }
-    
     /**
-     * Creates a new instance of the TaxiiXml utility class.
+     * Default constructor.
      * 
-     * @return 
      * @throws RuntimeException
      *              if a deployment error prevents the underlying JAXBContext
      *              from being created or the Schema from being parsed
      */
-    protected static TaxiiXml newInstance() {        
-        return new TaxiiXml();
+    public TaxiiXml() {
+        List<String> noAddlEntries = Collections.emptyList();
+        jaxbContext = newJaxbContext(noAddlEntries);
+        taxiiSchema = newSchema();
     }
     
+    
     /**
-     * Initialize the JAXB Context with known contexts that every instance of
-     * TaxiiXml will need to know.
+     * Constructor that takes additional JAXB packages, used in initializing 
+     * the JAXB Context.
      * 
+     * @throws RuntimeException
+     *              if a deployment error prevents the underlying JAXBContext
+     *              from being created, the Schema from being parsed, or 
+     *              the validating stylesheet from being compiled.
      */
-    private void initializeJaxbContextEntries() {
-        contextEntries = new ArrayList<>();
-        contextEntries.add(TaxiiXml.class.getPackage().getName());
-        contextEntries.add(Signature.class.getPackage().getName());        
+    public TaxiiXml(List<String> additionalJaxbPackages) {
+        jaxbContext = newJaxbContext(additionalJaxbPackages);
+        taxiiSchema = newSchema();
     }
+    
 
-    /**
-     * Add some things to the list of context path entries to later be
-     * used in initializing the JAXBContext.
-     * 
-     * @param cp 
-     */
-    protected void addJaxbContextPath(List<String> cp) {
-        contextEntries.addAll(cp);
-    }
-    
     /**
      * set the JAXBContext for the TAXII XML Message Binding 1.1 classes.
      * 
@@ -240,9 +229,13 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
-    protected void initializeJaxbContext() {
-        try {            
-            this.jaxbContext = JAXBContext.newInstance(Iterators.join(contextEntries.iterator(), ":"));
+    private JAXBContext newJaxbContext(List<String> addlContextEntries) {
+        try {      
+            List<String> contextEntries = new ArrayList<>();
+            contextEntries.add(TaxiiXml.class.getPackage().getName());
+            contextEntries.add(Signature.class.getPackage().getName());  
+            contextEntries.addAll(addlContextEntries);
+            return JAXBContext.newInstance(Iterators.join(contextEntries.iterator(), ":"));
         } catch (JAXBException e) {
             throw new RuntimeException("Deployment error", e);
         }
