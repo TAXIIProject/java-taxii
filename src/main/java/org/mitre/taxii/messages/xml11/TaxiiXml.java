@@ -29,6 +29,7 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -275,10 +276,14 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents the TAXII Schema from 
      *              being parsed
      */
-    private static Schema newSchema() {
+    private Schema newSchema() {
         final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
-            return sf.newSchema(ObjectFactory.class.getResource(TAXII_SCHEMA_RESOURCE));
+            final URL resource = getClass().getResource(TAXII_SCHEMA_RESOURCE);
+            if (resource == null) {
+                throw new RuntimeException("Deployment error: can't find TAXII 1.1 schema (" + TAXII_SCHEMA_RESOURCE + ")");
+            }
+            return sf.newSchema(resource);
         } catch (SAXException e) {
             throw new RuntimeException("Deployment error: can't parse TAXII schema", e);
         }
