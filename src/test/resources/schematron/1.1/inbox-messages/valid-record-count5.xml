@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Inbox_Message xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+  message_id="valid5">
+ <Message>This message is valid because there
+  is no Content_Block and Record_Count is a valid value.</Message>
+ <Record_Count>1</Record_Count>
+</Inbox_Message>

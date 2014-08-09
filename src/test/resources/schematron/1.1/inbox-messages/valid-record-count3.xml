@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Inbox_Message xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ message_id="valid3">
+ <Message>This Poll_Response is valid because Record_Count is the
+  number of Content_Block elements.</Message>
+ <Record_Count>1</Record_Count>
+ <Content_Block>
+  <Content_Binding binding_id="urn:foo"/>
+  <Content>Gitcha' content here!</Content>
+ </Content_Block>
+</Inbox_Message>

@@ -8,8 +8,7 @@
 
         <sch:p>
             Each of the rules below are mutually exclusive; in Schematron,
-            only the first matching rule will fire, and the associated asserts
-            tested.
+            only the first matching rule will fire, testing the associated asserts.
         </sch:p>
         
         <sch:rule context="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']">
@@ -69,6 +68,13 @@
             <sch:assert test="if (@more = true()) then (string-length(@result_id) > 0) else true()">
                 The @result_id attribute MUST be present if @more is true.
             </sch:assert>
+            <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
+                Record_Count MUST be greater than or equal to the number of 
+                Content Blocks.
+            </sch:assert>
+        </sch:rule>
+        
+        <sch:rule context="/taxii:Inbox_Message">
             <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
                 Record_Count MUST be greater than or equal to the number of 
                 Content Blocks.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Poll_Response xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
- collection_name="test-collection" in_response_to="1235" message_id="valid3">
+ collection_name="test-collection" in_response_to="1235" message_id="invalid4">
  <Message>This Poll_Response is invalid because Record_Count is missing while 
   a Content_Block is present.</Message>
  <Content_Block>
