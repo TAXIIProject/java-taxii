@@ -43,6 +43,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
+import org.mitre.taxii.util.Iterators;
 import org.mitre.taxii.util.Validation;
 import org.mitre.taxii.util.ValidationErrorHandler;
 import org.xml.sax.SAXException;
@@ -240,27 +241,12 @@ public final class TaxiiXml implements StatusDetails {
      */
     protected void initializeJaxbContext() {
         try {            
-            this.jaxbContext =  JAXBContext.newInstance(buildJaxbContextString());
+            this.jaxbContext = JAXBContext.newInstance(Iterators.join(contextEntries.iterator(), ":"));
         } catch (JAXBException e) {
             throw new RuntimeException("Deployment error", e);
         }
     }
     
-    private String buildJaxbContextString() {
-        // NOTE: Java 8 provides the String.join() method that does the below natively.
-        // Also Apache Commons StringUtils will do it.
-        // Doing it myself here to reduce dependencies and support older Java.
-        StringBuilder sb = new StringBuilder();
-        
-        if ((null != contextEntries) && !contextEntries.isEmpty()) {
-            for(String s : contextEntries.subList(0, contextEntries.size()-1)) {
-                sb.append(s);
-                sb.append(":");
-            }        
-            sb.append(contextEntries.get(contextEntries.size()-1));
-        }
-        return sb.toString();
-    }
             
     /**
      * Returns a marshaller for the TAXII XML Message Binding 1.1
