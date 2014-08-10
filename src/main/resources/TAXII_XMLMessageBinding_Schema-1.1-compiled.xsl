@@ -147,9 +147,9 @@
 
 		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger"/>
+         <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is a positiveInteger. </xsl:message>
+            <xsl:message>A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is a positive integer. </xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
@@ -162,7 +162,7 @@
 
 		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:positiveInteger"/>
+         <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is a positiveInteger. </xsl:message>
          </xsl:otherwise>
@@ -170,7 +170,7 @@
 
 		    <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='RESULT_ID'] castable as xs:anyURI"/>
+         <xsl:when test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>A Status Message of type PENDING requires a RESULT_ID Status Detail that is a URI. </xsl:message>
          </xsl:otherwise>
@@ -193,7 +193,7 @@
 
 		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test=". castable as xs:positiveInteger"/>
+         <xsl:when test=". castable as xs:integer and xs:integer(.) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>A Status Message of type RETRY has an optional ESTIMATED_WAIT Status Detail of type positiveInteger. </xsl:message>
          </xsl:otherwise>

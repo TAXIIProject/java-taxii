@@ -46,6 +46,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SAXDestination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
@@ -56,6 +57,7 @@ import org.mitre.taxii.util.Validation;
 import org.mitre.taxii.util.ValidationErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * JAXB utility class.
@@ -444,6 +446,9 @@ public final class TaxiiXml implements StatusDetails {
         
         if (checkSpecConformance) {
             checkConformance(m, errorHandler);
+            if (results.isFailure() && failFast) {
+                throw new SAXException("Conformance failure: " + results.getAllErrors());
+            }
         }
         
         return results;
@@ -459,6 +464,7 @@ public final class TaxiiXml implements StatusDetails {
         transformer.setMessageListener(errorHandler);
         try {
             transformer.setSource(new JAXBSource(jaxbContext, m));
+            transformer.setDestination(new SAXDestination(new DefaultHandler()));
             transformer.transform();
         } 
         catch (SaxonApiException | JAXBException e) {

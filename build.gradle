@@ -1,4 +1,4 @@
-defaultTasks 'compileJava'
+defaultTasks 'test'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'

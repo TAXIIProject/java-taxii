@@ -13,20 +13,20 @@
         
         <sch:rule context="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']">
             <sch:assert 
-                test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger">
+                test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) > 0">
                 A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
-                a positiveInteger.
+                a positive integer.
             </sch:assert>
         </sch:rule>
         
         <sch:rule context="/taxii:Status_Message[@status_type = 'PENDING']">
             <sch:assert 
-                test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:positiveInteger">
+                test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) > 0">
                 A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
                 a positiveInteger.
             </sch:assert>
             <sch:assert 
-                test="taxii:Status_Detail/taxii:Detail[@name='RESULT_ID'] castable as xs:anyURI">
+                test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) > 0">
                 A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
                 a URI.
             </sch:assert>
@@ -38,7 +38,7 @@
         </sch:rule>
         
         <sch:rule context="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']">
-            <sch:assert test=". castable as xs:positiveInteger">
+            <sch:assert test=". castable as xs:integer and xs:integer(.) > 0">
                 A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
                 Detail of type positiveInteger.
             </sch:assert>
