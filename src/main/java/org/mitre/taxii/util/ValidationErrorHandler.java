@@ -29,6 +29,10 @@ package org.mitre.taxii.util;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.ValidationEventLocator;
+import javax.xml.transform.SourceLocator;
+
+import net.sf.saxon.s9api.MessageListener;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.mitre.taxii.messages.xml11.TaxiiXml;
 import org.xml.sax.ErrorHandler;
@@ -36,11 +40,11 @@ import org.xml.sax.SAXParseException;
 
 /** 
  * An error handler that adds all warnings, errors, and fatalErrors to the
- * given Validation object. Implements both the SAX ErrorHandler and JAXB
- * ValidationEventHandler interfaces.
+ * given Validation object. Implements the SAX ErrorHandler, JAXB
+ * ValidationEventHandler, and Saxon MessageListener interfaces.
  */
 public final class ValidationErrorHandler 
-implements ErrorHandler, ValidationEventHandler {
+implements ErrorHandler, ValidationEventHandler, MessageListener {
     private final Validation results;
     private final boolean failFast;
 
@@ -133,6 +137,36 @@ implements ErrorHandler, ValidationEventHandler {
         throw new IllegalArgumentException("Unsupported ValidationEvent severity: " + event.getSeverity());
     }
 
+    
+    
+    /**
+     * Register the output from <code>xsl:message</code> as a validation error.
+     * Useful when using XSLT for validation (for example, when the XSLT
+     * is generated from Schematron).
+     */
+    @Override
+    public void message(XdmNode content, boolean terminate, SourceLocator locator) {
+        if (terminate) {
+            // Assumes that the content of xsl:message is just a string. This
+            // is true for XSLT generated from Schematron.
+            results.addFatalError(content.getStringValue());
+        }
+        else {
+            results.addError(content.getStringValue());
+        }
+        /*
+         *  DEVNOTE: We don't short-circuit XSLT execution by throwing an 
+         *  exception here, even if failFast is true.  The MessageListener
+         *  interface is designed to simply be a callback listener; it does
+         *  not have the same short-circuit semantics as the SAX ErrorHandler
+         *  or JAXB ValidationEventHandler interfaces.  Thus, we don't 
+         *  interrupt the XSLT execution because (1) the MessageListener
+         *  interface wasn't designed to support it and (2) because we
+         *  don't want to cause resource leaks.
+         */
+    }
+
+    
     public Validation getResults() {
         return results;
     }

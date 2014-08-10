@@ -27,23 +27,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.mitre.taxii.messages.xml11;
 
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.Messages;
 import org.mitre.taxii.Versions;
-import static org.mitre.taxii.messages.xml11.StatusDetails.STATUS_DETAIL_MAX_PART_NUMBER;
 import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
  * @author jasenj1
  */
 public class StatusMessageValidationTest implements StatusDetails, Versions, ContentBindings {
-    private static final String INVALID_XML_RESOURCE = "/invalid.xml";
+    private static final String INVALID_XML_RESOURCE = "/xsd/1.1/StatusMessage-Success-invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
@@ -55,7 +58,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
         taxiiXml = txf.getTaxiiXml();
     }
 
-        /** 
+    /** 
      * Verify that an bad Invalid Response Part status message with no status details
      * fails validation.
      */
@@ -73,7 +76,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
             // validateFast() throws an exception under more circumstances,
             // so other tests prefer validateAll() so that more of the 
             // validation code is tested.
-            taxiiXml.validateFast(sm);
+            taxiiXml.validateFast(sm, true);
             fail("Expected validation error!");
         }
         catch (SAXException e) {
@@ -104,7 +107,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
         // this should fail validation because it's missing the required
         // max part number
         try {
-            taxiiXml.validateFast(sm);
+            taxiiXml.validateFast(sm, true);
             fail("Expected validation error!");
         }
         catch (SAXException e) {
@@ -125,7 +128,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         MessageType msg = (MessageType) u.unmarshal(getClass().getResource(INVALID_XML_RESOURCE));
         
-        Validation results = taxiiXml.validateAll(msg);
+        Validation results = taxiiXml.validateAll(msg, false);
         assertTrue(results.isFailure());
         if (debug) {
             System.out.print("Validation results: ");
@@ -142,7 +145,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
 //        sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        Validation results = taxiiXml.validateAll(sm02);
+        Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());
         if (debug) {
             System.out.print("Validation results: ");
@@ -160,7 +163,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
         sm02.setMessageId("SM02");
 //        sm02.setInResponseTo(Messages.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        Validation results = taxiiXml.validateAll(sm02);
+        Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());
         if (debug) {
             System.out.print("Validation results: ");
@@ -178,7 +181,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
         sm02.setMessageId("SM02");
         sm02.setInResponseTo(Messages.generateMessageId());
 //        sm02.setStatusType(StatusTypes.ST_SUCCESS);
-        Validation results = taxiiXml.validateAll(sm02);
+        Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());
         if (debug) {
             System.out.print("Validation results: ");

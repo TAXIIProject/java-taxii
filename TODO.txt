@@ -139,6 +139,13 @@ Inbox_Message and Poll_Response
 (For Poll_Response, is it expected that @more=true when Record_Count > count(Content_Block)?
 Should it be a rule?) 
 
+TODO
+-----
+* Load XSLT in TaxiiXml and use for validation.
+* Convert to XSLT in build.gradle.
+* Circle back and embed Schematron into XSD.
+
+
 Additional tasks
 ================
 * Write utility factory methods to facilitate creating valid messages via the API. 
