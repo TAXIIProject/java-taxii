@@ -4,13 +4,7 @@
         prefix="taxii"/>
     
     <sch:pattern>
-        <sch:title>Rules for TAXII Messages</sch:title>
-
-        <sch:p>
-            Each of the rules below are mutually exclusive; in Schematron,
-            only the first matching rule will fire, testing the associated asserts.
-        </sch:p>
-        
+        <sch:title>Status Message Rules</sch:title>
         <sch:rule context="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']">
             <sch:assert 
                 test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) > 0">
@@ -43,7 +37,11 @@
                 Detail of type positiveInteger.
             </sch:assert>
         </sch:rule>
-        
+    </sch:pattern>
+    
+    
+    <sch:pattern>
+        <sch:title>Subscription Management Request Rules</sch:title>
         <sch:rule context="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']">
             <sch:assert test="taxii:Subscription_ID">
                 Subscription_ID MUST be present in UNSUBSCRIBE, PAUSE, and RESUME actions.
@@ -55,7 +53,10 @@
                 Subscription Parameters MUST be present in SUBSCRIBE actions.
             </sch:assert>
         </sch:rule>
-        
+    </sch:pattern>
+    
+    <sch:pattern>
+        <sch:title>Poll Request Rules</sch:title>
         <sch:rule context="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]">
             <sch:assert test="taxii:Inclusive_End_Timestamp > taxii:Exclusive_Begin_Timestamp">
                 If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
@@ -63,7 +64,10 @@
                 MUST be greater than Exclusive_Begin_Timestamp.
             </sch:assert>
         </sch:rule>
-        
+    </sch:pattern>
+    
+    <sch:pattern>
+        <sch:title>Poll Response Rules</sch:title>
         <sch:rule context="/taxii:Poll_Response">
             <sch:assert test="if (@more = true()) then (string-length(@result_id) > 0) else true()">
                 The @result_id attribute MUST be present if @more is true.
@@ -73,7 +77,10 @@
                 Content Blocks.
             </sch:assert>
         </sch:rule>
-        
+    </sch:pattern>
+    
+    <sch:pattern>
+        <sch:title>Inbox Message Rules</sch:title>
         <sch:rule context="/taxii:Inbox_Message">
             <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
                 Record_Count MUST be greater than or equal to the number of 

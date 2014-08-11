@@ -141,9 +141,8 @@ Should it be a rule?)
 
 TODO
 -----
-* Load XSLT in TaxiiXml and use for validation.
-* Convert to XSLT in build.gradle.
 * Circle back and embed Schematron into XSD.
+* Convert to XSLT in build.gradle.
 
 
 Additional tasks
