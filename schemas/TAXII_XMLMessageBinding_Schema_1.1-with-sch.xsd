@@ -3,19 +3,14 @@
     xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
     xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron"
     targetNamespace="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
     elementFormDefault="qualified" version="1.1">
     
     <!-- 
-        Changes between this schema and the original marked with CHANGED below:
-        - Substitution of an xmldsig schema that is more compatible with xjc.
-        - MessageType is abstract to suppress the generation of code to create
-            a MessageType instance.
-        - Removed TAXII_Message definition and the substitutionGroup references
-            as the substitionGroup was never used; that is, there isn't 
-            anywhere in the schema where one TAXII_Message can be substituted
-            for another, so the substitionGroup wasn't being used and was
-            resulting in extraneous (and useless) code being generated.
+        Additions to original 1.1 schema marked with ADDED below:
+        - Added schematron rules to enforce additional constraints described
+            in the specification.
     -->
     
     <xs:annotation>
@@ -25,16 +20,14 @@
             <date>1/13/2014</date>
             <short_description>The following specifies the fields and types of the TAXII XML Message Binding.</short_description>
             <terms_of_use>Copyright (c) 2014, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the TAXII License located at http://taxii.mitre.org/about/termsofuse.html. See the TAXII License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the TAXII XML Message Binding Schema, this license header must be included.</terms_of_use>
+            <!-- ADDED -->
+            <sch:ns prefix="taxii" uri="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" />
         </xs:appinfo>
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
     </xs:annotation>
 
-	<!-- CHANGED
-	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"> 
-    -->
-	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="xmldsig-core-schema-xjc.xsd">
+    <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+        schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd">
         <xs:annotation>
             <xs:documentation>XML Digital Signature schema imported to support signatures of messages and contents.</xs:documentation>
         </xs:annotation>
@@ -42,10 +35,7 @@
 
     <!-- GLOBAL TYPES -->
 
-    <!-- CHANGED
     <xs:complexType name="MessageType">
-	-->
-	<xs:complexType name="MessageType" abstract="true">
         <xs:annotation>
             <xs:documentation>The root of all TAXII messages. This is used to define header fields. This will never be instantiated directly but the TAXII Message Body types all extend this type.</xs:documentation>
         </xs:annotation>
@@ -309,6 +299,44 @@
     <xs:complexType name="TAXIIStatusMessageType">
         <xs:annotation>
             <xs:documentation>Type used by TAXII Status Messages.</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Status Message Rules</sch:title>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']">
+                        <sch:assert 
+                            test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) > 0">
+                            A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
+                            a positive integer.
+                        </sch:assert>
+                    </sch:rule>
+                    
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'PENDING']">
+                        <sch:assert 
+                            test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) > 0">
+                            A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
+                            a positiveInteger.
+                        </sch:assert>
+                        <sch:assert 
+                            test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) > 0">
+                            A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
+                            a URI.
+                        </sch:assert>
+                        <sch:assert 
+                            test="taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean">
+                            A Status Message of type PENDING requires a WILL_PUSH Status Detail that is 
+                            a boolean.
+                        </sch:assert>
+                    </sch:rule>
+                    
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']">
+                        <sch:assert test=". castable as xs:integer and xs:integer(.) > 0">
+                            A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
+                            Detail of type positiveInteger.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="ResponseMessageType">
@@ -780,6 +808,23 @@
     <xs:complexType name="TAXIISubscriptionManagementRequestType">
         <xs:annotation>
             <xs:documentation>Request management of a Data Collection subscription (including creation of a new subscription).</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Subscription Management Request Rules</sch:title>
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']">
+                        <sch:assert test="taxii:Subscription_ID">
+                            Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME.
+                        </sch:assert>
+                    </sch:rule>
+                    
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']">
+                        <sch:assert test="taxii:Subscription_Parameters">
+                            Subscription Parameters MUST be present if the action is SUBSCRIBE.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="RequestMessageType">
@@ -990,6 +1035,19 @@
     <xs:complexType name="TAXIIPollRequestType">
         <xs:annotation>
             <xs:documentation>A request to Poll a data collection.</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Poll Request Rules</sch:title>
+                    <sch:rule context="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]">
+                        <sch:assert test="taxii:Inclusive_End_Timestamp > taxii:Exclusive_Begin_Timestamp">
+                            If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
+                            are present in a Poll_Request, the Inclusive_End_Timestamp 
+                            MUST be greater than Exclusive_Begin_Timestamp.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="RequestMessageType">
@@ -1086,6 +1144,21 @@
     <xs:complexType name="TAXIIPollResponseType">
         <xs:annotation>
             <xs:documentation>Type for the Poll Response Messages.</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Poll Response Rules</sch:title>
+                    <sch:rule context="/taxii:Poll_Response">
+                        <sch:assert test="if (@more = true()) then (string-length(@result_id) > 0) else true()">
+                            The result_id attribute MUST be present if the more field is set to true.
+                        </sch:assert>
+                        <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
+                            Record_Count MUST be greater than or equal to the number of 
+                            Content Blocks.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="ResponseMessageType">
@@ -1186,6 +1259,18 @@
     <xs:complexType name="TAXIIInboxMessageType">
         <xs:annotation>
             <xs:documentation>Push message to exchange content.</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Inbox Message Rules</sch:title>
+                    <sch:rule context="/taxii:Inbox_Message">
+                        <sch:assert test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) >= count(taxii:Content_Block)) else true()">
+                            Record_Count MUST be greater than or equal to the number of 
+                            Content Blocks.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="RequestMessageType">
@@ -1307,7 +1392,6 @@
     </xs:complexType>
 
     <!-- GLOBAL ELEMENTS -->
-    <!-- CHANGED
     <xs:element name="TAXII_Message" abstract="true" type="MessageType">
         <xs:annotation>
             <xs:documentation>Abstract super-type of all message elements.</xs:documentation>
@@ -1333,18 +1417,4 @@
     />
     <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"
         substitutionGroup="TAXII_Message"/>
-    -->
-    <xs:element name="Status_Message" type="TAXIIStatusMessageType"/>
-    <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType"/>
-    <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType"/>
-    <xs:element name="Collection_Information_Request" type="TAXIICollectionInformationRequestType"/>
-    <xs:element name="Collection_Information_Response" type="TAXIICollectionInformationResponseType"/>
-    <xs:element name="Subscription_Management_Request" type="TAXIISubscriptionManagementRequestType"/>
-    <xs:element name="Subscription_Management_Response"
-        type="TAXIISubscriptionManagementResponseType"/>
-    <xs:element name="Poll_Request" type="TAXIIPollRequestType" />
-    <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
-    <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
-    <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"/>
-    
 </xs:schema>
