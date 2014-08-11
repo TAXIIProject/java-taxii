@@ -202,6 +202,7 @@ public final class TaxiiXml implements StatusDetails {
     private final JAXBContext jaxbContext;
     private final Schema taxiiSchema;
     private final XsltExecutable schematronValidator;
+    private final List<String> contextEntries;
     
     /**
      * Default constructor.
@@ -212,8 +213,8 @@ public final class TaxiiXml implements StatusDetails {
      *              the validating stylesheet from being compiled.
      */
     public TaxiiXml() {
-        List<String> noAddlEntries = Collections.emptyList();
-        jaxbContext = newJaxbContext(noAddlEntries);
+        contextEntries = initializeJaxbContextEntries();
+        jaxbContext = newJaxbContext(contextEntries);
         taxiiSchema = newSchema();
         schematronValidator = compileValidator();
     }
@@ -229,11 +230,26 @@ public final class TaxiiXml implements StatusDetails {
      *              the validating stylesheet from being compiled.
      */
     public TaxiiXml(List<String> additionalJaxbPackages) {
-        jaxbContext = newJaxbContext(additionalJaxbPackages);
+        contextEntries = initializeJaxbContextEntries();
+        contextEntries.addAll(additionalJaxbPackages);
+        jaxbContext = newJaxbContext(contextEntries);
         taxiiSchema = newSchema();
         schematronValidator = compileValidator();
     }
     
+    
+    /**
+     * Initialize the JAXB Context with known contexts that every instance of
+     * TaxiiXml will need to know.
+     * 
+     */
+    private static List<String> initializeJaxbContextEntries() {
+        List<String> contextEntries = new ArrayList<>();
+        contextEntries.add(TaxiiXml.class.getPackage().getName());
+        contextEntries.add(Signature.class.getPackage().getName());
+        return contextEntries;
+    }
+
 
     /**
      * set the JAXBContext for the TAXII XML Message Binding 1.1 classes.
@@ -242,12 +258,8 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
-    private JAXBContext newJaxbContext(List<String> addlContextEntries) {
+    private static JAXBContext newJaxbContext(List<String> contextEntries) {
         try {      
-            List<String> contextEntries = new ArrayList<>();
-            contextEntries.add(TaxiiXml.class.getPackage().getName());
-            contextEntries.add(Signature.class.getPackage().getName());  
-            contextEntries.addAll(addlContextEntries);
             return JAXBContext.newInstance(Iterators.join(contextEntries.iterator(), ":"));
         } catch (JAXBException e) {
             throw new RuntimeException("Deployment error", e);
@@ -401,6 +413,15 @@ public final class TaxiiXml implements StatusDetails {
     }
     
     
+    /**
+     * Returns a read-only list of JAXB packages that the underlying JAXB Context
+     * knows about.  
+     */
+    public List<String> getJaxbContextPath() {
+        return Collections.unmodifiableList(contextEntries);
+    }
+    
+    
    /**
     * Validates the given message.
     * 
@@ -444,7 +465,7 @@ public final class TaxiiXml implements StatusDetails {
         validator.setErrorHandler(errorHandler);
         validator.validate(source);
         
-        if (checkSpecConformance) {
+        if (results.isSuccess() && checkSpecConformance) {
             checkConformance(m, errorHandler);
             if (results.isFailure() && failFast) {
                 throw new SAXException("Conformance failure: " + results.getAllErrors());
