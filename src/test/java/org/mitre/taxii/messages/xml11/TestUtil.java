@@ -17,19 +17,25 @@ import org.xml.sax.SAXException;
 public class TestUtil {
     private static final boolean debug = true; // Boolean.getBoolean("debug"); 
 
+    
+    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
+        roundTripMessage(taxiiXml, msg, true);
+    }
+    
     /**
      * Confirm that a JAXB MessageType Object matches itself when marshaled to
      * a String and back.
      * 
      * @param taxiiXml
      * @param msg
+     * @param prettyPrint
      * @throws javax.xml.bind.JAXBException
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
      */
-    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
+    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg, boolean prettyPrint) throws JAXBException, SAXException, IOException {
 
-        final Marshaller m = taxiiXml.createMarshaller(false); // Whether to pretty print.
+        final Marshaller m = taxiiXml.createMarshaller(prettyPrint); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         
         m.setProperty(Marshaller.JAXB_FRAGMENT, true); // Don't generate xml declaration.
