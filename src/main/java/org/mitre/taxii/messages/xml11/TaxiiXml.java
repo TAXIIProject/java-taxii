@@ -29,7 +29,9 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -38,15 +40,24 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.util.JAXBSource;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SAXDestination;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
+
 import org.mitre.taxii.messages.xmldsig.Signature;
+import org.mitre.taxii.util.Iterators;
 import org.mitre.taxii.util.Validation;
 import org.mitre.taxii.util.ValidationErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * JAXB utility class.
@@ -74,8 +85,8 @@ import org.xml.sax.SAXParseException;
  *  
  * <pre>
  * try {
- *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
- *   Validation results = taxiiXml.validateFast(msg);
+ *   TaxiiXml taxiiXml = new TaxiiXml();
+ *   Validation results = taxiiXml.validateFast(msg, true);
  *   if (results.hasWarnings()) {
  *     System.out.print("Validation warnings: ");
  *     System.out.println(results.getAllWarnings());
@@ -98,10 +109,10 @@ import org.xml.sax.SAXParseException;
  * 
  * <pre>
  * try {
- *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   TaxiiXml taxiiXml = new TaxiiXml();
  *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
  *   MessageType msg = (MessageType) u.unmarshal(input);
- *   Validation results = taxiiXml.validateFast(msg);
+ *   Validation results = taxiiXml.validateFast(msg, true);
  *   if (results.hasWarnings()) {
  *     System.out.print("Validation warnings: ");
  *     System.out.println(results.getAllWarnings());
@@ -123,8 +134,8 @@ import org.xml.sax.SAXParseException;
  * 
  * <pre>
  * try {
- *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
- *   Validation results = taxiiXml.validateAll(msg);
+ *   TaxiiXml taxiiXml = new TaxiiXml();
+ *   Validation results = taxiiXml.validateAll(msg, true);
  *   if (results.isSuccess()) {
  *     if (results.hasWarnings()) {
  *     System.out.print("Validation warnings: ");
@@ -153,10 +164,10 @@ import org.xml.sax.SAXParseException;
  * 
  * <pre>
  * try {
- *   TaxiiXml taxiiXml = TaxiiXml.newInstance();
+ *   TaxiiXml taxiiXml = new TaxiiXml();
  *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
  *   MessageType msg = (MessageType) u.unmarshal(input);
- *   Validation results = taxiiXml.validateAll(msg);
+ *   Validation results = taxiiXml.validateAll(msg, true);
  *   if (results.isSuccess()) {
  *     if (results.hasWarnings()) {
  *       System.out.print("Validation warnings: ");
@@ -186,51 +197,60 @@ import org.xml.sax.SAXParseException;
 public final class TaxiiXml implements StatusDetails {
 
     private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd";
+    private static final String TAXII_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-compiled.xsl";
     
-    private JAXBContext jaxbContext;
+    private final JAXBContext jaxbContext;
     private final Schema taxiiSchema;
-    
-    private ArrayList<String>contextEntries;
-              
-    private TaxiiXml() {
-        initializeJaxbContextEntries();
-        taxiiSchema = newSchema();
-        // NOTE: At this point the object has no JAXB Context, which is needed to work.
-    }
+    private final XsltExecutable schematronValidator;
+    private final List<String> contextEntries;
     
     /**
-     * Creates a new instance of the TaxiiXml utility class.
+     * Default constructor.
      * 
-     * @return 
      * @throws RuntimeException
      *              if a deployment error prevents the underlying JAXBContext
-     *              from being created or the Schema from being parsed
+     *              from being created, the Schema from being parsed, or 
+     *              the validating stylesheet from being compiled.
      */
-    protected static TaxiiXml newInstance() {        
-        return new TaxiiXml();
+    public TaxiiXml() {
+        contextEntries = initializeJaxbContextEntries();
+        jaxbContext = newJaxbContext(contextEntries);
+        taxiiSchema = newSchema();
+        schematronValidator = compileValidator();
     }
+    
+    
+    /**
+     * Constructor that takes additional JAXB packages, used in initializing 
+     * the JAXB Context.
+     * 
+     * @throws RuntimeException
+     *              if a deployment error prevents the underlying JAXBContext
+     *              from being created, the Schema from being parsed, or 
+     *              the validating stylesheet from being compiled.
+     */
+    public TaxiiXml(List<String> additionalJaxbPackages) {
+        contextEntries = initializeJaxbContextEntries();
+        contextEntries.addAll(additionalJaxbPackages);
+        jaxbContext = newJaxbContext(contextEntries);
+        taxiiSchema = newSchema();
+        schematronValidator = compileValidator();
+    }
+    
     
     /**
      * Initialize the JAXB Context with known contexts that every instance of
      * TaxiiXml will need to know.
      * 
      */
-    private void initializeJaxbContextEntries() {
-        contextEntries = new ArrayList<>();
+    private static List<String> initializeJaxbContextEntries() {
+        List<String> contextEntries = new ArrayList<>();
         contextEntries.add(TaxiiXml.class.getPackage().getName());
-        contextEntries.add(Signature.class.getPackage().getName());        
+        contextEntries.add(Signature.class.getPackage().getName());
+        return contextEntries;
     }
 
-    /**
-     * Add some things to the list of context path entries to later be
-     * used in initializing the JAXBContext.
-     * 
-     * @param cp 
-     */
-    protected void addJaxbContextPath(List<String> cp) {
-        contextEntries.addAll(cp);
-    }
-    
+
     /**
      * set the JAXBContext for the TAXII XML Message Binding 1.1 classes.
      * 
@@ -238,29 +258,14 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents 
      *              the JAXBContext from being created
      */
-    protected void initializeJaxbContext() {
-        try {            
-            this.jaxbContext =  JAXBContext.newInstance(buildJaxbContextString());
+    private static JAXBContext newJaxbContext(List<String> contextEntries) {
+        try {      
+            return JAXBContext.newInstance(Iterators.join(contextEntries.iterator(), ":"));
         } catch (JAXBException e) {
             throw new RuntimeException("Deployment error", e);
         }
     }
     
-    private String buildJaxbContextString() {
-        // NOTE: Java 8 provides the String.join() method that does the below natively.
-        // Also Apache Commons StringUtils will do it.
-        // Doing it myself here to reduce dependencies and support older Java.
-        StringBuilder sb = new StringBuilder();
-        
-        if ((null != contextEntries) && !contextEntries.isEmpty()) {
-            for(String s : contextEntries.subList(0, contextEntries.size()-1)) {
-                sb.append(s);
-                sb.append(":");
-            }        
-            sb.append(contextEntries.get(contextEntries.size()-1));
-        }
-        return sb.toString();
-    }
             
     /**
      * Returns a marshaller for the TAXII XML Message Binding 1.1
@@ -289,12 +294,39 @@ public final class TaxiiXml implements StatusDetails {
      *              if a deployment error prevents the TAXII Schema from 
      *              being parsed
      */
-    private static Schema newSchema() {
+    private Schema newSchema() {
         final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
-            return sf.newSchema(ObjectFactory.class.getResource(TAXII_SCHEMA_RESOURCE));
+            final URL resource = getClass().getResource(TAXII_SCHEMA_RESOURCE);
+            if (resource == null) {
+                throw new RuntimeException("Deployment error: can't find TAXII 1.1 schema (" + TAXII_SCHEMA_RESOURCE + ")");
+            }
+            return sf.newSchema(resource);
         } catch (SAXException e) {
             throw new RuntimeException("Deployment error: can't parse TAXII schema", e);
+        }
+    }
+    
+    
+    /**
+     * Compiles the (Schematron-derived) XSLT stylesheet that implements additional validation checks.
+     */
+    private XsltExecutable compileValidator() {
+        // This method should only be called once in the constructor, and the
+        // stylesheet is only compiled once, so we
+        // don't cache any of these objects like we normally would.
+        final URL resource = getClass().getResource(TAXII_SCHEMATRON_XSLT_RESOURCE);
+        if (resource == null) {
+            throw new RuntimeException("Deployment error: can't find additional TAXII validator (" + TAXII_SCHEMATRON_XSLT_RESOURCE + ")");
+        }
+        try {
+            final boolean useLicensedEdition = false;
+            return new Processor(useLicensedEdition).newXsltCompiler()
+                    .compile(new StreamSource(resource.toString()));
+        } 
+        catch (SaxonApiException e) {
+            throw new RuntimeException("Deployment error: The validator stylesheet contains static errors or it cannot be read. See the standard error output for details.",
+                    e);
         }
     }
 
@@ -302,6 +334,11 @@ public final class TaxiiXml implements StatusDetails {
     /**
      * Validates the given message, returning all accumulated errors and warnings.
      * 
+     * @param m
+     *       The message to validate
+     * @param checkSpecConformance      
+     *       Check conformance to specification beyond what XML Schema provides.
+     *
      * @returns 
      *       The validation results, including all errors and warnings.  
      * @throws JAXBException 
@@ -312,31 +349,36 @@ public final class TaxiiXml implements StatusDetails {
      * @throws SAXException 
      *      on any fatal validation error 
      */
-    public Validation validateAll(MessageType m) 
+    public Validation validateAll(MessageType m, boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
-        return validate(m, false);
+        return validate(m, false, checkSpecConformance);
     }
     
     
     /**
      * Validates the given message, throwing a SAXException on the first
      * validation error encountered.
-    * 
-    * @returns 
-    *       The validation results, including any warnings.  If this method 
-    *       returns successfully, then isSuccess() on the returned object will
-    *       always return true.  
-    * @throws JAXBException 
-    *      If the message couldn't be validated because of an underlying JAXB error
-    * @throws IOException 
-    *      If the underlying {@link org.xml.sax.XMLReader} throws an
-    *      {@link IOException}.
-    * @throws SAXException 
-    *      On the first validation error 
+     * 
+     * @param m
+     *       The message to validate
+     * @param checkSpecConformance      
+     *       Check conformance to specification beyond what XML Schema provides.
+     *
+     * @returns 
+     *       The validation results, including any warnings.  If this method 
+     *       returns successfully, then isSuccess() on the returned object will
+     *       always return true.  
+     * @throws JAXBException 
+     *      If the message couldn't be validated because of an underlying JAXB error
+     * @throws IOException 
+     *      If the underlying {@link org.xml.sax.XMLReader} throws an
+     *      {@link IOException}.
+     * @throws SAXException 
+     *      On the first validation error 
      */
-    public Validation validateFast(MessageType m) 
+    public Validation validateFast(MessageType m, boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
-        return validate(m, true);
+        return validate(m, true, checkSpecConformance);
     }
     
 
@@ -371,7 +413,15 @@ public final class TaxiiXml implements StatusDetails {
     }
     
     
-    // TODO - add extra validation not done by the schema - see TODO.txt for details.
+    /**
+     * Returns a read-only list of JAXB packages that the underlying JAXB Context
+     * knows about.  
+     */
+    public List<String> getJaxbContextPath() {
+        return Collections.unmodifiableList(contextEntries);
+    }
+    
+    
    /**
     * Validates the given message.
     * 
@@ -379,10 +429,15 @@ public final class TaxiiXml implements StatusDetails {
     * <a href="http://blog.bdoughan.com/2010/11/validate-jaxb-object-model-with-xml.html">Validate a JAXB Object Model With an XML Schema</a>
     * blog post.</p>
     *
+    * @param m
+    *       Message to validate
     * @param failFast
     *       If true, then a SAXException will be thrown on the first error 
     *       encountered; otherwise,
     *       all errors and warnings are returned in the Validation object.
+    * @param checkSpecConformance      
+    *       Check conformance to specification beyond what XML Schema provides.
+    *       
     * @returns 
     *       The validation results.  If failFast is true,
     *       then a successful return indicates success, results.isSuccess() will 
@@ -399,60 +454,43 @@ public final class TaxiiXml implements StatusDetails {
     *      validation error encountered. If failFast is false, then a 
     *      SAXException indicates a fatal error. 
     */
-    private Validation validate(MessageType m, boolean failFast) 
+    private Validation validate(MessageType m, 
+            boolean failFast, 
+            boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
         JAXBSource source = new JAXBSource(jaxbContext, m);
         Validator validator = taxiiSchema.newValidator();
         final Validation results = new Validation();
-        validator.setErrorHandler(new ValidationErrorHandler(results, failFast));
+        final ValidationErrorHandler errorHandler = new ValidationErrorHandler(results, failFast);
+        validator.setErrorHandler(errorHandler);
         validator.validate(source);
         
-        // check for StatusMessage co-constraints
-        if (m instanceof StatusMessage) {
-            validateStatusMessage(results, (StatusMessage) m, failFast);
+        if (results.isSuccess() && checkSpecConformance) {
+            checkConformance(m, errorHandler);
+            if (results.isFailure() && failFast) {
+                throw new SAXException("Conformance failure: " + results.getAllErrors());
+            }
         }
         
         return results;
     }
-    
+
     
     /**
-     * Validates the status message.
-     * 
-     * @throws SAXException 
-     *      If failFast is true, then a SAXException will be thrown on the first
-     *      validation error encountered. If failFast is false, then a 
-     *      SAXException indicates a fatal error. 
+     * Check conformance to TAXII specification beyond what XML Schema provides. 
      */
-    private void validateStatusMessage(
-            Validation results, 
-            StatusMessage msg, 
-            boolean failFast) 
-    throws SAXException {
-        // If status type is null, then validation should have already failed.
-        // This situation should only occur when failFast is false.
-        if (msg.getStatusType() == null ) {
-            assert(!failFast && results.isFailure());
-        }
-        // Otherwise, validate co-constraints based on status type.
-        else {
-            StatusTypeEnum ste = StatusTypeEnum.fromValue(msg.getStatusType());
-            switch(ste) {
-            
-            // Invalid Response Part requires a Max Part Number
-            case INVALID_RESPONSE_PART : 
-                if (msg.getStatusDetail() == null 
-                || msg.getStatusDetail().getDetails().size() < 1
-                || StatusMessageHelper.findStatusDetailContentByName(msg, STATUS_DETAIL_MAX_PART_NUMBER) == null) 
-                {
-                    final String error = "Missing required status detail: " + STATUS_DETAIL_MAX_PART_NUMBER;
-                    results.addError(error);
-                    if (failFast) {
-                        throw new SAXException(error);
-                    }
-                }
-            }
-        }
+    private void checkConformance(MessageType m, 
+            ValidationErrorHandler errorHandler) {
+        final XsltTransformer transformer = schematronValidator.load();
+        transformer.setMessageListener(errorHandler);
+        try {
+            transformer.setSource(new JAXBSource(jaxbContext, m));
+            transformer.setDestination(new SAXDestination(new DefaultHandler()));
+            transformer.transform();
+        } 
+        catch (SaxonApiException | JAXBException e) {
+            errorHandler.getResults().addError("Conformance error: " + e.getMessage());
+        } 
     }
-    
+        
 }

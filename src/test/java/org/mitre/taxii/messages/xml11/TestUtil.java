@@ -78,7 +78,7 @@ public class TestUtil {
     
     public static void assertValid(TaxiiXml taxiiXml, MessageType msg) 
             throws JAXBException, SAXException, IOException {
-        final Validation results = taxiiXml.validateAll(msg);
+        final Validation results = taxiiXml.validateAll(msg, true);
         if (results.isFailure()) {
             fail(results.getAllErrorsAndWarnings());
         }

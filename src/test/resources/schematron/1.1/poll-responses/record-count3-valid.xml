@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Response xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ collection_name="test-collection" in_response_to="1235" message_id="valid3">
+ <Record_Count>1</Record_Count>
+ <Message>This Poll_Response is valid because Record_Count is the
+  number of Content_Block elements.</Message>
+ <Content_Block>
+  <Content_Binding binding_id="urn:foo"/>
+  <Content>Gitcha' content here!</Content>
+ </Content_Block>
+</Poll_Response>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Inbox_Message xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ message_id="invalid4">
+ <Message>This message is invalid because Record_Count is missing while 
+  a Content_Block is present.</Message>
+ <Content_Block>
+  <Content_Binding binding_id="urn:foo"/>
+  <Content>Gitcha' content here!</Content>
+ </Content_Block>
+</Inbox_Message>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Response xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+ collection_name="test-collection" in_response_to="1235" message_id="valid2"
+ more="false"> 
+<Message>
+ This Poll_Response is valid because the @more attribute is false, so it's 
+ ok if the result_id attribute is missing.
+</Message>
+</Poll_Response>

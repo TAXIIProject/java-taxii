@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Request xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+   collection_name="test-collection" message_id="valid-poll-request">
+   <Subscription_ID>test-subscription-id</Subscription_ID>
+</Poll_Request>

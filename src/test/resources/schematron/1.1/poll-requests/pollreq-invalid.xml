@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Request xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+   collection_name="test-collection" message_id="invalid-poll-request">
+   <!-- this poll request is invalid because the end timestamp is before
+      the beginning timestamp -->
+   <Exclusive_Begin_Timestamp>2014-05-12T12:34:45Z</Exclusive_Begin_Timestamp>
+   <Inclusive_End_Timestamp>2014-04-12T12:34:45Z</Inclusive_End_Timestamp>
+   <Subscription_ID>test-subscription-id</Subscription_ID>
+</Poll_Request>

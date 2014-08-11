@@ -1,4 +1,4 @@
-defaultTasks 'compileJava'
+defaultTasks 'test'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -37,6 +37,7 @@ dependencies {
 
     compile 'javax.xml.bind:jaxb-api:2.2.+'
     compile 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:0.6.5'
+    compile 'net.sf.saxon:Saxon-HE:9.5.1-5'
 
     testCompile 'junit:junit:4.11'
 }

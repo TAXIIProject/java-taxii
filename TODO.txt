@@ -135,6 +135,14 @@ Inbox_Message and Poll_Response
 -------------------------------- 
 * co-occurrence constraint: 
     Record_Count >= count(Content_Block)
+    
+(For Poll_Response, is it expected that @more=true when Record_Count > count(Content_Block)?
+Should it be a rule?) 
+
+TODO
+-----
+* Circle back and embed Schematron into XSD.
+* Convert to XSLT in build.gradle.
 
 
 Additional tasks
