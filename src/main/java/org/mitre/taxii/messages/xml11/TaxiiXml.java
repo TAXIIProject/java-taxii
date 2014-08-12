@@ -196,7 +196,7 @@ import org.xml.sax.helpers.DefaultHandler;
 // TODO copy the above code to a driver to test it out 
 public final class TaxiiXml implements StatusDetails {
 
-    private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd";
+    private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc-with-sch.xsd";
     private static final String TAXII_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-compiled.xsl";
     
     private final JAXBContext jaxbContext;

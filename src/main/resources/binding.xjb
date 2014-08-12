@@ -16,7 +16,7 @@
   <!--
     Binding customizations defining package names for generated code.
   -->
-  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.1-xjc.xsd" node="/xsd:schema">
+  <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.1-xjc-with-sch.xsd" node="/xsd:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xml11"/>
     </jaxb:schemaBindings>
