@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xsl:stylesheet xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:saxon="http://saxon.sf.net/"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:schold="http://www.ascc.net/xml/schematron"
+                xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
                 xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
                 version="2.0"><!--Implementers: please note that overriding process-prolog or process-root is 
-    the preferred method for meta-stylesheets to use where possible. The name or details of 
-    this mode may change during 1Q 2007.-->
+    the preferred method for meta-stylesheets to use where possible. -->
+   <xsl:param name="archiveDirParameter"/>
+   <xsl:param name="archiveNameParameter"/>
+   <xsl:param name="fileNameParameter"/>
+   <xsl:param name="fileDirParameter"/>
+   <xsl:variable name="document-uri">
+      <xsl:value-of select="document-uri(/)"/>
+   </xsl:variable>
+
+   <!--PHASES-->
 
 
-<!--PHASES-->
-
-
-<!--PROLOG-->
+   <!--PROLOG-->
    <xsl:output method="text"/>
 
-   <!--KEYS-->
+   <!--XSD TYPES FOR XSLT2-->
+
+
+   <!--KEYS AND FUNCTIONS-->
 
 
    <!--DEFAULT RULES-->
 
+
+   <!--MODE: SCHEMATRON-SELECT-FULL-PATH-->
+   <!--This mode can be used to generate an ugly though full XPath for locators-->
+   <xsl:template match="*" mode="schematron-select-full-path">
+      <xsl:apply-templates select="." mode="schematron-get-full-path"/>
+   </xsl:template>
 
    <!--MODE: SCHEMATRON-FULL-PATH-->
    <!--This mode can be used to generate an ugly though full XPath for locators-->
@@ -47,7 +65,8 @@
       <xsl:apply-templates select="parent::*" mode="schematron-get-full-path"/>
       <xsl:text>/</xsl:text>
       <xsl:choose>
-         <xsl:when test="namespace-uri()=''">@sch:schema</xsl:when>
+         <xsl:when test="namespace-uri()=''">@<xsl:value-of select="name()"/>
+         </xsl:when>
          <xsl:otherwise>
             <xsl:text>@*[local-name()='</xsl:text>
             <xsl:value-of select="local-name()"/>
@@ -65,6 +84,23 @@
          <xsl:text>/</xsl:text>
          <xsl:value-of select="name(.)"/>
          <xsl:if test="preceding-sibling::*[name(.)=name(current())]">
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="count(preceding-sibling::*[name(.)=name(current())])+1"/>
+            <xsl:text>]</xsl:text>
+         </xsl:if>
+      </xsl:for-each>
+      <xsl:if test="not(self::*)">
+         <xsl:text/>/@<xsl:value-of select="name(.)"/>
+      </xsl:if>
+   </xsl:template>
+   <!--MODE: SCHEMATRON-FULL-PATH-3-->
+   <!--This mode can be used to generate prefixed XPath for humans 
+    (Top-level element has index)-->
+   <xsl:template match="node() | @*" mode="schematron-get-full-path-3">
+      <xsl:for-each select="ancestor-or-self::*">
+         <xsl:text>/</xsl:text>
+         <xsl:value-of select="name(.)"/>
+         <xsl:if test="parent::*">
             <xsl:text>[</xsl:text>
             <xsl:value-of select="count(preceding-sibling::*[name(.)=name(current())])+1"/>
             <xsl:text>]</xsl:text>
@@ -96,14 +132,7 @@
    <xsl:template match="*" mode="generate-id-from-path" priority="-0.5">
       <xsl:apply-templates select="parent::*" mode="generate-id-from-path"/>
       <xsl:text>.</xsl:text>
-      <xsl:choose>
-         <xsl:when test="count(. | ../namespace::*) = count(../namespace::*)">
-            <xsl:value-of select="concat('.namespace::-',1+count(namespace::*),'-')"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:value-of select="concat('.',name(),'-',1+count(preceding-sibling::*[name()=name(current())]),'-')"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="concat('.',name(),'-',1+count(preceding-sibling::*[name()=name(current())]),'-')"/>
    </xsl:template>
 
    <!--MODE: GENERATE-ID-2 -->
@@ -129,7 +158,7 @@
    <!--Strip characters-->
    <xsl:template match="text()" priority="-1"/>
 
-   <!--SCHEMA METADATA-->
+   <!--SCHEMA SETUP-->
    <xsl:template match="/">
       <xsl:apply-templates select="/" mode="M1"/>
       <xsl:apply-templates select="/" mode="M2"/>
@@ -144,215 +173,206 @@
    <!--PATTERN Status Message Rules-->
 
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']"
-                 priority="103"
+                 priority="1002"
                  mode="M1">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is a positive integer. </xsl:message>
+            <xsl:message>
+                A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
+                a positive integer.
+             (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'PENDING']"
-                 priority="102"
+                 priority="1001"
                  mode="M1">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is a positiveInteger. </xsl:message>
+            <xsl:message>
+                A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
+                a positiveInteger.
+             (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
 
-		    <!--ASSERT -->
+            <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type PENDING requires a RESULT_ID Status Detail that is a URI. </xsl:message>
+            <xsl:message>
+                A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
+                a URI.
+             (string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
 
-		    <!--ASSERT -->
+            <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type PENDING requires a WILL_PUSH Status Detail that is a boolean. </xsl:message>
+            <xsl:message>
+                A Status Message of type PENDING requires a WILL_PUSH Status Detail that is 
+                a boolean.
+             (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']"
-                 priority="101"
+                 priority="1000"
                  mode="M1">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test=". castable as xs:integer and xs:integer(.) &gt; 0"/>
          <xsl:otherwise>
-            <xsl:message>A Status Message of type RETRY has an optional ESTIMATED_WAIT Status Detail of type positiveInteger. </xsl:message>
+            <xsl:message>
+                A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
+                Detail of type positiveInteger.
+             (. castable as xs:integer and xs:integer(.) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M1"/>
    <xsl:template match="@*|node()" priority="-2" mode="M1">
-      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
-                           of an attribute-->
-         <xsl:when test="not(@*)">
-            <xsl:apply-templates select="node()" mode="M1"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:apply-templates select="@*|node()" mode="M1"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
    <!--PATTERN Subscription Management Request Rules-->
 
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']"
-                 priority="102"
+                 priority="1001"
                  mode="M2">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Subscription_ID"/>
          <xsl:otherwise>
-            <xsl:message>Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME. </xsl:message>
+            <xsl:message>
+                Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME.
+             (taxii:Subscription_ID)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
    </xsl:template>
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']"
-                 priority="101"
+                 priority="1000"
                  mode="M2">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Subscription_Parameters"/>
          <xsl:otherwise>
-            <xsl:message>Subscription Parameters MUST be present if the action is SUBSCRIBE. </xsl:message>
+            <xsl:message>
+                Subscription Parameters MUST be present if the action is SUBSCRIBE.
+             (taxii:Subscription_Parameters)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M2"/>
    <xsl:template match="@*|node()" priority="-2" mode="M2">
-      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
-                           of an attribute-->
-         <xsl:when test="not(@*)">
-            <xsl:apply-templates select="node()" mode="M2"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:apply-templates select="@*|node()" mode="M2"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
    </xsl:template>
 
    <!--PATTERN Poll Request Rules-->
 
 
-	  <!--RULE -->
+      <!--RULE -->
    <xsl:template match="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]"
-                 priority="101"
+                 priority="1000"
                  mode="M3">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp"/>
          <xsl:otherwise>
-            <xsl:message>If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp are present in a Poll_Request, the Inclusive_End_Timestamp MUST be greater than Exclusive_Begin_Timestamp. </xsl:message>
+            <xsl:message>
+                If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
+                are present in a Poll_Request, the Inclusive_End_Timestamp 
+                MUST be greater than Exclusive_Begin_Timestamp.
+             (taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M3"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M3"/>
    <xsl:template match="@*|node()" priority="-2" mode="M3">
-      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
-                           of an attribute-->
-         <xsl:when test="not(@*)">
-            <xsl:apply-templates select="node()" mode="M3"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:apply-templates select="@*|node()" mode="M3"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M3"/>
    </xsl:template>
 
    <!--PATTERN Poll Response Rules-->
 
 
-	  <!--RULE -->
-   <xsl:template match="/taxii:Poll_Response" priority="101" mode="M4">
+      <!--RULE -->
+   <xsl:template match="/taxii:Poll_Response" priority="1000" mode="M4">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="if (@more = true()) then (string-length(@result_id) &gt; 0) else true()"/>
          <xsl:otherwise>
-            <xsl:message>The result_id attribute MUST be present if the more field is set to true. </xsl:message>
+            <xsl:message>
+                The result_id attribute MUST be present if the more field is set to true.
+             (if (@more = true()) then (string-length(@result_id) &gt; 0) else true())</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
 
-		    <!--ASSERT -->
+            <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
          <xsl:otherwise>
-            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
+            <xsl:message>
+                Record_Count MUST be greater than or equal to the number of 
+                Content Blocks.
+             (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M4"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M4"/>
    <xsl:template match="@*|node()" priority="-2" mode="M4">
-      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
-                           of an attribute-->
-         <xsl:when test="not(@*)">
-            <xsl:apply-templates select="node()" mode="M4"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:apply-templates select="@*|node()" mode="M4"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M4"/>
    </xsl:template>
 
    <!--PATTERN Inbox Message Rules-->
 
 
-	  <!--RULE -->
-   <xsl:template match="/taxii:Inbox_Message" priority="101" mode="M5">
+      <!--RULE -->
+   <xsl:template match="/taxii:Inbox_Message" priority="1000" mode="M5">
 
-		<!--ASSERT -->
+        <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
          <xsl:otherwise>
-            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
+            <xsl:message>
+                Record_Count MUST be greater than or equal to the number of 
+                Content Blocks.
+             (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M5"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M5"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M5"/>
    <xsl:template match="@*|node()" priority="-2" mode="M5">
-      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
-                           of an attribute-->
-         <xsl:when test="not(@*)">
-            <xsl:apply-templates select="node()" mode="M5"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:apply-templates select="@*|node()" mode="M5"/>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M5"/>
    </xsl:template>
 </xsl:stylesheet>
