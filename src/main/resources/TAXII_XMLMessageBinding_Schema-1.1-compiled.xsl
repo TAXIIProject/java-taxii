@@ -132,17 +132,21 @@
    <!--SCHEMA METADATA-->
    <xsl:template match="/">
       <xsl:apply-templates select="/" mode="M1"/>
+      <xsl:apply-templates select="/" mode="M2"/>
+      <xsl:apply-templates select="/" mode="M3"/>
+      <xsl:apply-templates select="/" mode="M4"/>
+      <xsl:apply-templates select="/" mode="M5"/>
    </xsl:template>
 
    <!--SCHEMATRON PATTERNS-->
 
 
-   <!--PATTERN Rules for TAXII Messages-->
+   <!--PATTERN Status Message Rules-->
 
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']"
-                 priority="108"
+                 priority="103"
                  mode="M1">
 
 		<!--ASSERT -->
@@ -157,7 +161,7 @@
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'PENDING']"
-                 priority="107"
+                 priority="102"
                  mode="M1">
 
 		<!--ASSERT -->
@@ -188,7 +192,7 @@
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']"
-                 priority="106"
+                 priority="101"
                  mode="M1">
 
 		<!--ASSERT -->
@@ -196,85 +200,6 @@
          <xsl:when test=". castable as xs:integer and xs:integer(.) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>A Status Message of type RETRY has an optional ESTIMATED_WAIT Status Detail of type positiveInteger. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
-   </xsl:template>
-
-	  <!--RULE -->
-   <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']"
-                 priority="105"
-                 mode="M1">
-
-		<!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="taxii:Subscription_ID"/>
-         <xsl:otherwise>
-            <xsl:message>Subscription_ID MUST be present in UNSUBSCRIBE, PAUSE, and RESUME actions. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
-   </xsl:template>
-
-	  <!--RULE -->
-   <xsl:template match="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']"
-                 priority="104"
-                 mode="M1">
-
-		<!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="taxii:Subscription_Parameters"/>
-         <xsl:otherwise>
-            <xsl:message>Subscription Parameters MUST be present in SUBSCRIBE actions. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
-   </xsl:template>
-
-	  <!--RULE -->
-   <xsl:template match="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]"
-                 priority="103"
-                 mode="M1">
-
-		<!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp"/>
-         <xsl:otherwise>
-            <xsl:message>If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp are present in a Poll_Request, the Inclusive_End_Timestamp MUST be greater than Exclusive_Begin_Timestamp. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
-   </xsl:template>
-
-	  <!--RULE -->
-   <xsl:template match="/taxii:Poll_Response" priority="102" mode="M1">
-
-		<!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="if (@more = true()) then (string-length(@result_id) &gt; 0) else true()"/>
-         <xsl:otherwise>
-            <xsl:message>The @result_id attribute MUST be present if @more is true. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-
-		    <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
-         <xsl:otherwise>
-            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
-   </xsl:template>
-
-	  <!--RULE -->
-   <xsl:template match="/taxii:Inbox_Message" priority="101" mode="M1">
-
-		<!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
-         <xsl:otherwise>
-            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M1"/>
@@ -288,6 +213,145 @@
          </xsl:when>
          <xsl:otherwise>
             <xsl:apply-templates select="@*|node()" mode="M1"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+
+   <!--PATTERN Subscription Management Request Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']"
+                 priority="102"
+                 mode="M2">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="taxii:Subscription_ID"/>
+         <xsl:otherwise>
+            <xsl:message>Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']"
+                 priority="101"
+                 mode="M2">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="taxii:Subscription_Parameters"/>
+         <xsl:otherwise>
+            <xsl:message>Subscription Parameters MUST be present if the action is SUBSCRIBE. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M2"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M2">
+      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
+                           of an attribute-->
+         <xsl:when test="not(@*)">
+            <xsl:apply-templates select="node()" mode="M2"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="@*|node()" mode="M2"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+
+   <!--PATTERN Poll Request Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]"
+                 priority="101"
+                 mode="M3">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp"/>
+         <xsl:otherwise>
+            <xsl:message>If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp are present in a Poll_Request, the Inclusive_End_Timestamp MUST be greater than Exclusive_Begin_Timestamp. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M3"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M3">
+      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
+                           of an attribute-->
+         <xsl:when test="not(@*)">
+            <xsl:apply-templates select="node()" mode="M3"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="@*|node()" mode="M3"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+
+   <!--PATTERN Poll Response Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Poll_Response" priority="101" mode="M4">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="if (@more = true()) then (string-length(@result_id) &gt; 0) else true()"/>
+         <xsl:otherwise>
+            <xsl:message>The result_id attribute MUST be present if the more field is set to true. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+
+		    <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
+         <xsl:otherwise>
+            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M4"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M4">
+      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
+                           of an attribute-->
+         <xsl:when test="not(@*)">
+            <xsl:apply-templates select="node()" mode="M4"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="@*|node()" mode="M4"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+
+   <!--PATTERN Inbox Message Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Inbox_Message" priority="101" mode="M5">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
+         <xsl:otherwise>
+            <xsl:message>Record_Count MUST be greater than or equal to the number of Content Blocks. </xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M5"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M5"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M5">
+      <xsl:choose><!--Housekeeping: SAXON warns if attempting to find the attribute
+                           of an attribute-->
+         <xsl:when test="not(@*)">
+            <xsl:apply-templates select="node()" mode="M5"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:apply-templates select="@*|node()" mode="M5"/>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
