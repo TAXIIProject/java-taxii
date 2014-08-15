@@ -1213,8 +1213,7 @@
                             <xs:documentation>An additional message intended for human consumption.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0"
-                        maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
@@ -1313,8 +1312,7 @@
                             <xs:documentation>A count of the number of applicable records.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0"
-                        maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
@@ -1447,5 +1445,10 @@
     <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
     <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
     <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"/>
-    
+
+    <!-- The below is/are pulled global to support creating objects of the type within JAXB not inside
+        the enclosing parent elements.
+    -->
+    <xs:element name="Content_Block" type="ContentBlockType"/>        
+        
 </xs:schema>
