@@ -4,6 +4,7 @@ package org.mitre.taxii.messages.xml11;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.jvnet.jaxb2_commons.lang.Equals;
@@ -52,7 +53,8 @@ import org.mitre.taxii.messages.xmldsig.Signature;
     "padding",
     "signature"
 })
-public class ContentBlockType implements Equals, HashCode
+@XmlRootElement(name = "Content_Block")
+public class ContentBlock implements Equals, HashCode
 {
 
     @XmlElement(name = "Content_Binding", required = true)
@@ -72,7 +74,7 @@ public class ContentBlockType implements Equals, HashCode
      * Default no-arg constructor
      * 
      */
-    public ContentBlockType() {
+    public ContentBlock() {
         super();
     }
 
@@ -80,7 +82,7 @@ public class ContentBlockType implements Equals, HashCode
      * Fully-initialising value constructor
      * 
      */
-    public ContentBlockType(final ContentInstanceType contentBinding, final AnyMixedContentType content, final XMLGregorianCalendar timestampLabel, final String message, final String padding, final Signature signature) {
+    public ContentBlock(final ContentInstanceType contentBinding, final AnyMixedContentType content, final XMLGregorianCalendar timestampLabel, final String message, final String padding, final Signature signature) {
         this.contentBinding = contentBinding;
         this.content = content;
         this.timestampLabel = timestampLabel;
@@ -234,13 +236,13 @@ public class ContentBlockType implements Equals, HashCode
     }
 
     public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
-        if (!(object instanceof ContentBlockType)) {
+        if (!(object instanceof ContentBlock)) {
             return false;
         }
         if (this == object) {
             return true;
         }
-        final ContentBlockType that = ((ContentBlockType) object);
+        final ContentBlock that = ((ContentBlock) object);
         {
             ContentInstanceType lhsContentBinding;
             lhsContentBinding = this.getContentBinding();
@@ -343,32 +345,32 @@ public class ContentBlockType implements Equals, HashCode
         return this.hashCode(null, strategy);
     }
 
-    public ContentBlockType withContentBinding(ContentInstanceType value) {
+    public ContentBlock withContentBinding(ContentInstanceType value) {
         setContentBinding(value);
         return this;
     }
 
-    public ContentBlockType withContent(AnyMixedContentType value) {
+    public ContentBlock withContent(AnyMixedContentType value) {
         setContent(value);
         return this;
     }
 
-    public ContentBlockType withTimestampLabel(XMLGregorianCalendar value) {
+    public ContentBlock withTimestampLabel(XMLGregorianCalendar value) {
         setTimestampLabel(value);
         return this;
     }
 
-    public ContentBlockType withMessage(String value) {
+    public ContentBlock withMessage(String value) {
         setMessage(value);
         return this;
     }
 
-    public ContentBlockType withPadding(String value) {
+    public ContentBlock withPadding(String value) {
         setPadding(value);
         return this;
     }
 
-    public ContentBlockType withSignature(Signature value) {
+    public ContentBlock withSignature(Signature value) {
         setSignature(value);
         return this;
     }

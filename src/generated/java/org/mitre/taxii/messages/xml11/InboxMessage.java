@@ -38,7 +38,7 @@ import org.mitre.taxii.messages.xmldsig.Signature;
  *         &lt;element name="Message" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Source_Subscription" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}SourceSubscriptionType" minOccurs="0"/>
  *         &lt;element name="Record_Count" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}RecordCountType" minOccurs="0"/>
- *         &lt;element name="Content_Block" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}ContentBlockType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}Content_Block" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{http://www.w3.org/2000/09/xmldsig#}Signature" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="result_id" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
@@ -74,7 +74,7 @@ public class InboxMessage
     @XmlElement(name = "Record_Count")
     protected RecordCountType recordCount;
     @XmlElement(name = "Content_Block")
-    protected List<ContentBlockType> contentBlocks;
+    protected List<ContentBlock> contentBlocks;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
     @XmlAttribute(name = "result_id")
@@ -93,7 +93,7 @@ public class InboxMessage
      * Fully-initialising value constructor
      * 
      */
-    public InboxMessage(final ExtendedHeadersType extendedHeaders, final String messageId, final List<String> destinationCollectionNames, final String message, final SourceSubscriptionType sourceSubscription, final RecordCountType recordCount, final List<ContentBlockType> contentBlocks, final Signature signature, final String resultId) {
+    public InboxMessage(final ExtendedHeadersType extendedHeaders, final String messageId, final List<String> destinationCollectionNames, final String message, final SourceSubscriptionType sourceSubscription, final RecordCountType recordCount, final List<ContentBlock> contentBlocks, final Signature signature, final String resultId) {
         super(extendedHeaders, messageId);
         this.destinationCollectionNames = destinationCollectionNames;
         this.message = message;
@@ -206,7 +206,7 @@ public class InboxMessage
     }
 
     /**
-     * Gets the value of the contentBlocks property.
+     * Returned content.Gets the value of the contentBlocks property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
@@ -223,13 +223,13 @@ public class InboxMessage
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ContentBlockType }
+     * {@link ContentBlock }
      * 
      * 
      */
-    public List<ContentBlockType> getContentBlocks() {
+    public List<ContentBlock> getContentBlocks() {
         if (contentBlocks == null) {
-            contentBlocks = new ArrayList<ContentBlockType>();
+            contentBlocks = new ArrayList<ContentBlock>();
         }
         return this.contentBlocks;
     }
@@ -330,9 +330,9 @@ public class InboxMessage
             }
         }
         {
-            List<ContentBlockType> lhsContentBlocks;
+            List<ContentBlock> lhsContentBlocks;
             lhsContentBlocks = (((this.contentBlocks!= null)&&(!this.contentBlocks.isEmpty()))?this.getContentBlocks():null);
-            List<ContentBlockType> rhsContentBlocks;
+            List<ContentBlock> rhsContentBlocks;
             rhsContentBlocks = (((that.contentBlocks!= null)&&(!that.contentBlocks.isEmpty()))?that.getContentBlocks():null);
             if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBlocks", lhsContentBlocks), LocatorUtils.property(thatLocator, "contentBlocks", rhsContentBlocks), lhsContentBlocks, rhsContentBlocks)) {
                 return false;
@@ -387,7 +387,7 @@ public class InboxMessage
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "recordCount", theRecordCount), currentHashCode, theRecordCount);
         }
         {
-            List<ContentBlockType> theContentBlocks;
+            List<ContentBlock> theContentBlocks;
             theContentBlocks = (((this.contentBlocks!= null)&&(!this.contentBlocks.isEmpty()))?this.getContentBlocks():null);
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBlocks", theContentBlocks), currentHashCode, theContentBlocks);
         }
@@ -440,16 +440,16 @@ public class InboxMessage
         return this;
     }
 
-    public InboxMessage withContentBlocks(ContentBlockType... values) {
+    public InboxMessage withContentBlocks(ContentBlock... values) {
         if (values!= null) {
-            for (ContentBlockType value: values) {
+            for (ContentBlock value: values) {
                 getContentBlocks().add(value);
             }
         }
         return this;
     }
 
-    public InboxMessage withContentBlocks(Collection<ContentBlockType> values) {
+    public InboxMessage withContentBlocks(Collection<ContentBlock> values) {
         if (values!= null) {
             getContentBlocks().addAll(values);
         }

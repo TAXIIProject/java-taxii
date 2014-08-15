@@ -41,7 +41,7 @@ import org.mitre.taxii.messages.xmldsig.Signature;
  *         &lt;element name="Inclusive_End_Timestamp" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}TimestampLabelType" minOccurs="0"/>
  *         &lt;element name="Record_Count" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}RecordCountType" minOccurs="0"/>
  *         &lt;element name="Message" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Content_Block" type="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}ContentBlockType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://taxii.mitre.org/messages/taxii_xml_binding-1.1}Content_Block" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element ref="{http://www.w3.org/2000/09/xmldsig#}Signature" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="collection_name" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
@@ -83,7 +83,7 @@ public class PollResponse
     @XmlElement(name = "Message")
     protected String message;
     @XmlElement(name = "Content_Block")
-    protected List<ContentBlockType> contentBlocks;
+    protected List<ContentBlock> contentBlocks;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
     protected Signature signature;
     @XmlAttribute(name = "collection_name", required = true)
@@ -110,7 +110,7 @@ public class PollResponse
      * Fully-initialising value constructor
      * 
      */
-    public PollResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final String subscriptionID, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final RecordCountType recordCount, final String message, final List<ContentBlockType> contentBlocks, final Signature signature, final String collectionName, final Boolean more, final String resultId, final BigInteger resultPartNumber) {
+    public PollResponse(final ExtendedHeadersType extendedHeaders, final String messageId, final String inResponseTo, final String subscriptionID, final XMLGregorianCalendar exclusiveBeginTimestamp, final XMLGregorianCalendar inclusiveEndTimestamp, final RecordCountType recordCount, final String message, final List<ContentBlock> contentBlocks, final Signature signature, final String collectionName, final Boolean more, final String resultId, final BigInteger resultPartNumber) {
         super(extendedHeaders, messageId, inResponseTo);
         this.subscriptionID = subscriptionID;
         this.exclusiveBeginTimestamp = exclusiveBeginTimestamp;
@@ -246,7 +246,7 @@ public class PollResponse
     }
 
     /**
-     * Gets the value of the contentBlocks property.
+     * Returned content.Gets the value of the contentBlocks property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
@@ -263,13 +263,13 @@ public class PollResponse
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ContentBlockType }
+     * {@link ContentBlock }
      * 
      * 
      */
-    public List<ContentBlockType> getContentBlocks() {
+    public List<ContentBlock> getContentBlocks() {
         if (contentBlocks == null) {
-            contentBlocks = new ArrayList<ContentBlockType>();
+            contentBlocks = new ArrayList<ContentBlock>();
         }
         return this.contentBlocks;
     }
@@ -459,9 +459,9 @@ public class PollResponse
             }
         }
         {
-            List<ContentBlockType> lhsContentBlocks;
+            List<ContentBlock> lhsContentBlocks;
             lhsContentBlocks = (((this.contentBlocks!= null)&&(!this.contentBlocks.isEmpty()))?this.getContentBlocks():null);
-            List<ContentBlockType> rhsContentBlocks;
+            List<ContentBlock> rhsContentBlocks;
             rhsContentBlocks = (((that.contentBlocks!= null)&&(!that.contentBlocks.isEmpty()))?that.getContentBlocks():null);
             if (!strategy.equals(LocatorUtils.property(thisLocator, "contentBlocks", lhsContentBlocks), LocatorUtils.property(thatLocator, "contentBlocks", rhsContentBlocks), lhsContentBlocks, rhsContentBlocks)) {
                 return false;
@@ -548,7 +548,7 @@ public class PollResponse
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "message", theMessage), currentHashCode, theMessage);
         }
         {
-            List<ContentBlockType> theContentBlocks;
+            List<ContentBlock> theContentBlocks;
             theContentBlocks = (((this.contentBlocks!= null)&&(!this.contentBlocks.isEmpty()))?this.getContentBlocks():null);
             currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "contentBlocks", theContentBlocks), currentHashCode, theContentBlocks);
         }
@@ -610,16 +610,16 @@ public class PollResponse
         return this;
     }
 
-    public PollResponse withContentBlocks(ContentBlockType... values) {
+    public PollResponse withContentBlocks(ContentBlock... values) {
         if (values!= null) {
-            for (ContentBlockType value: values) {
+            for (ContentBlock value: values) {
                 getContentBlocks().add(value);
             }
         }
         return this;
     }
 
-    public PollResponse withContentBlocks(Collection<ContentBlockType> values) {
+    public PollResponse withContentBlocks(Collection<ContentBlock> values) {
         if (values!= null) {
             getContentBlocks().addAll(values);
         }

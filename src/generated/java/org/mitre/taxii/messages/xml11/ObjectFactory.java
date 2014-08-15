@@ -62,11 +62,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ContentBlockType }
+     * Create an instance of {@link ContentBlock }
      * 
      */
-    public ContentBlockType createContentBlockType() {
-        return new ContentBlockType();
+    public ContentBlock createContentBlock() {
+        return new ContentBlock();
+    }
+
+    /**
+     * Create an instance of {@link ContentInstanceType }
+     * 
+     */
+    public ContentInstanceType createContentInstanceType() {
+        return new ContentInstanceType();
+    }
+
+    /**
+     * Create an instance of {@link AnyMixedContentType }
+     * 
+     */
+    public AnyMixedContentType createAnyMixedContentType() {
+        return new AnyMixedContentType();
     }
 
     /**
@@ -238,14 +254,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AnyMixedContentType }
-     * 
-     */
-    public AnyMixedContentType createAnyMixedContentType() {
-        return new AnyMixedContentType();
-    }
-
-    /**
      * Create an instance of {@link PushMethodType }
      * 
      */
@@ -283,14 +291,6 @@ public class ObjectFactory {
      */
     public ExtendedHeaderType createExtendedHeaderType() {
         return new ExtendedHeaderType();
-    }
-
-    /**
-     * Create an instance of {@link ContentInstanceType }
-     * 
-     */
-    public ContentInstanceType createContentInstanceType() {
-        return new ContentInstanceType();
     }
 
 }
