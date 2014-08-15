@@ -45,7 +45,7 @@ import static org.junit.Assert.fail;
  *
  * @author jasenj1
  */
-public class StatusMessageValidationTest implements StatusDetails, Versions, ContentBindings {
+public class StatusMessageValidationTests implements StatusDetails, Versions, ContentBindings {
     private static final String INVALID_XML_RESOURCE = "/xsd/1.1/StatusMessage-Success-invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
@@ -53,7 +53,7 @@ public class StatusMessageValidationTest implements StatusDetails, Versions, Con
     private final TaxiiXml taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
     
-    public StatusMessageValidationTest() {
+    public StatusMessageValidationTests() {
         txf = new TaxiiXmlFactory();
         taxiiXml = txf.getTaxiiXml();
     }

@@ -59,7 +59,7 @@ import static org.junit.Assert.fail;
  * @author Jonathan W. Cranford
  */
 @RunWith(Parameterized.class)
-public class SchematronTest {
+public class SchematronTests {
     
     private static final TaxiiXml taxiiXml = new TaxiiXml();
     private static Unmarshaller unmarshaller;

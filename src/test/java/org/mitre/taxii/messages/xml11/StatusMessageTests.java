@@ -46,13 +46,13 @@ import org.xml.sax.SAXException;
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTest implements StatusDetails, Versions, ContentBindings {
+public class StatusMessageTests implements StatusDetails, Versions, ContentBindings {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
     private final TaxiiXml taxiiXml;
     
-    public StatusMessageTest() {
+    public StatusMessageTests() {
         txf = new TaxiiXmlFactory();
         taxiiXml = txf.getTaxiiXml();
     }
