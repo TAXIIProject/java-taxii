@@ -1197,7 +1197,7 @@
                             <xs:documentation>An additional message intended for human consumption.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0"
+                    <xs:element ref="Content_Block" minOccurs="0"
                         maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
@@ -1297,7 +1297,7 @@
                             <xs:documentation>A count of the number of applicable records.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0"
+                    <xs:element ref="Content_Block" minOccurs="0"
                         maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
@@ -1392,6 +1392,8 @@
     </xs:complexType>
 
     <!-- GLOBAL ELEMENTS -->
+    <xs:element name="Content_Block" type="ContentBlockType"/>
+    
     <xs:element name="TAXII_Message" abstract="true" type="MessageType">
         <xs:annotation>
             <xs:documentation>Abstract super-type of all message elements.</xs:documentation>
