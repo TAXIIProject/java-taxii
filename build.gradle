@@ -38,7 +38,11 @@ dependencies {
     compile 'javax.xml.bind:jaxb-api:2.2.+'
     compile 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:0.6.5'
     compile 'net.sf.saxon:Saxon-HE:9.5.1-5'
-
+    compile 'org.apache.httpcomponents:httpclient:4.3.5'
+    compile 'org.apache.httpcomponents:httpclient-cache:4.3.5'
+    compile 'org.apache.httpcomponents:httpmime:4.3.5'
+    compile 'org.apache.httpcomponents:fluent-hc:4.3.5'
+    
     testCompile 'junit:junit:4.11'
 }
 

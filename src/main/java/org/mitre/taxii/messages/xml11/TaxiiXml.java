@@ -395,6 +395,13 @@ public final class TaxiiXml implements StatusDetails {
         return sw.toString();
     }
     
+    public String marshalToString(final Object msg, boolean prettyPrint) throws JAXBException {
+        Marshaller m = createMarshaller(prettyPrint);
+        final StringWriter sw = new StringWriter();
+        m.marshal(msg, sw);
+        return sw.toString();        
+    }
+    
     
     public static String formatException(SAXParseException e) {
         return String.format("(%s, line %d, column %d) %s",
