@@ -338,8 +338,8 @@ public final class TaxiiXml implements StatusDetails {
      *       The message to validate
      * @param checkSpecConformance      
      *       Check conformance to specification beyond what XML Schema provides.
-     *
-     * @returns 
+     * 
+     * @return 
      *       The validation results, including all errors and warnings.  
      * @throws JAXBException 
      *      If the message couldn't be validated because of an underlying JAXB error
