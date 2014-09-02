@@ -10,7 +10,7 @@ import org.mitre.taxii.Messages;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.PollRequest;
 import org.mitre.taxii.messages.xml11.PollResponse;
-import org.mitre.taxii.messages.xml11.TaxiiXml;
+import org.mitre.taxii.messages.xml11.TaxiiXmlImpl;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 
 /**
@@ -20,7 +20,7 @@ import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 public class PollRequestTest {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public PollRequestTest() {
@@ -29,7 +29,7 @@ public class PollRequestTest {
     
     @Test
     public void pollRequest() throws URISyntaxException, JAXBException, IOException {
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml);
+        HttpClient taxiiClient = new HttpClient();
         final URI serviceUri = new URI("http://127.0.0.1:8000/services/poll/");
         
         PollRequest pr = factory.createPollRequest()

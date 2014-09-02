@@ -34,7 +34,7 @@ public class TestUtil {
      * @throws SAXException
      * @throws IOException 
      */
-    public static void roundTripObject(TaxiiXml taxiiXml, Object obj) throws JAXBException, SAXException, IOException {
+    public static void roundTripObject(TaxiiXmlImpl taxiiXml, Object obj) throws JAXBException, SAXException, IOException {
         final Marshaller m = taxiiXml.createMarshaller(false); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         
@@ -69,7 +69,7 @@ public class TestUtil {
                 obj, objFromXml);
     }
     
-    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
+    public static void roundTripMessage(TaxiiXmlImpl taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
         roundTripMessage(taxiiXml, msg, true);
     }
     
@@ -84,7 +84,7 @@ public class TestUtil {
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
      */
-    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg, boolean prettyPrint) throws JAXBException, SAXException, IOException {
+    public static void roundTripMessage(TaxiiXmlImpl taxiiXml, MessageType msg, boolean prettyPrint) throws JAXBException, SAXException, IOException {
 
         final Marshaller m = taxiiXml.createMarshaller(prettyPrint); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
@@ -127,7 +127,7 @@ public class TestUtil {
                 msg, msgFromXml);
     }    
     
-    public static void assertValid(TaxiiXml taxiiXml, MessageType msg) 
+    public static void assertValid(TaxiiXmlImpl taxiiXml, MessageType msg) 
             throws JAXBException, SAXException, IOException {
         final Validation results = taxiiXml.validateAll(msg, true);
         if (results.isFailure()) {

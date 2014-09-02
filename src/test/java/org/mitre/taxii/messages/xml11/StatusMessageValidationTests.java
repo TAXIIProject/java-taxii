@@ -50,7 +50,7 @@ public class StatusMessageValidationTests implements StatusDetails, Versions, Co
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
     
     public StatusMessageValidationTests() {

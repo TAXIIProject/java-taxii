@@ -50,7 +50,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     
     public StatusMessageTests() {
         txf = new TaxiiXmlFactory();

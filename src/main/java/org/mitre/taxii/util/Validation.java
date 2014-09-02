@@ -30,6 +30,7 @@ package org.mitre.taxii.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.xml.sax.SAXParseException;
 
 /**
  * Validation results that keeps track of all warnings, errors, and fatal
@@ -167,6 +168,15 @@ public final class Validation {
         fatalErrors.add(fatalError);
         return this;
     }
+    
+    public static String formatException(SAXParseException e) {
+        return String.format("(%s, line %d, column %d) %s",
+                    e.getSystemId(),
+                    e.getLineNumber(),
+                    e.getColumnNumber(),
+                    e.getMessage());
+    }
+
 
 }
 

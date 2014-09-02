@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 public class CollectionSubscriptionManagementResponseTests {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     
     private ServiceContactInfoType poll1, poll2, poll3;
     private SubscriptionRecordType sub1, sub2, sub3;

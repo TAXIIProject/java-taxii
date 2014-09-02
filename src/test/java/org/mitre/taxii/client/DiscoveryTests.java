@@ -24,10 +24,10 @@ import org.apache.http.impl.client.HttpClients;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.mitre.taxii.Messages;
+import org.mitre.taxii.messages.TaxiiXml;
 import org.mitre.taxii.messages.xml11.DiscoveryRequest;
 import org.mitre.taxii.messages.xml11.DiscoveryResponse;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
-import org.mitre.taxii.messages.xml11.TaxiiXml;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 
 /**
@@ -47,7 +47,9 @@ public class DiscoveryTests {
    
     @Test
     public void simpleDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml);
+        
+        HttpClient taxiiClient = new HttpClient();
+        
         final String serverUrl = "http://127.0.0.1:8000/services/discovery/";
 
         // Prepare the message to send.
@@ -77,8 +79,8 @@ public class DiscoveryTests {
         cb.setDefaultCredentialsProvider(credsProvider);        
         CloseableHttpClient httpClient = cb.build();
 
-        // Create a Taxii Client with the HttpClient and TaxiiXml objects.
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml, httpClient);
+        // Create a Taxii Client with the HttpClient object.
+        HttpClient taxiiClient = new HttpClient(httpClient);
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -118,8 +120,8 @@ public class DiscoveryTests {
                 .setSSLSocketFactory(sslsf)
                 .build();        
         
-        // Create a Taxii Client with the HttpClient and TaxiiXml objects.
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml, httpClient);
+        // Create a Taxii Client with the HttpClient and TaxiiXmlImpl objects.
+        HttpClient taxiiClient = new HttpClient(httpClient);
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -145,8 +147,8 @@ public class DiscoveryTests {
         cb.setProxy(proxy);        
         CloseableHttpClient httpClient = cb.build();
 
-        // Create a Taxii Client with the HttpClient and TaxiiXml objects.
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml, httpClient);
+        // Create a Taxii Client with the HttpClient object.
+        HttpClient taxiiClient = new HttpClient(httpClient);
         
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()

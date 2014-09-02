@@ -44,6 +44,7 @@ dependencies {
     compile 'org.apache.httpcomponents:fluent-hc:4.3.5'
     
     testCompile 'junit:junit:4.11'
+    testCompile files('/Users/jasenj1/Documents/MITRE/TAXII/contrib/java-stix/target/JAVA_STIX-1.0-SNAPSHOT.jar')
 }
 
 

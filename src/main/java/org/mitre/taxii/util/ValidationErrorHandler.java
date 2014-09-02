@@ -34,7 +34,6 @@ import javax.xml.transform.SourceLocator;
 import net.sf.saxon.s9api.MessageListener;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.mitre.taxii.messages.xml11.TaxiiXml;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
@@ -74,13 +73,13 @@ implements ErrorHandler, ValidationEventHandler, MessageListener {
 
     @Override
     public void warning(SAXParseException e) {
-        results.addWarning(TaxiiXml.formatException(e));
+        results.addWarning(Validation.formatException(e));
     }
     
    
     @Override
     public void error(SAXParseException exception) throws SAXParseException  {
-        results.addError(TaxiiXml.formatException(exception));
+        results.addError(Validation.formatException(exception));
         if (failFast) {
             throw exception;
         }
@@ -89,7 +88,7 @@ implements ErrorHandler, ValidationEventHandler, MessageListener {
 
     @Override
     public void fatalError(SAXParseException exception) throws SAXParseException  {
-        results.addFatalError(TaxiiXml.formatException(exception));
+        results.addFatalError(Validation.formatException(exception));
         if (failFast) {
             throw exception;
         }

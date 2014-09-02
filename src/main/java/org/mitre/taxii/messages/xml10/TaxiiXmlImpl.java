@@ -25,8 +25,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
+import org.mitre.taxii.messages.TaxiiXml;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
@@ -50,6 +51,9 @@ import net.sf.saxon.s9api.SAXDestination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import org.mitre.taxii.Versions;
+import org.mitre.taxii.client.HttpResponseHandler;
+import org.mitre.taxii.client.xml10.ResponseHandler;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
 import org.mitre.taxii.util.Iterators;
@@ -84,125 +88,129 @@ import org.xml.sax.helpers.DefaultHandler;
  * <h3>Fast Validation before Marshalling</h3>
  *  
  * <pre>
- * try {
- *   TaxiiXml taxiiXml = new TaxiiXml();
- *   Validation results = taxiiXml.validateFast(msg, true);
- *   if (results.hasWarnings()) {
- *     System.out.print("Validation warnings: ");
- *     System.out.println(results.getAllWarnings());
- *   }
- *   Marshaller m = taxiiXml.createMarshaller(true);
- *   m.marshal(msg, System.out);
- * }
- * catch (SAXParseException e) {
- *   System.err.print("Validation error: ");
- *   System.err.println(TaxiiXml.formatException(e));
- * } 
- * catch (SAXException e) {
- *   System.err.print("Validation error: ");
- *   e.printStackTrace();
- * }
- * </pre>
+ try {
+   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   Validation results = taxiiXml.validateFast(msg, true);
+   if (results.hasWarnings()) {
+     System.out.print("Validation warnings: ");
+     System.out.println(results.getAllWarnings());
+   }
+   Marshaller m = taxiiXml.createMarshaller(true);
+   m.marshal(msg, System.out);
+ }
+ catch (SAXParseException e) {
+   System.err.print("Validation error: ");
+   System.err.println(TaxiiXmlImpl.formatException(e));
+ } 
+ catch (SAXException e) {
+   System.err.print("Validation error: ");
+   e.printStackTrace();
+ }
+ </pre>
  * 
  * 
  * <h3>Fast Validation after Unmarshalling</h3>
  * 
  * <pre>
- * try {
- *   TaxiiXml taxiiXml = new TaxiiXml();
- *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
- *   MessageType msg = (MessageType) u.unmarshal(input);
- *   Validation results = taxiiXml.validateFast(msg, true);
- *   if (results.hasWarnings()) {
- *     System.out.print("Validation warnings: ");
- *     System.out.println(results.getAllWarnings());
- *   }
- *   // do something with msg
- * }
- * catch (SAXParseException e) {
- *   System.err.print("Validation error: ");
- *   System.err.println(TaxiiXml.formatException(e));
- * } 
- * catch (SAXException e) {
- *   System.err.print("Validation error: ");
- *   e.printStackTrace();
- * }
- * </pre>
+ try {
+   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
+   MessageType msg = (MessageType) u.unmarshal(input);
+   Validation results = taxiiXml.validateFast(msg, true);
+   if (results.hasWarnings()) {
+     System.out.print("Validation warnings: ");
+     System.out.println(results.getAllWarnings());
+   }
+   // do something with msg
+ }
+ catch (SAXParseException e) {
+   System.err.print("Validation error: ");
+   System.err.println(TaxiiXmlImpl.formatException(e));
+ } 
+ catch (SAXException e) {
+   System.err.print("Validation error: ");
+   e.printStackTrace();
+ }
+ </pre>
  * 
  *
  * <h3>Comprehensive Validation before Marshalling</h3>
  * 
  * <pre>
- * try {
- *   TaxiiXml taxiiXml = new TaxiiXml();
- *   Validation results = taxiiXml.validateAll(msg, true);
- *   if (results.isSuccess()) {
- *     if (results.hasWarnings()) {
- *     System.out.print("Validation warnings: ");
- *       System.out.println(results.getAllWarnings());
- *     }
- *     Marshaller m = taxiiXml.createMarshaller(true);
- *     m.marshal(msg, System.out);
- *   }
- *   else {  // validation errors and warnings together
- *     System.err.print("Validation results: ");
- *     System.err.println(results.getAllErrorsAndWarnings());
- *   }
- * }
- * catch (SAXParseException e) {
- *   System.err.print("Fatal validation error: ");
- *   System.err.println(TaxiiXml.formatException(e));
- * } 
- * catch (SAXException e) {
- *   System.err.print("Fatal validation error: ");
- *   e.printStackTrace();
- * }
- * </pre>
+ try {
+   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   Validation results = taxiiXml.validateAll(msg, true);
+   if (results.isSuccess()) {
+     if (results.hasWarnings()) {
+     System.out.print("Validation warnings: ");
+       System.out.println(results.getAllWarnings());
+     }
+     Marshaller m = taxiiXml.createMarshaller(true);
+     m.marshal(msg, System.out);
+   }
+   else {  // validation errors and warnings together
+     System.err.print("Validation results: ");
+     System.err.println(results.getAllErrorsAndWarnings());
+   }
+ }
+ catch (SAXParseException e) {
+   System.err.print("Fatal validation error: ");
+   System.err.println(TaxiiXmlImpl.formatException(e));
+ } 
+ catch (SAXException e) {
+   System.err.print("Fatal validation error: ");
+   e.printStackTrace();
+ }
+ </pre>
  * 
  * 
  * <h3>Comprehensive Validation after Unmarshalling</h3>
  * 
  * <pre>
- * try {
- *   TaxiiXml taxiiXml = new TaxiiXml();
- *   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
- *   MessageType msg = (MessageType) u.unmarshal(input);
- *   Validation results = taxiiXml.validateAll(msg, true);
- *   if (results.isSuccess()) {
- *     if (results.hasWarnings()) {
- *       System.out.print("Validation warnings: ");
- *       System.out.println(results.getAllWarnings());
- *     }
- *     // do something with msg
- *   }
- *   else {  // validation errors and warnings together
- *     System.err.print("Validation results: ");
- *     System.err.println(results.getAllErrorsAndWarnings());
- *   }
- * }
- * catch (SAXParseException e) {
- *   System.err.print("Fatal validation error: ");
- *   System.err.println(TaxiiXml.formatException(e));
- * } 
- * catch (SAXException e) {
- *   System.err.print("Fatal validation error: ");
- *   e.printStackTrace();
- * }
- * </pre>
+ try {
+   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
+   MessageType msg = (MessageType) u.unmarshal(input);
+   Validation results = taxiiXml.validateAll(msg, true);
+   if (results.isSuccess()) {
+     if (results.hasWarnings()) {
+       System.out.print("Validation warnings: ");
+       System.out.println(results.getAllWarnings());
+     }
+     // do something with msg
+   }
+   else {  // validation errors and warnings together
+     System.err.print("Validation results: ");
+     System.err.println(results.getAllErrorsAndWarnings());
+   }
+ }
+ catch (SAXParseException e) {
+   System.err.print("Fatal validation error: ");
+   System.err.println(TaxiiXmlImpl.formatException(e));
+ } 
+ catch (SAXException e) {
+   System.err.print("Fatal validation error: ");
+   e.printStackTrace();
+ }
+ </pre>
  * 
  * 
- * @author Jonathan W. Cranford
+ * @author Jonathan W. Cranford & Jasen Jacobsen
+ * @param <T>
  */
 // TODO copy the above code to a driver to test it out 
-public final class TaxiiXml implements StatusDetails {
-
-    private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-xjc-with-sch.xsd";
+public final class TaxiiXmlImpl implements Versions, TaxiiXml {
+    
+    private static final String TAXII_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.0-xjc.xsd";
     private static final String TAXII_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-compiled.xsl";
     
     private final JAXBContext jaxbContext;
     private final Schema taxiiSchema;
     private final XsltExecutable schematronValidator;
     private final List<String> contextEntries;
+    
+    private final HttpResponseHandler responseHandler = new ResponseHandler();
+    
     
     /**
      * Default constructor.
@@ -212,7 +220,7 @@ public final class TaxiiXml implements StatusDetails {
      *              from being created, the Schema from being parsed, or 
      *              the validating stylesheet from being compiled.
      */
-    public TaxiiXml() {
+    protected TaxiiXmlImpl() {
         contextEntries = initializeJaxbContextEntries();
         jaxbContext = newJaxbContext(contextEntries);
         taxiiSchema = newSchema();
@@ -224,12 +232,13 @@ public final class TaxiiXml implements StatusDetails {
      * Constructor that takes additional JAXB packages, used in initializing 
      * the JAXB Context.
      * 
+     * @param additionalJaxbPackages
      * @throws RuntimeException
      *              if a deployment error prevents the underlying JAXBContext
      *              from being created, the Schema from being parsed, or 
      *              the validating stylesheet from being compiled.
      */
-    public TaxiiXml(List<String> additionalJaxbPackages) {
+    protected TaxiiXmlImpl(List<String> additionalJaxbPackages) {
         contextEntries = initializeJaxbContextEntries();
         contextEntries.addAll(additionalJaxbPackages);
         jaxbContext = newJaxbContext(contextEntries);
@@ -240,12 +249,12 @@ public final class TaxiiXml implements StatusDetails {
     
     /**
      * Initialize the JAXB Context with known contexts that every instance of
-     * TaxiiXml will need to know.
+ TaxiiXmlImpl will need to know.
      * 
      */
     private static List<String> initializeJaxbContextEntries() {
         List<String> contextEntries = new ArrayList<>();
-        contextEntries.add(TaxiiXml.class.getPackage().getName());
+        contextEntries.add(TaxiiXmlImpl.class.getPackage().getName());
         contextEntries.add(Signature.class.getPackage().getName());
         return contextEntries;
     }
@@ -277,6 +286,7 @@ public final class TaxiiXml implements StatusDetails {
      * @throws JAXBException 
      *              if an error was encountered while creating the Marshaller
      */
+    @Override
     public Marshaller createMarshaller(
             boolean prettyPrint)
             throws JAXBException {
@@ -349,7 +359,8 @@ public final class TaxiiXml implements StatusDetails {
      * @throws SAXException 
      *      on any fatal validation error 
      */
-    public Validation validateAll(MessageType m, boolean checkSpecConformance) 
+    @Override
+    public Validation validateAll(Object m, boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
         return validate(m, false, checkSpecConformance);
     }
@@ -376,7 +387,8 @@ public final class TaxiiXml implements StatusDetails {
      * @throws SAXException 
      *      On the first validation error 
      */
-    public Validation validateFast(MessageType m, boolean checkSpecConformance) 
+    @Override
+    public Validation validateFast(Object m, boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
         return validate(m, true, checkSpecConformance);
     }
@@ -388,13 +400,15 @@ public final class TaxiiXml implements StatusDetails {
      * @throws JAXBException 
      *           if any unexpected problem occurs during marshalling
      */
-    public String marshalToString(final Marshaller m, final MessageType msg)
+    @Override
+    public String marshalToString(final Marshaller m, final Object msg)
             throws JAXBException {
         final StringWriter sw = new StringWriter();
         m.marshal(msg, sw);
         return sw.toString();
     }
     
+    @Override
     public String marshalToString(final Object msg, boolean prettyPrint) throws JAXBException {
         Marshaller m = createMarshaller(prettyPrint);
         final StringWriter sw = new StringWriter();
@@ -415,6 +429,7 @@ public final class TaxiiXml implements StatusDetails {
     /**
      * Returns the JAXB Context.
      */
+    @Override
     public JAXBContext getJaxbContext() {
         return jaxbContext;
     }
@@ -424,6 +439,7 @@ public final class TaxiiXml implements StatusDetails {
      * Returns a read-only list of JAXB packages that the underlying JAXB Context
      * knows about.  
      */
+    @Override
     public List<String> getJaxbContextPath() {
         return Collections.unmodifiableList(contextEntries);
     }
@@ -461,7 +477,7 @@ public final class TaxiiXml implements StatusDetails {
     *      validation error encountered. If failFast is false, then a 
     *      SAXException indicates a fatal error. 
     */
-    private Validation validate(MessageType m, 
+    private Validation validate(Object m, 
             boolean failFast, 
             boolean checkSpecConformance) 
             throws JAXBException, SAXException, IOException {
@@ -481,12 +497,11 @@ public final class TaxiiXml implements StatusDetails {
         
         return results;
     }
-
     
     /**
      * Check conformance to TAXII specification beyond what XML Schema provides. 
      */
-    private void checkConformance(MessageType m, 
+    private void checkConformance(Object m, 
             ValidationErrorHandler errorHandler) {
         final XsltTransformer transformer = schematronValidator.load();
         transformer.setMessageListener(errorHandler);
@@ -499,5 +514,22 @@ public final class TaxiiXml implements StatusDetails {
             errorHandler.getResults().addError("Conformance error: " + e.getMessage());
         } 
     }
-        
+    
+    public String getTaxiiVersion() {
+        return VID_TAXII_XML_10;
+    }
+
+    public String getServiceVersion() {
+        return VID_TAXII_SERVICES_10;
+    }
+    
+    public HttpResponseHandler getResponseHandler() {
+        return responseHandler;
+    }
+
+    @Override
+    public boolean isRequestMessage(Object msg) {
+        return (msg instanceof RequestMessageType);
+    }
+    
 }

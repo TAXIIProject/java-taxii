@@ -61,7 +61,7 @@ import static org.junit.Assert.fail;
 @RunWith(Parameterized.class)
 public class SchematronTests {
     
-    private static final TaxiiXml taxiiXml = new TaxiiXml();
+    private static final TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
     private static Unmarshaller unmarshaller;
     
     @Parameter(0)

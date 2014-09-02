@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 public class CollectionSubscriptionManagementRequestTests {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     
     private SubscriptionParametersType sp1;
     private PushParameterType pp1;

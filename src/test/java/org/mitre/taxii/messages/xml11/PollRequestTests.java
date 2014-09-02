@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 public class PollRequestTests {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     
     private TestType test1;
     private CriterionType criterion1;

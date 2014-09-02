@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 public class PollFulfillmentTests {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     
     public PollFulfillmentTests() {
        taxiiXml = txf.getTaxiiXml();

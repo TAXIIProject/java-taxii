@@ -20,9 +20,8 @@ import org.mitre.taxii.Messages;
 import org.mitre.taxii.messages.xml11.DiscoveryRequest;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.StatusMessage;
-import org.mitre.taxii.messages.xml11.TaxiiXml;
+import org.mitre.taxii.messages.xml11.TaxiiXmlImpl;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
-import org.mitre.taxii.query.DefaultQuery;
 
 /**
  *
@@ -32,7 +31,7 @@ public class FailureTests {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;
+    private final TaxiiXmlImpl taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public FailureTests() {
@@ -41,7 +40,7 @@ public class FailureTests {
     
     @Test
     public void missingEndpointDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml);
+        org.mitre.taxii.client.HttpClient taxiiClient = new HttpClient();
         final String serverUrl = "http://127.0.0.1:8000/services/discover/"; // URL does not exist.
 
         // Prepare the message to send.
@@ -70,7 +69,7 @@ public class FailureTests {
         cb.setDefaultCredentialsProvider(credsProvider);        
         CloseableHttpClient httpClient = cb.build();
 
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml, httpClient);
+        HttpClient taxiiClient = new HttpClient(taxiiXml, httpClient);
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -110,7 +109,7 @@ public class FailureTests {
                 .build();        
         */
         
-        org.mitre.taxii.client.xml11.HttpClient taxiiClient = new org.mitre.taxii.client.xml11.HttpClient(taxiiXml);
+        HttpClient taxiiClient = new HttpClient();
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()

@@ -22,7 +22,7 @@ public class DiscoveryTests {
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;    
+    private final TaxiiXmlImpl taxiiXml;    
     private final boolean debug = true; // Boolean.getBoolean("debug");
     
     private ServiceInstanceType si1, si2, si3, si4, si5;

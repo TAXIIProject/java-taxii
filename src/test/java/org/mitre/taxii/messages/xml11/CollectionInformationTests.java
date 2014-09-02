@@ -17,7 +17,7 @@ public class CollectionInformationTests {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXml taxiiXml;    
+    private final TaxiiXmlImpl taxiiXml;    
     
     PushMethodType pm1;
     ServiceContactInfoType ps1, ps2, ss1, ss2;
