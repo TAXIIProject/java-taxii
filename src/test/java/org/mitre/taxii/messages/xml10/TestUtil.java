@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.io.StringReader;

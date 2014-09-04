@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.File;
 import java.io.IOException;

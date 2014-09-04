@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -39,17 +39,9 @@ public class PollResponseTests {
         PollResponse pr1 = factory.createPollResponse()
                                 .withMessageId("PollResp1")
                                 .withInResponseTo("tmp")
-                                .withCollectionName("blah")
-                                .withMore(Boolean.FALSE)
-                                .withResultId("123")
-                                .withResultPartNumber(BigInteger.ONE)
-                                .withSubscriptionID("24")
-                                .withExclusiveBeginTimestamp(beginTime)
+                                .withSubscriptionId("24")
+                                .withInclusiveBeginTimestamp(beginTime)
                                 .withInclusiveEndTimestamp(endTime)
-                                .withRecordCount(factory.createRecordCountType()
-                                                    .withPartialCount(Boolean.FALSE)
-                                                    .withValue(BigInteger.valueOf(22))                                
-                                )
                                 .withMessage("Woooooooo");
         TestUtil.roundTripMessage(taxiiXml, pr1);                                
     }
@@ -59,8 +51,7 @@ public class PollResponseTests {
         
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp2")
-                                .withInResponseTo("tmp")
-                                .withCollectionName("blah");
+                                .withInResponseTo("tmp");
         TestUtil.roundTripMessage(taxiiXml, pr);                                
     }
 
@@ -70,12 +61,7 @@ public class PollResponseTests {
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp3")
                                 .withInResponseTo("tmp")
-                                .withCollectionName("blah")
-                                .withResultId("123")
-                                .withSubscriptionID("24")
-                                .withRecordCount(factory.createRecordCountType()
-                                                    .withValue(BigInteger.valueOf(22))                                
-                                );
+                                .withSubscriptionId("24");
         TestUtil.roundTripMessage(taxiiXml, pr);                                
     }
     
@@ -84,8 +70,7 @@ public class PollResponseTests {
         
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp4")
-                                .withInResponseTo("tmp")
-                                .withCollectionName("blah");
+                                .withInResponseTo("tmp");
         TestUtil.roundTripMessage(taxiiXml, pr);                                
     }
 }

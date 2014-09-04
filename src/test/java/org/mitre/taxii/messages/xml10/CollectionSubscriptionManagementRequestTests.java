@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.util.Date;
@@ -23,7 +23,6 @@ public class CollectionSubscriptionManagementRequestTests {
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
     private final TaxiiXml taxiiXml;
     
-    private SubscriptionParametersType sp1;
     private PushParameterType pp1;
     private DefaultQuery query1, query2;
     private CriterionType criterion1, criterion2, criterion3;
@@ -35,7 +34,6 @@ public class CollectionSubscriptionManagementRequestTests {
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
         taxiiXml = txf.getTaxiiXml();
         setupQueries();
-        setupSubscriptionParameters();
         setupPushParameters();
     }
     
@@ -95,14 +93,7 @@ public class CollectionSubscriptionManagementRequestTests {
                         .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11)
                         .withCriteria(criteria3);                    
     }
-    
-    private void setupSubscriptionParameters() {
-        sp1 = factory.createSubscriptionParametersType()
-                    .withResponseType(ResponseTypeEnum.COUNT_ONLY)
-                    .withContentBindings(factory.createContentBindingIDType().withBindingId(ContentBindings.CB_STIX_XML_11))
-                    .withQuery(new QueryType().withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10).withContent(query1));                    
-    }
-    
+        
     private void setupPushParameters() {
         pp1 = factory.createPushParameterType()
                     .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
@@ -113,10 +104,9 @@ public class CollectionSubscriptionManagementRequestTests {
     @Test
     public void testSubsReq1() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr1 = factory.createSubscriptionManagementRequest()
-                                                .withMessageId("SubsReq01")
-                                                .withAction(CollectionActionEnum.SUBSCRIBE)
-                                                .withCollectionName("collection1")
-                                                .withSubscriptionParameters(sp1)
+                                                .withMessageId("01")
+                                                .withFeedName("Feed01")
+                                                .withAction(FeedActionEnum.SUBSCRIBE)
                                                 .withPushParameters(pp1);
         TestUtil.roundTripMessage(taxiiXml, smr1, false);                
     }
@@ -124,82 +114,47 @@ public class CollectionSubscriptionManagementRequestTests {
     @Test
     public void testSubsReq2() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr2 = factory.createSubscriptionManagementRequest()
-                                                .withMessageId("'SubsReq02'")
-                                                .withAction(CollectionActionEnum.SUBSCRIBE)
-                                                .withCollectionName("collection2")
-                                                .withSubscriptionParameters(
-                                                        factory.createSubscriptionParametersType()
-                                                                .withResponseType(ResponseTypeEnum.FULL)
-                                                                .withQuery(
-                                                                    new QueryType()
-                                                                            .withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10)
-                                                                            .withContent(query2)
-                                                                )
-                                                );
+                                                .withMessageId("02")
+                                                .withFeedName("Feed02")
+                                                .withAction(FeedActionEnum.SUBSCRIBE);
+                                                
         TestUtil.roundTripMessage(taxiiXml, smr2, false);                        
     }
     
     @Test
     public void testSubsReq3() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr3 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq03")
-                                                    .withAction(CollectionActionEnum.SUBSCRIBE)
-                                                    .withCollectionName("collection213")
-                                                    .withSubscriptionParameters(
-                                                            factory.createSubscriptionParametersType()
-                                                    );
+                                                    .withMessageId("03")
+                                                    .withFeedName("Feed03")
+                                                    .withAction(FeedActionEnum.SUBSCRIBE);
         TestUtil.roundTripMessage(taxiiXml, smr3, false);                                                                                    
     }
     
     @Test
     public void testSubsReq4() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr4 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq04")
-                                                    .withAction(CollectionActionEnum.SUBSCRIBE)
-                                                    .withCollectionName("collection2")
-    // NOTE: The Python library populates the parameters with a default value. JAXB doesn't support this - without customizing the generated classes.
-                                                    .withSubscriptionParameters(
-                                                            factory.createSubscriptionParametersType()
-                                                    );
+                                                    .withMessageId("04")
+                                                    .withFeedName("Feed04")
+                                                    .withAction(FeedActionEnum.SUBSCRIBE);
         TestUtil.roundTripMessage(taxiiXml, smr4, false);                                                                                    
     }
     
     @Test
     public void testSubsReq5() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr5 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq05")
-                                                    .withAction(CollectionActionEnum.STATUS)
-                                                    .withCollectionName("collection2")
-                                                    .withSubscriptionID("id1");
+                                                    .withMessageId("05")
+                                                    .withFeedName("Feed05")                
+                                                    .withAction(FeedActionEnum.STATUS)
+                                                    .withSubscriptionId("id1");
         TestUtil.roundTripMessage(taxiiXml, smr5, false);                                                                                                    
     }
 
     @Test
     public void testSubsReq6() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr6 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq06")
-                                                    .withAction(CollectionActionEnum.STATUS)
-                                                    .withCollectionName("collection2");
+                                                    .withMessageId("06")
+                                                    .withFeedName("Feed06")
+                                                    .withAction(FeedActionEnum.STATUS);
         TestUtil.roundTripMessage(taxiiXml, smr6, false);                                                                                                    
     }
-
-    @Test
-    public void testSubsReq7() throws JAXBException, SAXException, IOException {
-        SubscriptionManagementRequest smr7 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq07")
-                                                    .withAction(CollectionActionEnum.PAUSE)
-                                                    .withCollectionName("collection2")
-                                                    .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr7, false);                                                                                                    
-    }
-
-    @Test
-    public void testSubsReq8() throws JAXBException, SAXException, IOException {
-        SubscriptionManagementRequest smr8 = factory.createSubscriptionManagementRequest()
-                                                    .withMessageId("SubsReq08")
-                                                    .withAction(CollectionActionEnum.RESUME)
-                                                    .withCollectionName("collection2")
-                                                    .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr8, false);                                                                                                    
-    }    
 }

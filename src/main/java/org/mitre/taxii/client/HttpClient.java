@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,7 +56,7 @@ public class HttpClient {
     private final HashMap<String, String> packageToVersionMap = new HashMap<>();
 
     /**
-     * Create an HttpClient that uses a specific TaxiiXml object. NOTE: This
+     * Create an HttpClient that uses a specific TaxiiXmlInterface object. NOTE: This
      * will prevent the HttpClient from handling other TAXII versions.
      *
      * @param taxiiXml
@@ -68,8 +70,8 @@ public class HttpClient {
 
     /**
      * Create an HttpClient with a configured Apache HttpClient. For example,
-     * one configured to use a proxy or SSL. This will also create TaxiiXml
-     * objects that handle 1.0 and 1.1.
+ one configured to use a proxy or SSL. This will also create TaxiiXmlInterface
+ objects that handle 1.0 and 1.1.
      *
      * @param httpClient
      */
@@ -128,14 +130,14 @@ public class HttpClient {
          System.out.println("Message package = " + msgPackage);
          System.out.println("Message version = " + msgVersion);
          System.out.println("taxiiXml = " + taxiiXml.toString());
-         System.out.println("TaxiiXml version = " + taxiiXml.getTaxiiVersion());
+         System.out.println("TaxiiXmlInterface version = " + taxiiXml.getTaxiiVersion());
         */
 
          if (null == taxiiXml) {
             throw new JAXBException("Message is unknown TAXII version.");
         }
 
-        // we now have a TaxiiXml that knows how to handle the message we receieved.
+        // we now have a TaxiiXmlInterface that knows how to handle the message we receieved.
         String resultStr = null;
         Object resultObj = null;
 
@@ -147,10 +149,13 @@ public class HttpClient {
             postRequest.addHeader("User-Agent", "java-taxii.httpclient");
             postRequest.addHeader(HEADER_CONTENT_TYPE, "application/xml");
             postRequest.addHeader(HEADER_ACCEPT, "application/xml");
-            if (taxiiXml.isRequestMessage(message)) {
+// Assume the client will always send requests.
+// This is kind of dumb, but determining otherwise with all the dynamic class
+
+//            if (taxiiXml.isRequestMessage(message)) {
                 // Should be present for requests. Should NOT be present for responses.
                 postRequest.addHeader(HEADER_X_TAXII_ACCEPT, msgVersion);
-            }
+//            }
             postRequest.addHeader(HEADER_X_TAXII_CONTENT_TYPE, msgVersion);
             postRequest.addHeader(HEADER_X_TAXII_SERVICES, taxiiXml.getServiceVersion());
 
@@ -225,6 +230,18 @@ public class HttpClient {
             String packageName = entry.getValue().getClass().getPackage().getName();
             packageToVersionMap.put(packageName, version);
         }
+    }
+    
+    private void populateResponseHandlerMap(String taxiiPackage) {
+        try {
+            // Use reflection to instantiate the proper HttpResponseHandler.
+            Class rhClass = Class.forName(taxiiPackage + ".ResponseHandler");
+            Constructor rhConstructor = rhClass.getConstructor();
+            HttpResponseHandler responseHandler = (HttpResponseHandler)rhConstructor.newInstance();
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            // TODO: This is bad!
+        }
+
     }
         
     // ========= Getters and Setters. ==============

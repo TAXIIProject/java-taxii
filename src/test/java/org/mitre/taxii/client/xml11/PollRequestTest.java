@@ -1,4 +1,4 @@
-package org.mitre.taxii.client;
+package org.mitre.taxii.client.xml11;
 
 import java.io.IOException;
 import java.net.URI;
@@ -7,10 +7,11 @@ import javax.xml.bind.JAXBException;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.mitre.taxii.Messages;
+import org.mitre.taxii.client.HttpClient;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.PollRequest;
 import org.mitre.taxii.messages.xml11.PollResponse;
-import org.mitre.taxii.messages.xml11.TaxiiXmlImpl;
+import org.mitre.taxii.messages.xml11.TaxiiXml;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 
 /**
@@ -20,7 +21,7 @@ import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 public class PollRequestTest {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXmlImpl taxiiXml;
+    private final TaxiiXml taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public PollRequestTest() {

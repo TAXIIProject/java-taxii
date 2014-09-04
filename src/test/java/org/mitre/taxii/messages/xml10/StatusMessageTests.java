@@ -24,7 +24,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 
@@ -42,11 +42,11 @@ import org.mitre.taxii.Versions;
 import org.xml.sax.SAXException;
 
 /**
- * Unit tests for XML Message Binding 1.1.
+ * Unit tests for XML Message Binding 1.0.
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTests implements StatusDetails, Versions, ContentBindings {
+public class StatusMessageTests implements Versions, ContentBindings {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
@@ -80,9 +80,6 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
         sm.setInResponseTo(Messages.generateMessageId());
         sm.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
-        StatusMessageHelper.addDetail(sm, new URI("custom_status_detail_name"), "Custom status detail value");
-        StatusMessageHelper.addDetail(sm, new URI("Custom_detail_2"), "this one has", "multiple values");        
-                
         sm.setMessage("This is a test message");
         
         TestUtil.roundTripMessage(taxiiXml, sm);
@@ -132,38 +129,10 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
         final StatusMessage sm03 = new StatusMessage();
         sm03.setMessageId("SM03");
         sm03.setInResponseTo(Messages.generateMessageId());
-        sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
-                   
-        StatusMessageHelper.addDetail(sm03, new URI(STATUS_DETAIL_ACCEPTABLE_DESTINATION), "Collection1", "Collection2");
                 
         TestUtil.roundTripMessage(taxiiXml, sm03);
     }
 
-    /**
-     * Verify that an Invalid Response Part status message can be created
-     * and successfully round-tripped.
-     */
-    @Test
-    public void goodInvalidResponsePart() throws Exception, JAXBException, JAXBException, SAXException {
-    /**
-        def test_status_message_04(self):
-            sm04 = tm11.StatusMessage(
-            message_id='SM04',  # Required
-            in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
-            status_type=tm11.ST_INVALID_RESPONSE_PART,  # Required
-            status_detail={'MAX_PART_NUMBER': 4},  # Required/optional depending on Status Type. See spec for details
-            message=None  # Optional
-        )
-        round_trip_message(sm04)
-    */
-
-        final StatusMessage sm04 = StatusMessageHelper.createInvalidResponsePart(4);
-        sm04.setMessageId("SM04");
-        sm04.setInResponseTo(Messages.generateMessageId());
-        sm04.setMessage("This is a valid test status message");
-        
-        TestUtil.roundTripMessage(taxiiXml, sm04);
-    }
     
     @Test
     public void goodNotFound() throws JAXBException, SAXException, IOException, URISyntaxException {
@@ -184,44 +153,9 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
         
-        StatusMessageHelper.addDetail(sm05, new URI(STATUS_DETAIL_ITEM), "Collection1");
-
         TestUtil.roundTripMessage(taxiiXml, sm05);        
     }
-    
-    @Test
-    public void goodPending() throws JAXBException, SAXException, IOException, URISyntaxException {
-        /**
-        def test_status_message_06(self):
-            sm06 = tm11.StatusMessage(
-                    message_id='SM06',  # Required
-                    in_response_to=tm11.generate_message_id(),  # Required, should be the ID of the message that this is in response to
-                    status_type=tm11.ST_PENDING,  # Required
-                    status_detail={'ESTIMATED_WAIT': 900, 'RESULT_ID': 'Result1', 'WILL_PUSH': False},  # Required/optional depending on Status Type. See spec for details
-                    message=None  # Optional
-            )
-            round_trip_message(sm06)
-        */
         
-        StatusMessage sm06 = StatusMessageHelper.createPending(900, new URI("Result1"), false);
-        sm06.setMessageId("SM06");
-        sm06.setInResponseTo(Messages.generateMessageId());
-        
-        /* The manual way.
-        
-        StatusMessage sm06 = new StatusMessage()
-                                    .withMessageId("SM06")
-                                    .withInResponseTo(Messages.generateMessageId())
-                                    .withStatusType(StatusTypeEnum.PENDING.toString());
-        
-        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_ESTIMATED_WAIT, 900);
-        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_RESULT_ID, "Result1");
-        StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_WILL_PUSH, Boolean.FALSE);
-        */
-        
-        TestUtil.roundTripMessage(taxiiXml, sm06);        
-    }
-    
     @Test
     public void goodRetry() throws JAXBException, SAXException, IOException, URISyntaxException {
         /**
@@ -241,7 +175,6 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM07")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.RETRY.toString());
-        StatusMessageHelper.addDetail(sm07, new URI(STATUS_DETAIL_ESTIMATED_WAIT), 900);
         
         TestUtil.roundTripMessage(taxiiXml, sm07);
     }
@@ -263,7 +196,6 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM08")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
-        StatusMessageHelper.addDetail(sm08, new URI(STATUS_DETAIL_SUPPORTED_BINDING), VID_TAXII_XML_10, VID_TAXII_XML_11);
         
         TestUtil.roundTripMessage(taxiiXml, sm08);        
     }
@@ -286,7 +218,6 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM09")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
-        StatusMessageHelper.addDetail(sm09, new URI(STATUS_DETAIL_SUPPORTED_CONTENT), CB_STIX_XML_101);
         
         TestUtil.roundTripMessage(taxiiXml, sm09);                
     }

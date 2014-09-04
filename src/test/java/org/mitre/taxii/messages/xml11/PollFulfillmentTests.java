@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import javax.xml.bind.JAXBException;
 import org.junit.Test;
-import org.mitre.taxii.query.DefaultQuery;
 import org.xml.sax.SAXException;
 
 /**
@@ -14,7 +13,7 @@ import org.xml.sax.SAXException;
 public class PollFulfillmentTests {
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    private final TaxiiXmlImpl taxiiXml;
+    private final TaxiiXml taxiiXml;
     
     public PollFulfillmentTests() {
        taxiiXml = txf.getTaxiiXml();

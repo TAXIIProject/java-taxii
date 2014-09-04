@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,7 +30,7 @@ public class InboxMessageTests {
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
     private final TaxiiXml taxiiXml;
     
-    private ContentBlock cb001, cb002;
+    private ContentBlockType cb001, cb002;
 
     public InboxMessageTests() {
        taxiiXml = txf.getTaxiiXml();
@@ -61,27 +61,20 @@ public class InboxMessageTests {
         XMLGregorianCalendar timeStamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
         
-        cb001 = factory.createContentBlock()
+        cb001 = factory.createContentBlockType()
                     .withContentBinding(
-                        factory.createContentInstanceType()
-                            .withBindingId(ContentBindings.CB_STIX_XML_11)
-                            .withSubtype(
-                                    factory.createSubtypeType()
-                                        .withSubtypeId("test1")
-                            )
+                        ContentBindings.CB_STIX_XML_11
                     )
                     .withContent(
                             factory.createAnyMixedContentType()
                                 .withContent(stix)
                     )
                     .withTimestampLabel(timeStamp.normalize())
-                    .withMessage("Hullo!")
                     .withPadding("The quick brown fox jumped over the lazy dogs.");                
         
-        cb002 = factory.createContentBlock()
+        cb002 = factory.createContentBlockType()
                     .withContentBinding(
-                        factory.createContentInstanceType()
-                            .withBindingId(ContentBindings.CB_STIX_XML_11)
+                            ContentBindings.CB_STIX_XML_11
                     )
                     .withContent(
                             factory.createAnyMixedContentType()
@@ -100,22 +93,14 @@ public class InboxMessageTests {
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
         SourceSubscriptionType si = factory.createSourceSubscriptionType()
-                                        .withCollectionName("SomeCollectionName")
-                                        .withSubscriptionID("SubsId021")
-                                        .withExclusiveBeginTimestamp(beginTime)
+                                        .withSubscriptionId("SubsId021")
+                                        .withInclusiveBeginTimestamp(beginTime)
                                         .withInclusiveEndTimestamp(endTime);
                 
         InboxMessage inbox = factory.createInboxMessage()
                                 .withMessageId("Inbox1")
-                                .withResultId("123")
-                                .withDestinationCollectionNames("collection1", "collection2")
                                 .withMessage("Hello!")                                
                                 .withSourceSubscription(si)
-                                .withRecordCount(
-                                    factory.createRecordCountType()
-                                        .withPartialCount(Boolean.TRUE)
-                                        .withValue(BigInteger.valueOf(22)                                        
-                                ))
                                 .withContentBlocks(cb001, cb002);                                               
         
         TestUtil.roundTripMessage(taxiiXml, inbox, false);                                       
@@ -132,15 +117,11 @@ public class InboxMessageTests {
     @Test
     public void inbox3() throws JAXBException, SAXException, IOException {
         SourceSubscriptionType si = factory.createSourceSubscriptionType()
-                                        .withCollectionName("SomeCollectionName")
-                                        .withSubscriptionID("SubsId021");
+                                        .withSubscriptionId("SubsId021");
         
         InboxMessage inbox = factory.createInboxMessage()
                                 .withMessageId("Inbox3")
-                                .withResultId("123")
-                                .withDestinationCollectionNames("collection1", "collection2")
                                 .withSourceSubscription(si)
-                                .withRecordCount(factory.createRecordCountType().withValue(BigInteger.ONE)) //NOTE: Python test does not add the record count and generates an invalid message.
                                 .withContentBlocks(cb002);
 
         TestUtil.roundTripMessage(taxiiXml, inbox, false);                                                       

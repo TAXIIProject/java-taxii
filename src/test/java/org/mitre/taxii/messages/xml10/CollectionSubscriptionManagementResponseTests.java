@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import javax.xml.bind.JAXBException;
@@ -24,7 +24,6 @@ public class CollectionSubscriptionManagementResponseTests {
     
     private ServiceContactInfoType poll1, poll2, poll3;
     private SubscriptionRecordType sub1, sub2, sub3;
-    private SubscriptionParametersType sp1;
     private PushParameterType pp1;
     
     public CollectionSubscriptionManagementResponseTests() {
@@ -37,17 +36,17 @@ public class CollectionSubscriptionManagementResponseTests {
         poll1 = factory.createServiceContactInfoType()
                     .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
                     .withAddress("https://example.com/poll1/")
-                    .withMessageBindings(Versions.VID_TAXII_XML_11);
+                    .withMessageBindings(Versions.VID_TAXII_XML_10);
         
         poll2 = factory.createServiceContactInfoType()
                     .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
                     .withAddress("https://example.com/poll2/")
-                    .withMessageBindings(Versions.VID_TAXII_XML_11);
+                    .withMessageBindings(Versions.VID_TAXII_XML_10);
 
         poll3 = factory.createServiceContactInfoType()
                     .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
                     .withAddress("https://example.com/poll3/")
-                    .withMessageBindings(Versions.VID_TAXII_XML_11);
+                    .withMessageBindings(Versions.VID_TAXII_XML_10);
         
         TestType test1 = new TestType()
                     .withCapabilityId(DefaultQueryXml.CM_CORE)
@@ -70,10 +69,6 @@ public class CollectionSubscriptionManagementResponseTests {
             .withCriteria(criteria1);
 
 
-        sp1 = factory.createSubscriptionParametersType()
-                    .withResponseType(ResponseTypeEnum.COUNT_ONLY)
-                    .withContentBindings(factory.createContentBindingIDType().withBindingId(ContentBindings.CB_STIX_XML_11))
-                    .withQuery(new QueryType().withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10).withContent(query1));                    
 
         pp1 = factory.createPushParameterType()
                     .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
@@ -81,29 +76,24 @@ public class CollectionSubscriptionManagementResponseTests {
                     .withMessageBinding(Versions.VID_TAXII_XML_11);
         
         sub1 = factory.createSubscriptionRecordType()
-                    .withStatus(SubscriptionStatusEnum.ACTIVE)
-                    .withSubscriptionID("Subs001")
-                    .withSubscriptionParameters(sp1)
+                    .withSubscriptionId("Subs001")
                     .withPushParameters(pp1)
                     .withPollInstances(poll1, poll2, poll3);
         
         sub2 = factory.createSubscriptionRecordType()
-                    .withStatus(SubscriptionStatusEnum.PAUSED)
-                    .withSubscriptionID("Subs001")
-                    .withSubscriptionParameters(sp1)
+                    .withSubscriptionId("Subs001")
                     .withPushParameters(pp1);
         
         sub3 = factory.createSubscriptionRecordType()
-                    .withStatus(SubscriptionStatusEnum.PAUSED)
-                    .withSubscriptionID("Subs001");        
+                    .withSubscriptionId("Subs001");        
     }
     
     @Test
     public void testSubsResp1() throws JAXBException, SAXException, IOException {
         SubscriptionManagementResponse smr1 = factory.createSubscriptionManagementResponse()
-                .withMessageId("SubsResp01")
-                .withInResponseTo("xyz")
-                .withCollectionName("abc123")
+                .withMessageId("01")
+                .withFeedName("Feed01")
+                .withInResponseTo("123")
                 .withMessage("Hullo!")
                 .withSubscriptions(sub1, sub2, sub3);
         
@@ -113,9 +103,9 @@ public class CollectionSubscriptionManagementResponseTests {
     @Test
     public void testSubsResp2() throws JAXBException, SAXException, IOException {
         SubscriptionManagementResponse smr1 = factory.createSubscriptionManagementResponse()
-                .withMessageId("SubsResp02")
-                .withInResponseTo("xyz")
-                .withCollectionName("abc123");
+                .withMessageId("02")
+                .withFeedName("Feed01")
+                .withInResponseTo("123");
         
         TestUtil.roundTripMessage(taxiiXml, smr1, false);        
     }
@@ -123,9 +113,9 @@ public class CollectionSubscriptionManagementResponseTests {
     @Test
     public void testSubsResp3() throws JAXBException, SAXException, IOException {
         SubscriptionManagementResponse smr1 = factory.createSubscriptionManagementResponse()
-                .withMessageId("SubsResp03")
-                .withInResponseTo("xyz")
-                .withCollectionName("abc123")
+                .withMessageId("03")
+                .withFeedName("Feed01")
+                .withInResponseTo("123")
                 .withSubscriptions(sub1, sub2, sub3);
         
         TestUtil.roundTripMessage(taxiiXml, smr1, false);        
@@ -134,9 +124,9 @@ public class CollectionSubscriptionManagementResponseTests {
     @Test
     public void testSubsResp4() throws JAXBException, SAXException, IOException {
         SubscriptionManagementResponse smr1 = factory.createSubscriptionManagementResponse()
-                .withMessageId("SubsResp04")
-                .withInResponseTo("xyz")
-                .withCollectionName("abc123")
+                .withMessageId("04")
+                .withFeedName("Feed01")
+                .withInResponseTo("123")
                 .withMessage("Hullo!");
         
         TestUtil.roundTripMessage(taxiiXml, smr1, false);        
@@ -145,15 +135,14 @@ public class CollectionSubscriptionManagementResponseTests {
     @Test
     public void testSubsRespDeprecated() throws JAXBException, SAXException, IOException {
         SubscriptionRecordType sub = factory.createSubscriptionRecordType()
-                    .withSubscriptionID("Subs001")
-                    .withSubscriptionParameters(sp1)
+                    .withSubscriptionId("Subs001")
                     .withPushParameters(pp1)
                     .withPollInstances(poll1);
         
         SubscriptionManagementResponse smr1 = factory.createSubscriptionManagementResponse()
-                .withMessageId("SubsResp01")
-                .withInResponseTo("xyz")
-                .withCollectionName("abc123")
+                .withMessageId("01")
+                .withFeedName("Feed01")
+                .withInResponseTo("123")
                 .withSubscriptions(sub);
         
         TestUtil.roundTripMessage(taxiiXml, smr1, false);                        

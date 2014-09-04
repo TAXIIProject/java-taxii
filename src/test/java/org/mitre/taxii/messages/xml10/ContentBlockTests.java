@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -38,9 +38,9 @@ public class ContentBlockTests {
         Document doc = db.parse(new InputSource(new StringReader("<stix:STIX_Package xmlns:stix=\"http://stix.mitre.org/stix-1\"/>")));
         Node stix = doc.getDocumentElement();
         
-        ContentBlock cb = factory.createContentBlock()                                    
+        ContentBlockType cb = factory.createContentBlockType()                                    
                                     .withContentBinding(
-                                        factory.createContentInstanceType().withBindingId(ContentBindings.CB_STIX_XML_10)
+                                        ContentBindings.CB_STIX_XML_10
                                     )
                                     .withContent(
                                         factory.createAnyMixedContentType()
@@ -52,9 +52,9 @@ public class ContentBlockTests {
     
     @Test
     public void contentBlock2() throws JAXBException, SAXException, IOException {
-        ContentBlock cb = factory.createContentBlock()                                    
+        ContentBlockType cb = factory.createContentBlockType()                                    
                                     .withContentBinding(
-                                            factory.createContentInstanceType().withBindingId(ContentBindings.CB_STIX_XML_10)
+                                            ContentBindings.CB_STIX_XML_10
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()
@@ -66,9 +66,9 @@ public class ContentBlockTests {
     
     @Test
     public void contentBlock3() throws JAXBException, SAXException, IOException {
-        ContentBlock cb = factory.createContentBlock()                                    
+        ContentBlockType cb = factory.createContentBlockType()                                    
                                     .withContentBinding(
-                                            factory.createContentInstanceType().withBindingId(ContentBindings.CB_STIX_XML_10)
+                                            ContentBindings.CB_STIX_XML_10
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()
@@ -80,9 +80,9 @@ public class ContentBlockTests {
 
     @Test
     public void contentBlock4() throws JAXBException, SAXException, IOException {
-        ContentBlock cb = factory.createContentBlock()                                    
+        ContentBlockType cb = factory.createContentBlockType()                                    
                                     .withContentBinding(
-                                            factory.createContentInstanceType().withBindingId("RandomUnicodeString")
+                                            "RandomUnicodeString"
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()

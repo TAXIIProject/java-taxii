@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 import java.util.Date;
@@ -10,7 +10,6 @@ import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
-import org.mitre.taxii.Versions;
 import org.mitre.taxii.query.CriteriaType;
 import org.mitre.taxii.query.CriterionType;
 import org.mitre.taxii.query.DefaultQuery;
@@ -72,10 +71,9 @@ public class PollRequestTests {
                 
         PollRequest pr1 = factory.createPollRequest()
                             .withMessageId("PollReq01")
-                            .withCollectionName("collection100")
                             .withExclusiveBeginTimestamp(beginTime.normalize()) // Normalize to UTC
                             .withInclusiveEndTimestamp(endTime.normalize())     // Normalize to UTC
-                            .withSubscriptionID("12345");
+                            .withSubscriptionId("12345");
         
         TestUtil.roundTripMessage(taxiiXml, pr1);                        
     }
@@ -84,26 +82,14 @@ public class PollRequestTests {
     public void pollReq2() throws DatatypeConfigurationException, JAXBException, SAXException, IOException {
         PollRequest pr2 = factory.createPollRequest()
                             .withMessageId("PollReq02")
-                            .withCollectionName("collection100")
-                            .withSubscriptionID("Kenneth Coal Collection");
+                            .withSubscriptionId("Kenneth Coal Collection");
         
         TestUtil.roundTripMessage(taxiiXml, pr2);                        
     }
 
     @Test
     public void pollReq3() throws DatatypeConfigurationException, JAXBException, SAXException, IOException {
-        PushParameterType deliveryParameters = factory.createPushParameterType()
-                                                    .withProtocolBinding(Versions.VID_TAXII_HTTPS_10)
-                                                    .withAddress("https://example.com/inboxAddress/")
-                                                    .withMessageBinding(Versions.VID_TAXII_XML_11);
         
-        PollParametersType pollParameters = factory.createPollParametersType()
-                                                .withAllowAsynch(Boolean.FALSE)
-                                                .withResponseType(ResponseTypeEnum.COUNT_ONLY)
-                                                .withContentBindings(factory.createContentBindingIDType().withBindingId(ContentBindings.CB_STIX_XML_11))
-                                                .withQuery(new QueryType().withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10).withContent(query1))
-                                                .withDeliveryParameters(deliveryParameters);
-
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date()); // Now.
         XMLGregorianCalendar beginTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
@@ -114,10 +100,8 @@ public class PollRequestTests {
         
         PollRequest pr3 = factory.createPollRequest()
                                 .withMessageId("PollReq03")
-                                .withCollectionName("collection100")
                                 .withExclusiveBeginTimestamp(beginTime)
-                                .withInclusiveEndTimestamp(endTime)
-                                .withPollParameters(pollParameters);
+                                .withInclusiveEndTimestamp(endTime);
 
         TestUtil.roundTripMessage(taxiiXml, pr3, false);                        
     }
@@ -129,20 +113,14 @@ public class PollRequestTests {
         gc.setTime(new Date()); // Now.
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
         
-        PollParametersType pp = factory.createPollParametersType(); // Defaults to Response type = FULL.
-
         PollRequest pr4 = factory.createPollRequest()
                             .withMessageId("PollReq04")
-                            .withCollectionName("collection100")
-                            .withInclusiveEndTimestamp(endTime)
-                            .withPollParameters(pp);
+                            .withInclusiveEndTimestamp(endTime);
         TestUtil.roundTripMessage(taxiiXml, pr4);                        
     }
 
     @Test
     public void pollReq5() throws DatatypeConfigurationException, JAXBException, SAXException, IOException {
-        PollParametersType pp = factory.createPollParametersType()
-                                    .withQuery(new QueryType().withFormatId(DefaultQueryXml.FID_TAXII_DEFAULT_QUERY_10).withContent(query1));
         
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date()); // Now.
@@ -150,9 +128,7 @@ public class PollRequestTests {
 
         PollRequest pr5 = factory.createPollRequest()
                                 .withMessageId("PollReq05")
-                                .withCollectionName("collection100")
-                                .withExclusiveBeginTimestamp(startTime)
-                                .withPollParameters(pp);
+                                .withExclusiveBeginTimestamp(startTime);
         TestUtil.roundTripMessage(taxiiXml, pr5, false);                                               
     }    
 }
