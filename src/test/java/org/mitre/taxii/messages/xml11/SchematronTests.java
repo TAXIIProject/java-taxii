@@ -83,7 +83,9 @@ public class SchematronTests {
                 new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                        data.add(new File[] { file.toFile() });
+                        if (!file.toFile().isHidden()) {
+                            data.add(new File[] { file.toFile() });
+                        }
                         return FileVisitResult.CONTINUE;
                     }
                 });

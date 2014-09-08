@@ -54,11 +54,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ContentBlockType }
+     * Create an instance of {@link ContentBlock }
      * 
      */
-    public ContentBlockType createContentBlockType() {
-        return new ContentBlockType();
+    public ContentBlock createContentBlock() {
+        return new ContentBlock();
+    }
+
+    /**
+     * Create an instance of {@link AnyMixedContentType }
+     * 
+     */
+    public AnyMixedContentType createAnyMixedContentType() {
+        return new AnyMixedContentType();
     }
 
     /**
@@ -171,14 +179,6 @@ public class ObjectFactory {
      */
     public ServiceContactInfoType createServiceContactInfoType() {
         return new ServiceContactInfoType();
-    }
-
-    /**
-     * Create an instance of {@link AnyMixedContentType }
-     * 
-     */
-    public AnyMixedContentType createAnyMixedContentType() {
-        return new AnyMixedContentType();
     }
 
     /**

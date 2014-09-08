@@ -1,7 +1,6 @@
 package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.xml.bind.JAXBException;
@@ -37,40 +36,13 @@ public class PollResponseTests {
 
         
         PollResponse pr1 = factory.createPollResponse()
-                                .withMessageId("PollResp1")
-                                .withInResponseTo("tmp")
+                                .withMessageId("1")
+                                .withFeedName("Feed1")
+                                .withInResponseTo("1")
                                 .withSubscriptionId("24")
                                 .withInclusiveBeginTimestamp(beginTime)
                                 .withInclusiveEndTimestamp(endTime)
                                 .withMessage("Woooooooo");
         TestUtil.roundTripMessage(taxiiXml, pr1);                                
-    }
-    
-    @Test
-    public void pollResp2() throws JAXBException, SAXException, IOException {
-        
-        PollResponse pr = factory.createPollResponse()
-                                .withMessageId("PollResp2")
-                                .withInResponseTo("tmp");
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
-    }
-
-    @Test
-    public void pollResp3() throws JAXBException, SAXException, IOException {
-        
-        PollResponse pr = factory.createPollResponse()
-                                .withMessageId("PollResp3")
-                                .withInResponseTo("tmp")
-                                .withSubscriptionId("24");
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
-    }
-    
-    @Test
-    public void pollResp4() throws JAXBException, SAXException, IOException {
-        
-        PollResponse pr = factory.createPollResponse()
-                                .withMessageId("PollResp4")
-                                .withInResponseTo("tmp");
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
-    }
+    }    
 }

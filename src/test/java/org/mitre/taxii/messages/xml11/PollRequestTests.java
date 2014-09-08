@@ -68,6 +68,7 @@ public class PollRequestTests {
         XMLGregorianCalendar beginTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
         
         gc.setTime(new Date()); // Now.
+        gc.add(GregorianCalendar.HOUR, 1);
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
                 
         PollRequest pr1 = factory.createPollRequest()

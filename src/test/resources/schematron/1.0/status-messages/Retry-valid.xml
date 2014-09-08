@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="RETRY"
+    in_response_to="0"
+    message_id="1" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1">
+    <Status_Detail>2014-09-05T17:01:32.808-04:00</Status_Detail>
+    <Message>
+        This is a valid RETRY message because the Status Detail has a valid value.
+    </Message>
+</Status_Message>

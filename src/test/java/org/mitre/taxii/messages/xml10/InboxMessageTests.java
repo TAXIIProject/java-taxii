@@ -30,7 +30,7 @@ public class InboxMessageTests {
     private final TaxiiXmlFactory txf = new TaxiiXmlFactory();
     private final TaxiiXml taxiiXml;
     
-    private ContentBlockType cb001, cb002;
+    private ContentBlock cb001, cb002;
 
     public InboxMessageTests() {
        taxiiXml = txf.getTaxiiXml();
@@ -61,7 +61,7 @@ public class InboxMessageTests {
         XMLGregorianCalendar timeStamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
         
-        cb001 = factory.createContentBlockType()
+        cb001 = factory.createContentBlock()
                     .withContentBinding(
                         ContentBindings.CB_STIX_XML_11
                     )
@@ -72,7 +72,7 @@ public class InboxMessageTests {
                     .withTimestampLabel(timeStamp.normalize())
                     .withPadding("The quick brown fox jumped over the lazy dogs.");                
         
-        cb002 = factory.createContentBlockType()
+        cb002 = factory.createContentBlock()
                     .withContentBinding(
                             ContentBindings.CB_STIX_XML_11
                     )
@@ -93,12 +93,13 @@ public class InboxMessageTests {
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
         SourceSubscriptionType si = factory.createSourceSubscriptionType()
-                                        .withSubscriptionId("SubsId021")
+                                        .withSubscriptionId("021")
+                                        .withFeedName("Feed01")
                                         .withInclusiveBeginTimestamp(beginTime)
                                         .withInclusiveEndTimestamp(endTime);
                 
         InboxMessage inbox = factory.createInboxMessage()
-                                .withMessageId("Inbox1")
+                                .withMessageId("1")
                                 .withMessage("Hello!")                                
                                 .withSourceSubscription(si)
                                 .withContentBlocks(cb001, cb002);                                               
@@ -109,18 +110,28 @@ public class InboxMessageTests {
     @Test
     public void inbox2() throws JAXBException, SAXException, IOException {
         InboxMessage inbox = factory.createInboxMessage()
-                                .withMessageId("Inbox2");
+                                .withMessageId("2");
 
         TestUtil.roundTripMessage(taxiiXml, inbox);                                                       
     }
 
     @Test
-    public void inbox3() throws JAXBException, SAXException, IOException {
+    public void inbox3() throws JAXBException, SAXException, IOException, DatatypeConfigurationException {
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(new Date()); // Now.
+        XMLGregorianCalendar beginTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+
+        gc.setTime(new Date()); // Now.
+        XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+
         SourceSubscriptionType si = factory.createSourceSubscriptionType()
-                                        .withSubscriptionId("SubsId021");
+                                        .withSubscriptionId("021")
+                                        .withFeedName("Feed02")
+                                        .withInclusiveBeginTimestamp(beginTime)
+                                        .withInclusiveEndTimestamp(endTime);
         
         InboxMessage inbox = factory.createInboxMessage()
-                                .withMessageId("Inbox3")
+                                .withMessageId("3")
                                 .withSourceSubscription(si)
                                 .withContentBlocks(cb002);
 

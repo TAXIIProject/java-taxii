@@ -38,7 +38,7 @@ public class ContentBlockTests {
         Document doc = db.parse(new InputSource(new StringReader("<stix:STIX_Package xmlns:stix=\"http://stix.mitre.org/stix-1\"/>")));
         Node stix = doc.getDocumentElement();
         
-        ContentBlockType cb = factory.createContentBlockType()                                    
+        ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
                                         ContentBindings.CB_STIX_XML_10
                                     )
@@ -52,7 +52,7 @@ public class ContentBlockTests {
     
     @Test
     public void contentBlock2() throws JAXBException, SAXException, IOException {
-        ContentBlockType cb = factory.createContentBlockType()                                    
+        ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
                                             ContentBindings.CB_STIX_XML_10
                                     )
@@ -66,7 +66,7 @@ public class ContentBlockTests {
     
     @Test
     public void contentBlock3() throws JAXBException, SAXException, IOException {
-        ContentBlockType cb = factory.createContentBlockType()                                    
+        ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
                                             ContentBindings.CB_STIX_XML_10
                                     )
@@ -80,7 +80,7 @@ public class ContentBlockTests {
 
     @Test
     public void contentBlock4() throws JAXBException, SAXException, IOException {
-        ContentBlockType cb = factory.createContentBlockType()                                    
+        ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
                                             "RandomUnicodeString"
                                     )

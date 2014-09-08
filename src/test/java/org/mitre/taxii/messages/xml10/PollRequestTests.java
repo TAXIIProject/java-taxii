@@ -70,7 +70,8 @@ public class PollRequestTests {
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
                 
         PollRequest pr1 = factory.createPollRequest()
-                            .withMessageId("PollReq01")
+                            .withMessageId("01")
+                            .withFeedName("Feed01")
                             .withExclusiveBeginTimestamp(beginTime.normalize()) // Normalize to UTC
                             .withInclusiveEndTimestamp(endTime.normalize())     // Normalize to UTC
                             .withSubscriptionId("12345");
@@ -81,7 +82,8 @@ public class PollRequestTests {
     @Test
     public void pollReq2() throws DatatypeConfigurationException, JAXBException, SAXException, IOException {
         PollRequest pr2 = factory.createPollRequest()
-                            .withMessageId("PollReq02")
+                            .withMessageId("02")
+                            .withFeedName("Feed02")
                             .withSubscriptionId("Kenneth Coal Collection");
         
         TestUtil.roundTripMessage(taxiiXml, pr2);                        
@@ -99,7 +101,8 @@ public class PollRequestTests {
         endTime.add(oneHour);
         
         PollRequest pr3 = factory.createPollRequest()
-                                .withMessageId("PollReq03")
+                                .withMessageId("03")
+                                .withFeedName("Feed03")
                                 .withExclusiveBeginTimestamp(beginTime)
                                 .withInclusiveEndTimestamp(endTime);
 
@@ -114,7 +117,8 @@ public class PollRequestTests {
         XMLGregorianCalendar endTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
         
         PollRequest pr4 = factory.createPollRequest()
-                            .withMessageId("PollReq04")
+                            .withMessageId("04")
+                            .withFeedName("Feed04")
                             .withInclusiveEndTimestamp(endTime);
         TestUtil.roundTripMessage(taxiiXml, pr4);                        
     }
@@ -127,7 +131,8 @@ public class PollRequestTests {
         XMLGregorianCalendar startTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
         PollRequest pr5 = factory.createPollRequest()
-                                .withMessageId("PollReq05")
+                                .withMessageId("05")
+                                .withFeedName("Feed05")
                                 .withExclusiveBeginTimestamp(startTime);
         TestUtil.roundTripMessage(taxiiXml, pr5, false);                                               
     }    

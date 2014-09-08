@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.mitre.taxii.messages.xml10;
 
-import java.util.List;
+import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -39,14 +39,13 @@ import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  *
  * @author jasenj1
  */
 public class StatusMessageValidationTests implements Versions, ContentBindings {
-    private static final String INVALID_XML_RESOURCE = "/xsd/1.1/StatusMessage-Success-invalid.xml";
+    private static final String INVALID_XML_RESOURCE = "/xsd/1.0/StatusMessage-Success-invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
@@ -63,16 +62,21 @@ public class StatusMessageValidationTests implements Versions, ContentBindings {
      * @throws JAXBException 
      */
     @Test
-    public void invalidXML() throws Exception {
+    public void invalidXML() throws JAXBException {
+        boolean failure = false;
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
-        MessageType msg = (MessageType) u.unmarshal(getClass().getResource(INVALID_XML_RESOURCE));
+        try {
+            MessageType msg = (MessageType) u.unmarshal(getClass().getResource(INVALID_XML_RESOURCE));
         
-        Validation results = taxiiXml.validateAll(msg, false);
-        assertTrue(results.isFailure());
-        if (debug) {
-            System.out.print("Validation results: ");
-            System.out.println(results.getAllErrorsAndWarnings());
+            Validation results = taxiiXml.validateAll(msg, false);
+            failure = results.isFailure();
+        } catch (IOException ex) {
+            failure = true;
+        } catch (SAXException ex) {
+            failure = true;
         }
+        
+        assertTrue(failure);
     }
         
     /**

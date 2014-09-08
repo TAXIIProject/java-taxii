@@ -495,5 +495,5 @@ public abstract class TaxiiXml implements Versions {
     }    
     
     public abstract HttpResponseHandler getResponseHandler();
-
+    public abstract boolean isRequestMessage(Object message);
 }

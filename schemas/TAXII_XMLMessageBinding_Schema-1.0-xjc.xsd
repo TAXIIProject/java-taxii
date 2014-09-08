@@ -365,7 +365,7 @@
             </xs:group>
             <xs:element name="Content_Binding" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Ignored if @service_version has a value other than INBOX. If @service_version=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_version=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
+                    <xs:documentation>Ignored if @service_type has a value other than INBOX. If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="Message" type="xs:string" minOccurs="0" maxOccurs="1">
@@ -750,7 +750,7 @@
                             <xs:documentation>The latest timestamp of content considered.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
@@ -794,7 +794,7 @@
                             <xs:documentation>If this message is being sent in service of an existing subscription, this field SHOULD be present and provide information about the subscription being serviced.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
@@ -867,5 +867,10 @@
     <xs:element name="Poll_Request" type="TAXIIPollRequestType" />
     <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
     <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
-        
+
+    <!-- The below is/are pulled global to support creating objects of the type within JAXB not inside
+        the enclosing parent elements.
+    -->
+    <xs:element name="Content_Block" type="ContentBlockType"/>        
+            
 </xs:schema>

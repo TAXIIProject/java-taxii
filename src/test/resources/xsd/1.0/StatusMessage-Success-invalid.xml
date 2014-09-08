@@ -1,0 +1,4 @@
+<Status_Message status_type="SUCCESS"  message_id="invalidStatusMessage" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1">
+    <Message>This is a invalid test message because it's missing
+    the in_response_to attribute.</Message>
+</Status_Message>

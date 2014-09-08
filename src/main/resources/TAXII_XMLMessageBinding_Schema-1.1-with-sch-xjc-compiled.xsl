@@ -95,7 +95,7 @@
    </xsl:template>
    <!--MODE: SCHEMATRON-FULL-PATH-3-->
    <!--This mode can be used to generate prefixed XPath for humans 
-    (Top-level element has index)-->
+	(Top-level element has index)-->
    <xsl:template match="node() | @*" mode="schematron-get-full-path-3">
       <xsl:for-each select="ancestor-or-self::*">
          <xsl:text>/</xsl:text>
@@ -165,6 +165,7 @@
       <xsl:apply-templates select="/" mode="M3"/>
       <xsl:apply-templates select="/" mode="M4"/>
       <xsl:apply-templates select="/" mode="M5"/>
+      <xsl:apply-templates select="/" mode="M6"/>
    </xsl:template>
 
    <!--SCHEMATRON PATTERNS-->
@@ -173,77 +174,77 @@
    <!--PATTERN Status Message Rules-->
 
 
-      <!--RULE -->
+	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']"
                  priority="1002"
                  mode="M1">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>
-                A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
-                a positive integer.
-             (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0)</xsl:message>
+                            A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
+                            a positive integer.
+                         (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
-      <!--RULE -->
+	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'PENDING']"
                  priority="1001"
                  mode="M1">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>
-                A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
-                a positiveInteger.
-             (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0)</xsl:message>
+                            A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
+                            a positiveInteger.
+                         (taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
 
-            <!--ASSERT -->
+		    <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>
-                A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
-                a URI.
-             (string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0)</xsl:message>
+                            A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
+                            a URI.
+                         (string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
 
-            <!--ASSERT -->
+		    <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean"/>
          <xsl:otherwise>
             <xsl:message>
-                A Status Message of type PENDING requires a WILL_PUSH Status Detail that is 
-                a boolean.
-             (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean)</xsl:message>
+                            A Status Message of type PENDING requires a WILL_PUSH Status Detail that is 
+                            a boolean.
+                         (taxii:Status_Detail/taxii:Detail[@name='WILL_PUSH'] castable as xs:boolean)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
-      <!--RULE -->
+	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']"
                  priority="1000"
                  mode="M1">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
          <xsl:when test=". castable as xs:integer and xs:integer(.) &gt; 0"/>
          <xsl:otherwise>
             <xsl:message>
-                A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
-                Detail of type positiveInteger.
-             (. castable as xs:integer and xs:integer(.) &gt; 0)</xsl:message>
+                            A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
+                            Detail of type positiveInteger.
+                         (. castable as xs:integer and xs:integer(.) &gt; 0)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
@@ -253,38 +254,19 @@
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
    </xsl:template>
 
-   <!--PATTERN Subscription Management Request Rules-->
+   <!--PATTERN Content_Binding only present when @service_type=INBOX. XML Binding Spec section 3.3. -->
 
 
-      <!--RULE -->
-   <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']"
-                 priority="1001"
-                 mode="M2">
-
-        <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="taxii:Subscription_ID"/>
-         <xsl:otherwise>
-            <xsl:message>
-                Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME.
-             (taxii:Subscription_ID)</xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
-   </xsl:template>
-
-      <!--RULE -->
-   <xsl:template match="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']"
+	  <!--RULE -->
+   <xsl:template match="taxii:Service_Instance/taxii:Content_Binding"
                  priority="1000"
                  mode="M2">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="taxii:Subscription_Parameters"/>
+         <xsl:when test="../@service_type='INBOX'"/>
          <xsl:otherwise>
-            <xsl:message>
-                Subscription Parameters MUST be present if the action is SUBSCRIBE.
-             (taxii:Subscription_Parameters)</xsl:message>
+            <xsl:message>If Content_Binding is present, @service_type SHOULD be "INBOX". (../@service_type='INBOX')</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
@@ -294,23 +276,38 @@
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
    </xsl:template>
 
-   <!--PATTERN Poll Request Rules-->
+   <!--PATTERN Subscription Management Request Rules-->
 
 
-      <!--RULE -->
-   <xsl:template match="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]"
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE' or @action='PAUSE' or @action='RESUME']"
+                 priority="1001"
+                 mode="M3">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="taxii:Subscription_ID"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            Subscription_ID MUST be present if the action is UNSUBSCRIBE, PAUSE, or RESUME.
+                         (taxii:Subscription_ID)</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M3"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[@action='SUBSCRIBE']"
                  priority="1000"
                  mode="M3">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp"/>
+         <xsl:when test="taxii:Subscription_Parameters"/>
          <xsl:otherwise>
             <xsl:message>
-                If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
-                are present in a Poll_Request, the Inclusive_End_Timestamp 
-                MUST be greater than Exclusive_Begin_Timestamp.
-             (taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp)</xsl:message>
+                            Subscription Parameters MUST be present if the action is SUBSCRIBE.
+                         (taxii:Subscription_Parameters)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M3"/>
@@ -320,30 +317,23 @@
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M3"/>
    </xsl:template>
 
-   <!--PATTERN Poll Response Rules-->
+   <!--PATTERN Poll Request Rules-->
 
 
-      <!--RULE -->
-   <xsl:template match="/taxii:Poll_Response" priority="1000" mode="M4">
+	  <!--RULE -->
+   <xsl:template match="/taxii:Poll_Request[taxii:Exclusive_Begin_Timestamp and taxii:Inclusive_End_Timestamp]"
+                 priority="1000"
+                 mode="M4">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="if (@more = true()) then (string-length(@result_id) &gt; 0) else true()"/>
+         <xsl:when test="taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp"/>
          <xsl:otherwise>
             <xsl:message>
-                The result_id attribute MUST be present if the more field is set to true.
-             (if (@more = true()) then (string-length(@result_id) &gt; 0) else true())</xsl:message>
-         </xsl:otherwise>
-      </xsl:choose>
-
-            <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
-         <xsl:otherwise>
-            <xsl:message>
-                Record_Count MUST be greater than or equal to the number of 
-                Content Blocks.
-             (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
+                            If both Exclusive_Begin_Timestamp and Inclusive_End_Timestamp 
+                            are present in a Poll_Request, the Inclusive_End_Timestamp 
+                            MUST be greater than Exclusive_Begin_Timestamp.
+                         (taxii:Inclusive_End_Timestamp &gt; taxii:Exclusive_Begin_Timestamp)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M4"/>
@@ -353,20 +343,30 @@
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M4"/>
    </xsl:template>
 
-   <!--PATTERN Inbox Message Rules-->
+   <!--PATTERN Poll Response Rules-->
 
 
-      <!--RULE -->
-   <xsl:template match="/taxii:Inbox_Message" priority="1000" mode="M5">
+	  <!--RULE -->
+   <xsl:template match="/taxii:Poll_Response" priority="1000" mode="M5">
 
-        <!--ASSERT -->
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="if (@more = true()) then (string-length(@result_id) &gt; 0) else true()"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            The result_id attribute MUST be present if the more field is set to true.
+                         (if (@more = true()) then (string-length(@result_id) &gt; 0) else true())</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+
+		    <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
          <xsl:otherwise>
             <xsl:message>
-                Record_Count MUST be greater than or equal to the number of 
-                Content Blocks.
-             (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
+                            Record_Count MUST be greater than or equal to the number of 
+                            Content Blocks.
+                         (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M5"/>
@@ -374,5 +374,28 @@
    <xsl:template match="text()" priority="-1" mode="M5"/>
    <xsl:template match="@*|node()" priority="-2" mode="M5">
       <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M5"/>
+   </xsl:template>
+
+   <!--PATTERN Inbox Message Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Inbox_Message" priority="1000" mode="M6">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true()"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            Record_Count MUST be greater than or equal to the number of 
+                            Content Blocks.
+                         (if (taxii:Content_Block or taxii:Record_Count) then (xs:integer(taxii:Record_Count) &gt;= count(taxii:Content_Block)) else true())</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M6"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M6"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M6">
+      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M6"/>
    </xsl:template>
 </xsl:stylesheet>

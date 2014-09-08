@@ -76,8 +76,8 @@ public class StatusMessageTests implements Versions, ContentBindings {
             round_trip_message(sm01)
          */
         final StatusMessage sm = factory.createStatusMessage();
-        sm.setMessageId("SM01");
-        sm.setInResponseTo(Messages.generateMessageId());
+        sm.setMessageId("01");
+        sm.setInResponseTo("00");
         sm.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
         sm.setMessage("This is a test message");
@@ -102,8 +102,8 @@ public class StatusMessageTests implements Versions, ContentBindings {
         round_trip_message(sm02)
          */
         final StatusMessage sm02 = factory.createStatusMessage();
-        sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setMessageId("02");
+        sm02.setInResponseTo("01");
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm02);
@@ -126,9 +126,10 @@ public class StatusMessageTests implements Versions, ContentBindings {
         )
         round_trip_message(sm03)
         */
-        final StatusMessage sm03 = new StatusMessage();
-        sm03.setMessageId("SM03");
-        sm03.setInResponseTo(Messages.generateMessageId());
+        final StatusMessage sm03 = new StatusMessage()
+                                    .withMessageId("03")
+                                    .withInResponseTo("02")
+                                    .withStatusType(StatusTypeEnum.SUCCESS.name());                
                 
         TestUtil.roundTripMessage(taxiiXml, sm03);
     }
@@ -149,8 +150,8 @@ public class StatusMessageTests implements Versions, ContentBindings {
          */
         
         StatusMessage sm05 = new StatusMessage()
-                                    .withMessageId("SM05")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withMessageId("05")
+                                    .withInResponseTo("04")
                                     .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm05);        
@@ -172,8 +173,8 @@ public class StatusMessageTests implements Versions, ContentBindings {
         */
         
         StatusMessage sm07 = new StatusMessage()
-                                    .withMessageId("SM07")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withMessageId("07")
+                                    .withInResponseTo("06")
                                     .withStatusType(StatusTypeEnum.RETRY.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm07);
@@ -193,8 +194,8 @@ public class StatusMessageTests implements Versions, ContentBindings {
             round_trip_message(sm08)               
         */
         StatusMessage sm08 = new StatusMessage()
-                                    .withMessageId("SM08")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withMessageId("08")
+                                    .withInResponseTo("07")
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm08);        
@@ -215,13 +216,10 @@ public class StatusMessageTests implements Versions, ContentBindings {
         */
         
         StatusMessage sm09 = new StatusMessage()
-                                    .withMessageId("SM09")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withMessageId("09")
+                                    .withInResponseTo("08")
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm09);                
-    }
-    
-    //======================================
-        
+    }    
 }

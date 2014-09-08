@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Discovery_Response xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" message_id="1234" in_response_to="1234">
+<!-- If Content_Binding is present, @service_type should be "INBOX" -->
+    <Service_Instance service_type="DISCOVERY" service_version="urn:taxii.mitre.org:services:1.1" available="true">
+        <Protocol_Binding>urn:taxii.mitre.org:protocol:http:1.0</Protocol_Binding>
+        <Address>http://example.com/discovery</Address>
+        <Message_Binding>urn:taxii.mitre.org:message:xml:1.1</Message_Binding>
+        <Content_Binding binding_id="urn:stix.mitre.org:xml:1.1"></Content_Binding>        
+    </Service_Instance>
+    
+</Discovery_Response>

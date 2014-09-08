@@ -79,11 +79,13 @@ public class SchematronTests {
     public static Iterable<File[]> data() throws IOException {
         final List<File[]> data = new ArrayList<>();
         Files.walkFileTree(
-                Paths.get("src/test/resources/schematron/1.1"),
+                Paths.get("src/test/resources/schematron/1.0"),
                 new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                        data.add(new File[] { file.toFile() });
+                        if (!file.toFile().isHidden()) {
+                            data.add(new File[] { file.toFile() });
+                        }
                         return FileVisitResult.CONTINUE;
                     }
                 });

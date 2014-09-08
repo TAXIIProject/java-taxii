@@ -3,11 +3,13 @@ defaultTasks 'test'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-String srcGeneratedDir = 'src/generated/java'
+String srcGeneratedJavaDir = 'src/generated/java'
+String srcGeneratedDir = 'src/generated'
+
 sourceSets {
     main {
         java {
-            srcDirs('src/main/java', srcGeneratedDir)
+            srcDirs('src/main/java', srcGeneratedJavaDir)
         }
     }
 }
@@ -54,20 +56,34 @@ task generate << {
     ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task',
         classpath: configurations.xjc.asPath)
 
-    ant.mkdir(dir: srcGeneratedDir)
-    ant.xjc(destdir: srcGeneratedDir, header: false, readonly: true,
+    ant.mkdir(dir: srcGeneratedJavaDir)
+    ant.xjc(destdir: srcGeneratedJavaDir, header: false, readonly: true,
             extension: true, classpath: configurations.xjc.asPath) {
         // generate an equals method - this uses an XJC plugin
         arg(line: '-Xequals -XhashCode -Xfluent-api -Xvalue-constructor -Xdefault-value')
         binding(dir: srcXsdDir, includes: '*.xjb')
         schema(dir: srcXsdDir, includes: '*.xsd')
-        produces(dir: srcGeneratedDir, includes: '**/*.java')
+        produces(dir: srcGeneratedJavaDir, includes: '**/*.java')
     }
 }
 
 task cleanGenerate << {
-    ant.delete(dir: srcGeneratedDir)
+    ant.delete(dir: srcGeneratedJavaDir)
+}
+
+task extractSchematron << {
+    ant.xslt (destdir: srcGeneratedDir, extension: ".sch", basedir: "src/main/resources",
+        includes: "TAXII_XMLMessage*.xsd", classpath: configurations.compile.asPath,
+        style: 'src/main/build/iso-schematron-xslt2/ExtractSchFromXSD-2.xsl')
+}
+
+task compileSchematron << {
+    ant.xslt (destdir: "src/main/resources", extension: "-compiled.xsl", basedir: srcGeneratedDir,
+        includes: "TAXII_XMLMessage*.sch", classpath: configurations.compile.asPath,
+        style: 'src/main/build/iso-schematron-xslt2/iso_schematron_message_xslt2.xsl')    
 }
 
 // fix dependencies so that generate gets called before compileJava
 compileJava.dependsOn generate
+
+compileSchematron.dependsOn extractSchematron

@@ -149,13 +149,10 @@ public class HttpClient {
             postRequest.addHeader("User-Agent", "java-taxii.httpclient");
             postRequest.addHeader(HEADER_CONTENT_TYPE, "application/xml");
             postRequest.addHeader(HEADER_ACCEPT, "application/xml");
-// Assume the client will always send requests.
-// This is kind of dumb, but determining otherwise with all the dynamic class
-
-//            if (taxiiXml.isRequestMessage(message)) {
+            if (taxiiXml.isRequestMessage(message)) {
                 // Should be present for requests. Should NOT be present for responses.
                 postRequest.addHeader(HEADER_X_TAXII_ACCEPT, msgVersion);
-//            }
+            }
             postRequest.addHeader(HEADER_X_TAXII_CONTENT_TYPE, msgVersion);
             postRequest.addHeader(HEADER_X_TAXII_SERVICES, taxiiXml.getServiceVersion());
 
