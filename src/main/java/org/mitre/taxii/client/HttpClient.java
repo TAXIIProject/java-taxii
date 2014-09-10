@@ -155,6 +155,14 @@ public class HttpClient {
             }
             postRequest.addHeader(HEADER_X_TAXII_CONTENT_TYPE, msgVersion);
             postRequest.addHeader(HEADER_X_TAXII_SERVICES, taxiiXml.getServiceVersion());
+            
+            // validate the scheme (HTTP or HTTPS)
+            if (null == postRequest.getURI().getScheme()) {
+                throw new IOException("Invalid service URI.");
+            } else if (!(postRequest.getURI().getScheme().toLowerCase().equals(SCHEME_HTTP) || 
+                    postRequest.getURI().getScheme().toLowerCase().equals(SCHEME_HTTPS))) {
+                throw new IOException("Invalid service URI. Only 'http' or 'https' are supported");                
+            }
 
             if (postRequest.getURI().getScheme().equals(SCHEME_HTTPS)) {
                 postRequest.addHeader(HEADER_X_TAXII_PROTOCOL, Versions.VID_TAXII_HTTPS_10);
