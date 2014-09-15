@@ -118,7 +118,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                 .withCollectionName("collection1")
                                                 .withSubscriptionParameters(sp1)
                                                 .withPushParameters(pp1);
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);                
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);                
     }
     
     @Test
@@ -136,7 +136,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                                             .withContent(query2)
                                                                 )
                                                 );
-        TestUtil.roundTripMessage(taxiiXml, smr2, false);                        
+        TestUtil.roundTripMessage(taxiiXml, smr2, false, true);                        
     }
     
     @Test
@@ -148,7 +148,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withSubscriptionParameters(
                                                             factory.createSubscriptionParametersType()
                                                     );
-        TestUtil.roundTripMessage(taxiiXml, smr3, false);                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr3, false, true);                                                                                    
     }
     
     @Test
@@ -161,7 +161,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withSubscriptionParameters(
                                                             factory.createSubscriptionParametersType()
                                                     );
-        TestUtil.roundTripMessage(taxiiXml, smr4, false);                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr4, false, true);                                                                                    
     }
     
     @Test
@@ -171,7 +171,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withAction(CollectionActionEnum.STATUS)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr5, false);                                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr5, false, true);                                                                                                    
     }
 
     @Test
@@ -180,7 +180,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withMessageId("SubsReq06")
                                                     .withAction(CollectionActionEnum.STATUS)
                                                     .withCollectionName("collection2");
-        TestUtil.roundTripMessage(taxiiXml, smr6, false);                                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr6, false, true);                                                                                                    
     }
 
     @Test
@@ -190,7 +190,7 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withAction(CollectionActionEnum.PAUSE)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr7, false);                                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr7, false, true);                                                                                                    
     }
 
     @Test
@@ -200,6 +200,6 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withAction(CollectionActionEnum.RESUME)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr8, false);                                                                                                    
+        TestUtil.roundTripMessage(taxiiXml, smr8, false, true);                                                                                                    
     }    
 }

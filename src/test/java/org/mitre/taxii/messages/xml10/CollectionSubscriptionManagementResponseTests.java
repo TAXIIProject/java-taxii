@@ -97,7 +97,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withMessage("Hullo!")
                 .withSubscriptions(sub1, sub2, sub3);
         
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);        
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);        
     }
     
     @Test
@@ -107,7 +107,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withFeedName("Feed01")
                 .withInResponseTo("123");
         
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);        
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);        
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withInResponseTo("123")
                 .withSubscriptions(sub1, sub2, sub3);
         
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);        
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);        
     }
 
     @Test
@@ -129,7 +129,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withInResponseTo("123")
                 .withMessage("Hullo!");
         
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);        
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);        
     }
     
     @Test
@@ -145,7 +145,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withInResponseTo("123")
                 .withSubscriptions(sub);
         
-        TestUtil.roundTripMessage(taxiiXml, smr1, false);                        
+        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);                        
     }
     
 }

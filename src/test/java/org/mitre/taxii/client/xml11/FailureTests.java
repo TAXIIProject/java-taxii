@@ -42,7 +42,7 @@ public class FailureTests {
     @Test
     public void missingEndpointDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
         org.mitre.taxii.client.HttpClient taxiiClient = new HttpClient();
-        final String serverUrl = "http://127.0.0.1:8000/services/discover/"; // URL does not exist.
+        final String serverUrl = "http://127.0.0.1:8080/services/discover/"; // URL does not exist.
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -58,6 +58,7 @@ public class FailureTests {
         assertTrue("Received Status Message", (responseObj instanceof StatusMessage));
     }
 
+/*    
     @Test
     public void failBasicAuthDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
         
@@ -109,7 +110,7 @@ public class FailureTests {
                 .setSSLSocketFactory(sslsf)
                 .build();        
         */
-        
+/*        
         HttpClient taxiiClient = new HttpClient();
 
         // Prepare the message to send.
@@ -128,5 +129,5 @@ public class FailureTests {
 
         assertTrue("Received Status Message", (responseObj instanceof StatusMessage));
     }
-    
+*/    
 }

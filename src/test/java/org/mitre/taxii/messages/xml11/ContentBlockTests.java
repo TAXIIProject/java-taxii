@@ -47,7 +47,7 @@ public class ContentBlockTests {
                                                 .withContent(stix)
                                     );
                         
-        TestUtil.roundTripObject(taxiiXml, cb);
+        TestUtil.roundTripObject(taxiiXml, cb, false);
     }
     
     @Test
@@ -61,7 +61,7 @@ public class ContentBlockTests {
                                                     .withContent("<Something thats not XML")
                                     );
                         
-        TestUtil.roundTripObject(taxiiXml, cb);        
+        TestUtil.roundTripObject(taxiiXml, cb, true);        
     }
     
     @Test
@@ -75,7 +75,7 @@ public class ContentBlockTests {
                                                     .withContent("Something thats not XML <xml/>")
                                     );
         
-        TestUtil.roundTripObject(taxiiXml, cb);        
+        TestUtil.roundTripObject(taxiiXml, cb, true);        
     }
 
     @Test
@@ -89,7 +89,7 @@ public class ContentBlockTests {
                                                     .withContent("abcdef")
                                     );
         
-        TestUtil.roundTripObject(taxiiXml, cb);        
+        TestUtil.roundTripObject(taxiiXml, cb, true);        
     }
     
 }

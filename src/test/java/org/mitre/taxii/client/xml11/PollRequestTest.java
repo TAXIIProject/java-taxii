@@ -31,7 +31,7 @@ public class PollRequestTest {
     @Test
     public void pollRequest() throws URISyntaxException, JAXBException, IOException {
         HttpClient taxiiClient = new HttpClient();
-        final URI serviceUri = new URI("http://127.0.0.1:8000/services/poll/");
+        final URI serviceUri = new URI("http://127.0.0.1:8080/services/poll/");
         
         PollRequest pr = factory.createPollRequest()
                         .withMessageId(Messages.generateMessageId())

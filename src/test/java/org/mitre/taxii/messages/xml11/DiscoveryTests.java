@@ -143,7 +143,7 @@ public class DiscoveryTests {
                                         .withMessageId("DR02")
                                         .withInResponseTo("TheSecondIdentifier")
                                         .withServiceInstances(si1, si3, si5);
-        TestUtil.roundTripMessage(taxiiXml, dr02, false); // Don't pretty print. It causes problems with the query info.
+        TestUtil.roundTripMessage(taxiiXml, dr02, false, true); // Don't pretty print. It causes problems with the query info.
     }
     
     @Test
@@ -152,7 +152,7 @@ public class DiscoveryTests {
                                         .withMessageId("DR03")
                                         .withInResponseTo("TheSecondIdentifier")
                                         .withServiceInstances(si2, si4);
-        TestUtil.roundTripMessage(taxiiXml, dr03, false); // Don't pretty print. It causes problems with the query info.        
+        TestUtil.roundTripMessage(taxiiXml, dr03, false, true); // Don't pretty print. It causes problems with the query info.        
     }
     
     @Test
@@ -161,7 +161,7 @@ public class DiscoveryTests {
                                         .withMessageId("DR04")
                                         .withInResponseTo("TheSecondIdentifier")
                                         .withServiceInstances(si1, si2, si4);
-        TestUtil.roundTripMessage(taxiiXml, dr04, false);  // Don't pretty print. It causes problems with the query info.                
+        TestUtil.roundTripMessage(taxiiXml, dr04, false, true);  // Don't pretty print. It causes problems with the query info.                
     }
 
     @Test
@@ -170,7 +170,7 @@ public class DiscoveryTests {
                                         .withMessageId("DR05")
                                         .withInResponseTo("TheSecondIdentifier")
                                         .withServiceInstances(si1, si2, si3, si4, si5);
-        TestUtil.roundTripMessage(taxiiXml, dr05, false);  // Don't pretty print. It causes problems with the query info.                
+        TestUtil.roundTripMessage(taxiiXml, dr05, false, true);  // Don't pretty print. It causes problems with the query info.                
     }
 
     @Test

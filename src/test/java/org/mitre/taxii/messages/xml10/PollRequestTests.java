@@ -106,7 +106,7 @@ public class PollRequestTests {
                                 .withExclusiveBeginTimestamp(beginTime)
                                 .withInclusiveEndTimestamp(endTime);
 
-        TestUtil.roundTripMessage(taxiiXml, pr3, false);                        
+        TestUtil.roundTripMessage(taxiiXml, pr3, false, true);                        
     }
     
     @Test
@@ -134,6 +134,6 @@ public class PollRequestTests {
                                 .withMessageId("05")
                                 .withFeedName("Feed05")
                                 .withExclusiveBeginTimestamp(startTime);
-        TestUtil.roundTripMessage(taxiiXml, pr5, false);                                               
+        TestUtil.roundTripMessage(taxiiXml, pr5, false, true);                                               
     }    
 }

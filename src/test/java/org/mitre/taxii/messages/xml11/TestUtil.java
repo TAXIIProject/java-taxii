@@ -3,9 +3,6 @@ package org.mitre.taxii.messages.xml11;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.ListIterator;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -34,7 +31,7 @@ public class TestUtil {
      * @throws SAXException
      * @throws IOException 
      */
-    public static void roundTripObject(TaxiiXml taxiiXml, Object obj) throws JAXBException, SAXException, IOException {
+    public static void roundTripObject(TaxiiXml taxiiXml, Object obj, boolean compareObject) throws JAXBException, SAXException, IOException {
         final Marshaller m = taxiiXml.createMarshaller(false); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         
@@ -64,13 +61,16 @@ public class TestUtil {
         // do the XML-object-XML round trip comparison first because it's
         // easier to debug
         assertEquals("round tripping from XML to object back to XML failed",
-                xmlString, xmlString2);        
-        assertEquals("round tripping from object to XML back to object failed! ",
-                obj, objFromXml);
+                xmlString, xmlString2);
+        
+        if(compareObject) {
+            assertEquals("round tripping from object to XML back to object failed! ",
+                    obj, objFromXml);
+        }        
     }
     
     public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg) throws JAXBException, SAXException, IOException {
-        roundTripMessage(taxiiXml, msg, true);
+        roundTripMessage(taxiiXml, msg, true, true);
     }
     
     /**
@@ -84,7 +84,7 @@ public class TestUtil {
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
      */
-    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg, boolean prettyPrint) throws JAXBException, SAXException, IOException {
+    public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg, boolean prettyPrint, boolean compareObject) throws JAXBException, SAXException, IOException {
 
         final Marshaller m = taxiiXml.createMarshaller(prettyPrint); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
@@ -123,8 +123,12 @@ public class TestUtil {
         // easier to debug
         assertEquals("round tripping from XML to object back to XML failed",
                 xmlString, xmlString2);
+        
+        if (compareObject) {
         assertEquals("round tripping from object to XML back to object failed! ",
                 msg, msgFromXml);
+        }
+        
     }    
     
     public static void assertValid(TaxiiXml taxiiXml, MessageType msg) 

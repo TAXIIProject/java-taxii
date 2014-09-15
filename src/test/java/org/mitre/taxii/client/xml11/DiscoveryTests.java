@@ -51,7 +51,7 @@ public class DiscoveryTests {
         
         HttpClient taxiiClient = new HttpClient();
         
-        final String serverUrl = "http://127.0.0.1:8000/services/discovery/";
+        final String serverUrl = "http://127.0.0.1:8080/services/discovery/";
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -68,6 +68,7 @@ public class DiscoveryTests {
         assertTrue("Received Discovery Response", (responseObj instanceof DiscoveryResponse));
     }
 
+    /*
     @Test
     public void basicAuthDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
         
@@ -105,7 +106,7 @@ public class DiscoveryTests {
 
         // Prepare the TLS objects necessary for SSL connection.
         KeyStore trustStore  = KeyStore.getInstance(KeyStore.getDefaultType());
-        trustStore.load(null, "nopassword".toCharArray());
+        trustStore.load(null);
 
         // Trust own CA and all self-signed certs
         SSLContext sslcontext = SSLContexts.custom()
@@ -138,6 +139,7 @@ public class DiscoveryTests {
 
         assertTrue("Received Discovery Response", (responseObj instanceof DiscoveryResponse));
     }
+    */
         
     @Test
     public void proxyDiscoveryTest() throws IOException, JAXBException, URISyntaxException {

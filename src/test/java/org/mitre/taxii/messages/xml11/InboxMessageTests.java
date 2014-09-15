@@ -118,7 +118,7 @@ public class InboxMessageTests {
                                 ))
                                 .withContentBlocks(cb001, cb002);                                               
         
-        TestUtil.roundTripMessage(taxiiXml, inbox, false);                                       
+        TestUtil.roundTripMessage(taxiiXml, inbox, false, false); // Do not pretty print, and do not compare the object - only the string representation.
     }
     
     @Test
@@ -143,7 +143,7 @@ public class InboxMessageTests {
                                 .withRecordCount(factory.createRecordCountType().withValue(BigInteger.ONE)) //NOTE: Python test does not add the record count and generates an invalid message.
                                 .withContentBlocks(cb002);
 
-        TestUtil.roundTripMessage(taxiiXml, inbox, false);                                                       
+        TestUtil.roundTripMessage(taxiiXml, inbox, false, false); // Do not pretty print, and do not compare the object - only the string representation.
     }
     
 }

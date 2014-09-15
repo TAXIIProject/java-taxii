@@ -104,7 +104,7 @@ public class InboxMessageTests {
                                 .withSourceSubscription(si)
                                 .withContentBlocks(cb001, cb002);                                               
         
-        TestUtil.roundTripMessage(taxiiXml, inbox, false);                                       
+        TestUtil.roundTripMessage(taxiiXml, inbox, false, false);                                       
     }
     
     @Test
@@ -135,7 +135,7 @@ public class InboxMessageTests {
                                 .withSourceSubscription(si)
                                 .withContentBlocks(cb002);
 
-        TestUtil.roundTripMessage(taxiiXml, inbox, false);                                                       
+        TestUtil.roundTripMessage(taxiiXml, inbox, false, false);                                                       
     }
     
 }

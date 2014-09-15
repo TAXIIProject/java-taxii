@@ -6,11 +6,8 @@ import java.net.URISyntaxException;
 import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
-import org.mitre.taxii.query.DefaultQueryXml;
 import org.mitre.taxii.Versions;
 import org.mitre.taxii.query.DefaultQuery;
-import org.mitre.taxii.query.DefaultQueryInfo;
-import org.mitre.taxii.query.TargetingExpressionInfoType;
 import org.xml.sax.SAXException;
 
 /**
@@ -104,7 +101,7 @@ public class DiscoveryTests {
                                         .withMessageId("02")
                                         .withInResponseTo("01")
                                         .withServiceInstances(si1, si3);
-        TestUtil.roundTripMessage(taxiiXml, dr02, false); // Don't pretty print. It causes problems with the query info.
+        TestUtil.roundTripMessage(taxiiXml, dr02, false, true); // Don't pretty print. It causes problems with the query info.
     }
     
     @Test
@@ -113,7 +110,7 @@ public class DiscoveryTests {
                                         .withMessageId("03")
                                         .withInResponseTo("02")
                                         .withServiceInstances(si2, si4);
-        TestUtil.roundTripMessage(taxiiXml, dr03, false); // Don't pretty print. It causes problems with the query info.        
+        TestUtil.roundTripMessage(taxiiXml, dr03, false, true); // Don't pretty print. It causes problems with the query info.        
     }
     
     @Test
@@ -122,7 +119,7 @@ public class DiscoveryTests {
                                         .withMessageId("04")
                                         .withInResponseTo("03")
                                         .withServiceInstances(si1, si2, si4);
-        TestUtil.roundTripMessage(taxiiXml, dr04, false);  // Don't pretty print. It causes problems with the query info.                
+        TestUtil.roundTripMessage(taxiiXml, dr04, false, true);  // Don't pretty print. It causes problems with the query info.                
     }
 
     @Test
@@ -131,6 +128,6 @@ public class DiscoveryTests {
                                         .withMessageId("05")
                                         .withInResponseTo("04")
                                         .withServiceInstances(si1, si2, si3, si4);
-        TestUtil.roundTripMessage(taxiiXml, dr05, false);  // Don't pretty print. It causes problems with the query info.                
+        TestUtil.roundTripMessage(taxiiXml, dr05, false, true);  // Don't pretty print. It causes problems with the query info.                
     }
 }
