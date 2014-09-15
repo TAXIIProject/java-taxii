@@ -1,18 +1,45 @@
-package org.mitre.taxii.client.xml11;
+package org.mitre.taxii.client.xml10;
+/*
+Copyright (c) 2014, The MITRE Corporation
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of The MITRE Corporation nor the 
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ */
 
 import javax.net.ssl.SSLException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.mitre.taxii.client.HttpResponseHandler;
-import org.mitre.taxii.messages.xml11.MessageType;
-import org.mitre.taxii.messages.xml11.ObjectFactory;
-import org.mitre.taxii.messages.xml11.StatusMessage;
-import org.mitre.taxii.messages.xml11.StatusTypeEnum;
+import org.mitre.taxii.messages.xml10.MessageType;
+import org.mitre.taxii.messages.xml10.ObjectFactory;
+import org.mitre.taxii.messages.xml10.StatusMessage;
+import org.mitre.taxii.messages.xml10.StatusTypeEnum;
 
 /**
- *
+ * This class handles generating StatusMessages of the proper TAXII Version when
+ * an error occurs while handling the response from the TAXII server.
+ * 
  * @author jasenj1
  */
-public class ResponseHandler extends HttpResponseHandler {
+public class ResponseErrorHandler extends org.mitre.taxii.client.HttpResponseErrorHandler {
     /**
      * We received a response that did not contain the proper HEADER_X_TAXII_CONTENT_TYPE
      * value. Make up an appropriate Status Message.
@@ -23,9 +50,6 @@ public class ResponseHandler extends HttpResponseHandler {
      */
     @Override
     public StatusMessage buildStatusCodeStatusMessage(CloseableHttpResponse response, Object msgIn) {
-        if (!(msgIn instanceof MessageType)) {
-            return null; // Probably ought to throw an exception here.
-        }
         String msgId = ((MessageType)msgIn).getMessageId();
         ObjectFactory factory = new ObjectFactory();
         StatusMessage msg = factory.createStatusMessage()
@@ -75,6 +99,9 @@ public class ResponseHandler extends HttpResponseHandler {
      * Unfortunately, Java does not give us access to the TLS Alert, so we'll 
      * just make all the Statuses UNAUTHORIZED and return the exception's message.
      * 
+     * @param ex
+     * @param message
+     * @return 
      */ 
     @Override
     public StatusMessage buildSSLErrorStatusMessage(SSLException ex, Object message) {
@@ -82,7 +109,7 @@ public class ResponseHandler extends HttpResponseHandler {
             return null; // Probably ought to throw an exception here.
         }
         String msgId = ((MessageType)message).getMessageId();
-
+        
         ObjectFactory factory = new ObjectFactory();
         StatusMessage msg = factory.createStatusMessage()
                                 .withInResponseTo(msgId)

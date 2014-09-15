@@ -1,11 +1,35 @@
 package org.mitre.taxii.client;
+/*
+Copyright (c) 2014, The MITRE Corporation
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of The MITRE Corporation nor the 
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ */
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,6 +57,20 @@ import org.mitre.taxii.messages.TaxiiXml;
  * includes serializing TAXII Messages, managing the connection to the remote
  * end point, parsing and unmarshaling the responses and returning a TAXII
  * Message back to the user.
+ * 
+ * There are two important components of this class.
+ * 1. An Apache Components HttpClient. This manages the HTTP protocol interaction.
+ * The default constructor will create a simple, pre-configured HttpClient based
+ * on the system properties. If you wish to use an HttpClient configured to use
+ * an explicit proxy, or a security certificate, you will need to construct and 
+ * configure it, then apply it to the TAXII HttpClient.
+ * 
+ * 2. One or more TaxiiXml objects. These objects understand the TAXII JAXB environment.
+ * They are configured to handle parsing and generating a certain version of TAXII
+ * messages. There can be only one TaxiiXml object per TAXII version.
+ * The default constructor will create TaxiiXml objects for TAXII 1.0 and 1.1.
+ * You may, for example, want to provide a TaxiiXml object configured to handle 
+ * STIX content blocks.
  *
  * @author jasenj1
  */
@@ -56,8 +94,8 @@ public class HttpClient {
     private final HashMap<String, String> packageToVersionMap = new HashMap<>();
 
     /**
-     * Create an HttpClient that uses a specific TaxiiXmlInterface object. NOTE: This
-     * will prevent the HttpClient from handling other TAXII versions.
+     * Create a client that uses a specific TaxiiXml object and a pre-configured
+     * Apache HttpClient.
      *
      * @param taxiiXml
      * @param httpClient
@@ -69,9 +107,9 @@ public class HttpClient {
     }
 
     /**
-     * Create an HttpClient with a configured Apache HttpClient. For example,
- one configured to use a proxy or SSL. This will also create TaxiiXmlInterface
- objects that handle 1.0 and 1.1.
+     * Create a client with a pre-configured Apache HttpClient. For example,
+     * one configured to use a proxy or SSL.
+     * TaxiiXml objects that handle 1.0 and 1.1 will be created.
      *
      * @param httpClient
      */
@@ -113,7 +151,9 @@ public class HttpClient {
      *
      * @param uri
      * @param message
-     * @return
+     * @return resultObj
+     *              Either a TAXII response object of the same version as was passed in
+     *              or "null" if parsing fails in a way that does not throw an exception.
      * @throws JAXBException
      * @throws UnsupportedEncodingException
      * @throws IOException
@@ -123,6 +163,7 @@ public class HttpClient {
         // Figure out the version of the message.
         String msgPackage = message.getClass().getPackage().getName();
 
+        // Get the appropriate TAXII message environment.
         String msgVersion = packageToVersionMap.get(msgPackage);
         TaxiiXml taxiiXml = taxiiXmlMap.get(msgVersion);
 
@@ -133,14 +174,16 @@ public class HttpClient {
          System.out.println("TaxiiXmlInterface version = " + taxiiXml.getTaxiiVersion());
         */
 
+        // Couldn't find a handler for the message.
          if (null == taxiiXml) {
             throw new JAXBException("Message is unknown TAXII version.");
         }
 
-        // we now have a TaxiiXmlInterface that knows how to handle the message we receieved.
+        // we now have a TaxiiXml that knows how to handle the message we receieved.
         String resultStr = null;
         Object resultObj = null;
 
+        // Make the call to the server.
         try {
             // The TAXII messages must be sent as POST.
             HttpPost postRequest = new HttpPost(uri);
@@ -199,10 +242,11 @@ public class HttpClient {
                 }
 
                 if (!contentFound) { // Response is not a TAXII Message we understand.
-                    // go create a TAXII status message base on what we got.
+                    // go create a TAXII status message based on what we got.
                     resultObj = taxiiXml.getResponseHandler().buildStatusCodeStatusMessage(response, message);
-                } else {
+                } else { // We should know how to handle the response.
 
+                    // Extract the response body.
                     HttpEntity respEntity = response.getEntity();
                     resultStr = EntityUtils.toString(respEntity);
 
@@ -226,6 +270,11 @@ public class HttpClient {
         return resultObj;
     }
 
+    /**
+     * Populate the map that maps package names to TAXII versions.
+     * The package of the TaxiiXml classes is used to determine which version of 
+     * TAXII they understand.
+     */
     private void populatePackageToVersionMap() {
         // Populate the package to version map so we can figure out what version message objects are.
         Set<Entry<String, TaxiiXml>> entries = taxiiXmlMap.entrySet();
@@ -236,24 +285,25 @@ public class HttpClient {
             packageToVersionMap.put(packageName, version);
         }
     }
-    
-    private void populateResponseHandlerMap(String taxiiPackage) {
-        try {
-            // Use reflection to instantiate the proper HttpResponseHandler.
-            Class rhClass = Class.forName(taxiiPackage + ".ResponseHandler");
-            Constructor rhConstructor = rhClass.getConstructor();
-            HttpResponseHandler responseHandler = (HttpResponseHandler)rhConstructor.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            // TODO: This is bad!
-        }
-
-    }
-        
+            
     // ========= Getters and Setters. ==============
+    
+    /**
+     * Get the Apache Components HTTP Client in use by this object.
+     *
+     * @return 
+     */
     public CloseableHttpClient getHttpclient() {
         return httpClient;
     }
 
+    /**
+     * Set the Apache Components HTTP Client.
+     * This method is very useful when needing an HttpClient configured to use a
+     * proxy or SSL certificates or other authorization technique.
+     * 
+     * @param httpclient 
+     */
     public void setHttpclient(CloseableHttpClient httpclient) {
         this.httpClient = httpclient;
     }

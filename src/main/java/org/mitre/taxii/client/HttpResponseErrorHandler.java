@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml10;
+package org.mitre.taxii.client;
 /*
 Copyright (c) 2014, The MITRE Corporation
 All rights reserved.
@@ -26,28 +26,45 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-import java.util.List;
-import org.mitre.taxii.client.HttpResponseErrorHandler;
-import org.mitre.taxii.client.xml10.ResponseErrorHandler;
+import java.io.IOException;
+import javax.net.ssl.SSLException;
+import org.apache.http.Header;
+import org.apache.http.HeaderIterator;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
 
 /**
- * Version specific implementation of TaxiiXml abstract class.
  * 
  * @author jasenj1
  */
-public class TaxiiXml extends org.mitre.taxii.messages.TaxiiXml {
-
-    private HttpResponseErrorHandler responseHandler = new ResponseErrorHandler();
+public abstract class HttpResponseErrorHandler {
     
-    public TaxiiXml(String taxiiVersion, String serviceVersion, String taxiiPackage, List<String> otherPackages, String schemaLocation, String validatorLocation) {
-        super(taxiiVersion, serviceVersion, taxiiPackage, otherPackages, schemaLocation, validatorLocation);
+    public abstract Object buildStatusCodeStatusMessage(CloseableHttpResponse response, Object message);
+    public abstract Object buildSSLErrorStatusMessage(SSLException ex, Object message);
+    
+    /**
+     * Render the headers and the response content as a string.
+     * This could include more things such as the status code.
+     * 
+     * @param response
+     * @return 
+     */
+     public String buildResponseStr(CloseableHttpResponse response) {
+        StringBuilder sb = new StringBuilder();
+        
+        HeaderIterator hi = response.headerIterator();
+        while (hi.hasNext()) {
+            Header header = hi.nextHeader();
+            sb.append(header.getName()).append(": ").append(header.getValue()).append("\r\n");                        
+        }
+        sb.append("\r\n");
+        try {
+            sb.append(EntityUtils.toString(response.getEntity()));            
+        } catch (IOException | IllegalStateException ex) {
+            // Don't care
+        }
+        
+        return sb.toString();
     }
     
-    public boolean isRequestMessage(Object message) {
-        return (message instanceof RequestMessageType);
-    }
-    
-    public HttpResponseErrorHandler getResponseHandler() {
-        return responseHandler;
-    }    
 }

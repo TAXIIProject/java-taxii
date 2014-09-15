@@ -51,7 +51,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.mitre.taxii.Versions;
-import org.mitre.taxii.client.HttpResponseHandler;
+import org.mitre.taxii.client.HttpResponseErrorHandler;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
 import org.mitre.taxii.util.Iterators;
@@ -87,7 +87,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *  
  * <pre>
  try {
-   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   TaxiiXml taxiiXml = new TaxiiXml();
    Validation results = taxiiXml.validateFast(msg, true);
    if (results.hasWarnings()) {
      System.out.print("Validation warnings: ");
@@ -111,7 +111,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   TaxiiXml taxiiXml = new TaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateFast(msg, true);
@@ -136,7 +136,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   TaxiiXml taxiiXml = new TaxiiXml();
    Validation results = taxiiXml.validateAll(msg, true);
    if (results.isSuccess()) {
      if (results.hasWarnings()) {
@@ -166,7 +166,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXmlImpl taxiiXml = new TaxiiXmlImpl();
+   TaxiiXml taxiiXml = new TaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateAll(msg, true);
@@ -195,7 +195,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author Jonathan W. Cranford & Jasen Jacobsen
  */
-// TODO copy the above code to a driver to test it out 
 public abstract class TaxiiXml implements Versions {
         
     private final JAXBContext jaxbContext;
@@ -209,7 +208,15 @@ public abstract class TaxiiXml implements Versions {
      * Constructor that takes additional JAXB packages, used in initializing 
      * the JAXB Context.
      * 
-     * @param additionalJaxbPackages
+     * For internal use. Use a TaxiiXmlFactory of the proper version to create
+     * a TaxiiXml instance.
+     * 
+     * @param taxiiVersion
+     * @param serviceVersion
+     * @param taxiiPackage
+     * @param otherPackages
+     * @param schemaLocation
+     * @param validatorLocation
      * @throws RuntimeException
      *              if a deployment error prevents the underlying JAXBContext
      *              from being created, the Schema from being parsed, or 
@@ -229,7 +236,7 @@ public abstract class TaxiiXml implements Versions {
     
     /**
      * Initialize the JAXB Context with known contexts that every instance of
- TaxiiXmlImpl will need to know.
+     * TaxiiXmlImpl will need to know.
      * 
      */
     private static List<String> initializeJaxbContextEntries() {
@@ -494,6 +501,6 @@ public abstract class TaxiiXml implements Versions {
         return this.serviceVersion;               
     }    
     
-    public abstract HttpResponseHandler getResponseHandler();
+    public abstract HttpResponseErrorHandler getResponseHandler();
     public abstract boolean isRequestMessage(Object message);
 }
