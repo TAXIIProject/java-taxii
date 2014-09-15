@@ -162,6 +162,7 @@
    <xsl:template match="/">
       <xsl:apply-templates select="/" mode="M1"/>
       <xsl:apply-templates select="/" mode="M2"/>
+      <xsl:apply-templates select="/" mode="M3"/>
    </xsl:template>
 
    <!--SCHEMATRON PATTERNS-->
@@ -172,7 +173,7 @@
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail"
-                 priority="1000"
+                 priority="1003"
                  mode="M1">
 
 		<!--ASSERT -->
@@ -184,11 +185,62 @@
                          (. castable as xs:dateTime)</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
+      <xsl:apply-templates select="*" mode="M1"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Status_Message[@status_type = 'UNSUPPORTED_MESSAGE']/taxii:Status_Detail"
+                 priority="1002"
+                 mode="M1">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            Status_Detail must contain a space-separated list of Message Binding IDs indicating supported message bindings.
+                         (every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI)</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M1"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Status_Message[@status_type = 'UNSUPPORTED_CONTENT']/taxii:Status_Detail"
+                 priority="1001"
+                 mode="M1">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            Status_Detail must contain a space-separated list of Content Binding IDs indicating supported content bindings.
+                         (every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI)</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M1"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Status_Message[@status_type = 'UNSUPPORTED_PROTOCOL']/taxii:Status_Detail"
+                 priority="1000"
+                 mode="M1">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            Status_Detail must contain a space-separated list of Protocol Binding IDs indicating supported protocol bindings.
+                         (every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI)</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M1"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M1"/>
    <xsl:template match="@*|node()" priority="-2" mode="M1">
-      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/>
+      <xsl:apply-templates select="*" mode="M1"/>
    </xsl:template>
 
    <!--PATTERN Content_Binding only present when @service_type=INBOX. XML Binding Spec section 3.3. -->
@@ -206,10 +258,51 @@
             <xsl:message>If Content_Binding is present, @service_type SHOULD be "INBOX". (../@service_type='INBOX')</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
+      <xsl:apply-templates select="*" mode="M2"/>
    </xsl:template>
    <xsl:template match="text()" priority="-1" mode="M2"/>
    <xsl:template match="@*|node()" priority="-2" mode="M2">
-      <xsl:apply-templates select="*|comment()|processing-instruction()" mode="M2"/>
+      <xsl:apply-templates select="*" mode="M2"/>
+   </xsl:template>
+
+   <!--PATTERN Subscription Management Request Rules-->
+
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE']"
+                 priority="1001"
+                 mode="M3">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="@subscription_id"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            @subscription_id MUST be present if the action is UNSUBSCRIBE.
+                         (@subscription_id)</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M3"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[not(@action='UNSUBSCRIBE')]"
+                 priority="1000"
+                 mode="M3">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not(@subscription_id)"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            @subscription_id SHOULD not be present if the action is not UNSUBSCRIBE.
+                         (not(@subscription_id))</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M3"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M3"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M3">
+      <xsl:apply-templates select="*" mode="M3"/>
    </xsl:template>
 </xsl:stylesheet>
