@@ -33,7 +33,7 @@ import java.util.UUID;
  * 
  * @author Jonathan W. Cranford
  */
-public final class Messages {
+public abstract class Messages {
     
     /**
      * Generates a random message id.
@@ -44,4 +44,5 @@ public final class Messages {
         return "urn:uuid:" + UUID.randomUUID().toString();
     }
 
+    private Messages() {}
 }

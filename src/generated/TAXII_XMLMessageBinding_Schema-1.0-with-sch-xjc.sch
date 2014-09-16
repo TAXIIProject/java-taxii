@@ -16,6 +16,21 @@
                             A Status Message of type RETRY should have a Status_Detail containing a timestamp.
                         </sch:assert>
                     </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_MESSAGE']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Message Binding IDs indicating supported message bindings.
+                        </sch:assert>
+                    </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_CONTENT']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Content Binding IDs indicating supported content bindings.
+                        </sch:assert>
+                    </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_PROTOCOL']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Protocol Binding IDs indicating supported protocol bindings.
+                        </sch:assert>
+                    </sch:rule>
                 </sch:pattern>
    <sch:pattern xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1"
                 xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1"
@@ -25,5 +40,25 @@
                                 <sch:assert test="../@service_type='INBOX'">If Content_Binding is present, @service_type SHOULD be "INBOX".</sch:assert>
                             </sch:rule>                                                           
                         </sch:pattern>
+   <sch:pattern xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1"
+                xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1"
+                xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                    <sch:title>Subscription Management Request Rules</sch:title>
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE']">
+                        <sch:assert test="@subscription_id">
+                            @subscription_id MUST be present if the action is UNSUBSCRIBE.
+                        </sch:assert>
+                    </sch:rule>                    
+                    <sch:rule context="/taxii:Subscription_Management_Request[not(@action='UNSUBSCRIBE')]">
+                        <sch:assert test="not(@subscription_id)">
+                            @subscription_id SHOULD not be present if the action is not UNSUBSCRIBE.
+                        </sch:assert>
+                    </sch:rule>                    
+                    <sch:rule context="/taxii:Subscription_Management_Request[not(@action='SUBSCRIBE')]">
+                        <sch:assert test="not(Push_Parameters)">
+                            For values of @action other than SUBSCRIBE senders SHOULD NOT include Push_Parameters.
+                        </sch:assert>
+                    </sch:rule>                    
+                </sch:pattern>
    <sch:diagnostics/>
 </sch:schema>

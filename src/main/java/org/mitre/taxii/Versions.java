@@ -32,31 +32,33 @@ package org.mitre.taxii;
  * 
  * @author Jonathan W. Cranford
  */
-public interface Versions {
+public abstract class Versions {
 
     /* ### TAXII Version IDs ### */
 
     /**  Version ID for the TAXII Services Specification 1.0 */
-    String VID_TAXII_SERVICES_10 = "urn:taxii.mitre.org:services:1.0";
+    public static final String VID_TAXII_SERVICES_10 = "urn:taxii.mitre.org:services:1.0";
     
     /** Version ID for the TAXII Services Specification 1.1 */
-    String VID_TAXII_SERVICES_11 = "urn:taxii.mitre.org:services:1.1";
+    public static final String VID_TAXII_SERVICES_11 = "urn:taxii.mitre.org:services:1.1";
     
     /** Version ID for the TAXII XML Message Binding Specification 1.0 */
-    String VID_TAXII_XML_10 = "urn:taxii.mitre.org:message:xml:1.0";
+    public static final String VID_TAXII_XML_10 = "urn:taxii.mitre.org:message:xml:1.0";
     
     /** Version ID for the TAXII XML Message Binding Specification 1.1 */
-    String VID_TAXII_XML_11 = "urn:taxii.mitre.org:message:xml:1.1";
+    public static final String VID_TAXII_XML_11 = "urn:taxii.mitre.org:message:xml:1.1";
     
     /** Version ID for the TAXII HTTP Protocol Binding Specification 1.0 */
-    String VID_TAXII_HTTP_10 = "urn:taxii.mitre.org:protocol:http:1.0";
+    public static final String VID_TAXII_HTTP_10 = "urn:taxii.mitre.org:protocol:http:1.0";
     
     /** Version ID for the TAXII HTTPS Protocol Binding Specification 1.0 */
-    String VID_TAXII_HTTPS_10 = "urn:taxii.mitre.org:protocol:https:1.0";
+    public static final String VID_TAXII_HTTPS_10 = "urn:taxii.mitre.org:protocol:https:1.0";
 
     /* # Third Party Version IDs */
     
     /** Version ID for the CERT EU JSON Message Binding */
-    String VID_CERT_EU_JSON_10 = "urn:cert.europa.eu:message:json:1.0";
+    public static final String VID_CERT_EU_JSON_10 = "urn:cert.europa.eu:message:json:1.0";
+    
+    private Versions() {}
 
 }

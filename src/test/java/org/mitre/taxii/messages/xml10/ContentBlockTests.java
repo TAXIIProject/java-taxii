@@ -40,7 +40,7 @@ public class ContentBlockTests {
         
         ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
-                                        ContentBindings.CB_STIX_XML_10
+                                        ContentBindings.CB_STIX_XML_10.toString()
                                     )
                                     .withContent(
                                         factory.createAnyMixedContentType()
@@ -54,7 +54,7 @@ public class ContentBlockTests {
     public void contentBlock2() throws JAXBException, SAXException, IOException {
         ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
-                                            ContentBindings.CB_STIX_XML_10
+                                            ContentBindings.CB_STIX_XML_10.toString()
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()
@@ -68,7 +68,7 @@ public class ContentBlockTests {
     public void contentBlock3() throws JAXBException, SAXException, IOException {
         ContentBlock cb = factory.createContentBlock()                                    
                                     .withContentBinding(
-                                            ContentBindings.CB_STIX_XML_10
+                                            ContentBindings.CB_STIX_XML_10.toString()
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()

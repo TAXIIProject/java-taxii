@@ -28,16 +28,11 @@ package org.mitre.taxii.messages.xml10;
 
 import java.io.IOException;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
-
-import org.mitre.taxii.ContentBindings;
-import org.mitre.taxii.Messages;
-import org.mitre.taxii.Versions;
 
 import org.xml.sax.SAXException;
 
@@ -46,7 +41,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTests implements Versions, ContentBindings {
+public class StatusMessageTests {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;

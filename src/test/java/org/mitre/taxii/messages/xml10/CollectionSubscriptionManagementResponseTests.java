@@ -65,7 +65,7 @@ public class CollectionSubscriptionManagementResponseTests {
                 .withCriteriasAndCriterions(criterion1);
 
         DefaultQuery query1 = new DefaultQuery()
-            .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11)
+            .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11.toString())
             .withCriteria(criteria1);
 
 

@@ -195,7 +195,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author Jonathan W. Cranford & Jasen Jacobsen
  */
-public abstract class TaxiiXml implements Versions {
+public abstract class TaxiiXml {
         
     private final JAXBContext jaxbContext;
     private final Schema taxiiSchema;

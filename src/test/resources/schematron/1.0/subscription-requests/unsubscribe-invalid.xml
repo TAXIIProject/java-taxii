@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription_Management_Request
+ xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1"
+ action="UNSUBSCRIBE" collection_name="test" message_id="unsubscribe-invalid">
+ <!-- 
+   This test message is invalid because it's missing a @subscription_id. 
+ -->
+</Subscription_Management_Request>
+

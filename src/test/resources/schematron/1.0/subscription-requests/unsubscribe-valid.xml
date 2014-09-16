@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription_Management_Request xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1"
+  action="UNSUBSCRIBE" feed_name="test" message_id="1" subscription_id="theSubscription">
+  <!-- This test message is valid because it has a @subscription_id. -->
+</Subscription_Management_Request>

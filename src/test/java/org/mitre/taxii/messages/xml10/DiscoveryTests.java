@@ -59,9 +59,9 @@ public class DiscoveryTests {
                         .withAddress("http://example.com/inbox/")
                         .withMessageBindings(Versions.VID_TAXII_XML_10)
                         .withContentBindings(
-                                ContentBindings.CB_STIX_XML_11,
-                                ContentBindings.CB_STIX_XML_101,
-                                ContentBindings.CB_STIX_XML_10                                
+                                ContentBindings.CB_STIX_XML_11.toString(),
+                                ContentBindings.CB_STIX_XML_101.toString(),
+                                ContentBindings.CB_STIX_XML_10.toString()
                                 )
                         .withAvailable(false)
                         .withMessage("This is a message. Yipee!");

@@ -32,9 +32,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
-import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.Messages;
-import org.mitre.taxii.Versions;
 import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
 
@@ -45,7 +43,7 @@ import static org.junit.Assert.fail;
  *
  * @author jasenj1
  */
-public class StatusMessageValidationTests implements StatusDetails, Versions, ContentBindings {
+public class StatusMessageValidationTests {
     private static final String INVALID_XML_RESOURCE = "/xsd/1.1/StatusMessage-Success-invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
@@ -80,7 +78,7 @@ public class StatusMessageValidationTests implements StatusDetails, Versions, Co
             fail("Expected validation error!");
         }
         catch (SAXException e) {
-            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
+            assertTrue(e.getMessage().contains(StatusDetailEnum.MAX_PART_NUMBER.name()));
         }
     }
         
@@ -114,7 +112,7 @@ public class StatusMessageValidationTests implements StatusDetails, Versions, Co
             if (e.getMessage() == null) {
                 throw e;
             }
-            assertTrue(e.getMessage().contains(STATUS_DETAIL_MAX_PART_NUMBER));
+            assertTrue(e.getMessage().contains(StatusDetailEnum.MAX_PART_NUMBER.name()));
         }
     }
     

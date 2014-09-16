@@ -84,6 +84,9 @@ task compileSchematron << {
 }
 
 // fix dependencies so that generate gets called before compileJava
+compileSchematron.dependsOn extractSchematron
+
+generate.dependsOn extractSchematron
+
 compileJava.dependsOn generate
 
-compileSchematron.dependsOn extractSchematron

@@ -26,10 +26,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
-public class ResourcePaths {
+
+/**
+ * Constants to locate the Schema and Schematron documents for the various versions of TAXII.
+ * 
+ * @author jasenj1
+ */
+public abstract class ResourcePaths {
+    /** Path to the TAXII 1.0 XSD */
     public static final String TAXII_10_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.0-with-sch-xjc.xsd";
+    /** Path to the XSLT containing the Schematron rules for TAXII 1.0 */
     public static final String TAXII_10_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.0-with-sch-xjc-compiled.xsl";
 
+    /** Path to the TAXII 1.1 XSD */
     public static final String TAXII_11_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-with-sch-xjc.xsd";
+    /** Path to the XSLT containing the Schematron rules for TAXII 1.1 */
     public static final String TAXII_11_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-with-sch-xjc-compiled.xsl";        
+    
+    private ResourcePaths() {}
 }

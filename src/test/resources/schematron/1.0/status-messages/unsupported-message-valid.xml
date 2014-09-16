@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Status_Message status_type="UNSUPPORTED_MESSAGE"
+    in_response_to="0"
+    message_id="1" 
+    xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1">
+    <Status_Detail>urn:taxii.mitre.org:message:xml:1.0 urn:taxii.mitre.org:message:xml:1.1</Status_Detail>
+    <Message>
+    </Message>
+</Status_Message>

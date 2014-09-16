@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Jonathan W. Cranford
  */
-public class StatusMessageTests implements StatusDetails, Versions, ContentBindings {
+public class StatusMessageTests {
     
     private final ObjectFactory factory = new ObjectFactory();
     private final TaxiiXmlFactory txf;
@@ -134,7 +134,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
         sm03.setInResponseTo(Messages.generateMessageId());
         sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
                    
-        StatusMessageHelper.addDetail(sm03, new URI(STATUS_DETAIL_ACCEPTABLE_DESTINATION), "Collection1", "Collection2");
+        StatusMessageHelper.addDetail(sm03, new URI(StatusDetailEnum.ACCEPTABLE_DESTINATION.name()), "Collection1", "Collection2");
                 
         TestUtil.roundTripMessage(taxiiXml, sm03);
     }
@@ -184,7 +184,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
         
-        StatusMessageHelper.addDetail(sm05, new URI(STATUS_DETAIL_ITEM), "Collection1");
+        StatusMessageHelper.addDetail(sm05, new URI(StatusDetailEnum.ITEM.name()), "Collection1");
 
         TestUtil.roundTripMessage(taxiiXml, sm05);        
     }
@@ -241,7 +241,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM07")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.RETRY.toString());
-        StatusMessageHelper.addDetail(sm07, new URI(STATUS_DETAIL_ESTIMATED_WAIT), 900);
+        StatusMessageHelper.addDetail(sm07, new URI(StatusDetailEnum.ESTIMATED_WAIT.name()), 900);
         
         TestUtil.roundTripMessage(taxiiXml, sm07);
     }
@@ -263,7 +263,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM08")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
-        StatusMessageHelper.addDetail(sm08, new URI(STATUS_DETAIL_SUPPORTED_BINDING), VID_TAXII_XML_10, VID_TAXII_XML_11);
+        StatusMessageHelper.addDetail(sm08, new URI(StatusDetailEnum.SUPPORTED_BINDING.name()), Versions.VID_TAXII_XML_10, Versions.VID_TAXII_XML_11);
         
         TestUtil.roundTripMessage(taxiiXml, sm08);        
     }
@@ -286,7 +286,7 @@ public class StatusMessageTests implements StatusDetails, Versions, ContentBindi
                                     .withMessageId("SM09")
                                     .withInResponseTo(Messages.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
-        StatusMessageHelper.addDetail(sm09, new URI(STATUS_DETAIL_SUPPORTED_CONTENT), CB_STIX_XML_101);
+        StatusMessageHelper.addDetail(sm09, new URI(StatusDetailEnum.SUPPORTED_CONTENT.name()), ContentBindings.CB_STIX_XML_101);
         
         TestUtil.roundTripMessage(taxiiXml, sm09);                
     }

@@ -31,29 +31,30 @@ package org.mitre.taxii;
  * 
  * @author Jonathan W. Cranford
  */
-public interface ContentBindings {
+public abstract class ContentBindings {
 
     /* ### TAXII Content Bindings ### */
 
     /** Content Binding ID for STIX XML 1.0 */
-    String CB_STIX_XML_10 = "urn:stix.mitre.org:xml:1.0";
+    public static final String CB_STIX_XML_10 = "urn:stix.mitre.org:xml:1.0";
     
     /** Content Binding ID for STIX XML 1.0.1 */
-    String CB_STIX_XML_101 = "urn:stix.mitre.org:xml:1.0.1";
+    public static final String CB_STIX_XML_101 = "urn:stix.mitre.org:xml:1.0.1";
     
     /** Content Binding ID for STIX XML 1.1 */
-    String CB_STIX_XML_11 = "urn:stix.mitre.org:xml:1.1";
+    public static final String CB_STIX_XML_11 = "urn:stix.mitre.org:xml:1.1";
 
     /** Content Binding ID for STIX XML 1.1.1 */
-    String CB_STIX_XML_111 = "urn:stix.mitre.org:xml:1.1.1";
+    public static final String CB_STIX_XML_111 = "urn:stix.mitre.org:xml:1.1.1";
 
     /** Content Binding ID for CAP 1.1 */
-    String CB_CAP_11 = "urn:oasis:names:tc:emergency:cap:1.1";
+    public static final String CB_CAP_11 = "urn:oasis:names:tc:emergency:cap:1.1";
 
     /** Content Binding ID for XML Encryption */
-    String CB_XENC_122002 = "http://www.w3.org/2001/04/xmlenc#";
+    public static final String CB_XENC_122002 = "http://www.w3.org/2001/04/xmlenc#";
 
     /** Content Binding ID for SMIME */
-    String CB_SMIME = "application/x-pks7-mime";
-
+    public static final String CB_SMIME = "application/x-pks7-mime";
+    
+    private ContentBindings() {}
 }

@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  *
  * @author Jonathan W. Cranford
  */
-public final class StatusMessageHelper implements StatusDetails {
+public final class StatusMessageHelper {
 
     private static final ObjectFactory factory = new ObjectFactory();
 
@@ -85,7 +85,7 @@ public final class StatusMessageHelper implements StatusDetails {
         final List<StatusDetailDetailType> details = detailsHolder.getDetails();
 
         final StatusDetailDetailType detail1 = factory.createStatusDetailDetailType();
-        detail1.setName(STATUS_DETAIL_MAX_PART_NUMBER);
+        detail1.setName(StatusDetailEnum.MAX_PART_NUMBER.name());
         detail1.getContent().add(String.valueOf(maxPartNumber));
         details.add(detail1);
 
@@ -105,9 +105,9 @@ public final class StatusMessageHelper implements StatusDetails {
         final StatusMessage sm = new StatusMessage().withStatusType(StatusTypeEnum.PENDING.toString());
         
         try {
-            StatusMessageHelper.addDetail(sm, new URI(STATUS_DETAIL_ESTIMATED_WAIT), estimatedWait);
-            StatusMessageHelper.addDetail(sm, new URI(STATUS_DETAIL_RESULT_ID), resultId);
-            StatusMessageHelper.addDetail(sm, new URI(STATUS_DETAIL_WILL_PUSH), willPush);
+            StatusMessageHelper.addDetail(sm, new URI(StatusDetailEnum.ESTIMATED_WAIT.name()), estimatedWait);
+            StatusMessageHelper.addDetail(sm, new URI(StatusDetailEnum.RESULT_ID.name()), resultId);
+            StatusMessageHelper.addDetail(sm, new URI(StatusDetailEnum.WILL_PUSH.name()), willPush);
         } catch (URISyntaxException ex) { // This shouldn't ever happen. 
             Logger.getLogger(StatusMessageHelper.class.getName()).log(Level.SEVERE, null, ex);
         }

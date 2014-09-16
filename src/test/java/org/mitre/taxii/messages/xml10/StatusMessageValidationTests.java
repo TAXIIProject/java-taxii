@@ -32,7 +32,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
-import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.Messages;
 import org.mitre.taxii.Versions;
 import org.mitre.taxii.util.Validation;
@@ -44,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author jasenj1
  */
-public class StatusMessageValidationTests implements Versions, ContentBindings {
+public class StatusMessageValidationTests {
     private static final String INVALID_XML_RESOURCE = "/xsd/1.0/StatusMessage-Success-invalid.xml";
 
     private final ObjectFactory factory = new ObjectFactory();
