@@ -6,8 +6,8 @@ import java.net.URISyntaxException;
 import javax.xml.bind.JAXBException;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.mitre.taxii.Messages;
 import org.mitre.taxii.client.HttpClient;
+import org.mitre.taxii.messages.xml11.MessageHelper;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.PollRequest;
 import org.mitre.taxii.messages.xml11.PollResponse;
@@ -34,7 +34,7 @@ public class PollRequestTest {
         final URI serviceUri = new URI("http://127.0.0.1:8080/services/poll/");
         
         PollRequest pr = factory.createPollRequest()
-                        .withMessageId(Messages.generateMessageId())
+                        .withMessageId(MessageHelper.generateMessageId())
                         .withCollectionName("default")
                         .withPollParameters(
                                 factory.createPollParametersType()

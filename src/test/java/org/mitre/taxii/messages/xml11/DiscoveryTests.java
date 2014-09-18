@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
-import org.mitre.taxii.Messages;
 import org.mitre.taxii.query.DefaultQueryXml;
 import org.mitre.taxii.Versions;
 import org.mitre.taxii.query.DefaultQuery;
@@ -122,7 +121,7 @@ public class DiscoveryTests {
     @Test
     public void goodDiscoveryRequestWithExtendedHeaders() throws URISyntaxException, JAXBException, SAXException, IOException {
         DiscoveryRequest dr = new DiscoveryRequest()
-                                    .withMessageId(Messages.generateMessageId());
+                                    .withMessageId(MessageHelper.generateMessageId());
         MessageHelper.addExtendedHeader(dr, new URI("ext_header1"), "value1");
         MessageHelper.addExtendedHeader(dr, new URI("ext_header2"), "value2");
         

@@ -16,12 +16,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.mitre.taxii.Messages;
 import org.mitre.taxii.client.HttpClient;
 import org.mitre.taxii.messages.xml11.DiscoveryRequest;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.StatusMessage;
 import org.mitre.taxii.messages.TaxiiXml;
+import org.mitre.taxii.messages.xml11.MessageHelper;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 
 /**
@@ -46,7 +46,7 @@ public class FailureTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
 
@@ -75,7 +75,7 @@ public class FailureTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         final String serverUrl = "http://127.0.0.1:8100/services/discovery/";
         Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
@@ -115,7 +115,7 @@ public class FailureTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         Object responseObj = null;
         responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);

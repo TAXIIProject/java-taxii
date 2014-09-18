@@ -32,8 +32,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
-import org.mitre.taxii.Messages;
-import org.mitre.taxii.Versions;
 import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
 
@@ -85,7 +83,7 @@ public class StatusMessageValidationTests {
     public void missingMessageId() throws Exception {
         final StatusMessage sm02 = factory.createStatusMessage();
 //        sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setInResponseTo(MessageHelper.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());
@@ -103,7 +101,7 @@ public class StatusMessageValidationTests {
     public void missingInResponseTo() throws Exception {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
-//        sm02.setInResponseTo(Messages.generateMessageId());
+//        sm02.setInResponseTo(MessageHelper.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());
@@ -121,7 +119,7 @@ public class StatusMessageValidationTests {
     public void missingStatusType() throws Exception {
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setInResponseTo(MessageHelper.generateMessageId());
 //        sm02.setStatusType(StatusTypes.ST_SUCCESS);
         Validation results = taxiiXml.validateAll(sm02, false);
         assertTrue(results.isFailure());

@@ -83,6 +83,10 @@ task compileSchematron << {
         style: 'src/main/build/iso-schematron-xslt2/iso_schematron_message_xslt2.xsl')    
 }
 
+javadoc {
+    options.overview = "src/main/java/overview.html"
+}
+
 // fix dependencies so that generate gets called before compileJava
 compileSchematron.dependsOn extractSchematron
 

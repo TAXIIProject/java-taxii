@@ -52,26 +52,45 @@ import org.mitre.taxii.Versions;
 import org.mitre.taxii.messages.TaxiiXml;
 
 /**
+ * <p>
  * This class does its best to comply with the "TAXII HTTP Protocol Binding
  * Specification". It handles interaction with a TAXII HTTP server. This
  * includes serializing TAXII Messages, managing the connection to the remote
  * end point, parsing and unmarshaling the responses and returning a TAXII
  * Message back to the user.
- * 
+ * </p><p>
  * There are two important components of this class.
- * 1. An Apache Components HttpClient. This manages the HTTP protocol interaction.
+ * </p>
+ * <ol>
+ * <li> An Apache Components HttpClient, {@link HttpClient#httpClient} This manages the HTTP protocol interaction.
  * The default constructor will create a simple, pre-configured HttpClient based
  * on the system properties. If you wish to use an HttpClient configured to use
  * an explicit proxy, or a security certificate, you will need to construct and 
  * configure it, then apply it to the TAXII HttpClient.
+ * </li>
  * 
- * 2. One or more TaxiiXml objects. These objects understand the TAXII JAXB environment.
+ * <li>One or more TaxiiXml objects, {@link HttpClient#taxiiXmlMap}. These objects understand the TAXII JAXB environment.
  * They are configured to handle parsing and generating a certain version of TAXII
  * messages. There can be only one TaxiiXml object per TAXII version.
  * The default constructor will create TaxiiXml objects for TAXII 1.0 and 1.1.
  * You may, for example, want to provide a TaxiiXml object configured to handle 
  * STIX content blocks.
+ * </li>
  *
+ * <h3>Usage example</h3>
+ <pre>
+    HttpClient taxiiClient = new HttpClient();
+        
+    final String serverUrl = "http://127.0.0.1:8080/services/discovery/";
+
+    // Prepare the message to send.
+    DiscoveryRequest dr = factory.createDiscoveryRequest()
+            .withMessageId(MessageHelper.generateMessageId());
+
+    // Call the service
+    Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
+ </pre>
+ 
  * @author jasenj1
  */
 public class HttpClient {
@@ -80,17 +99,37 @@ public class HttpClient {
     public final static String SCHEME_HTTPS = "https";
 
     // Header Constants
+    /** HTTP Accept header name */
     public final static String HEADER_ACCEPT = "accept";
+    /** HTTP Content-Type header name */
     public final static String HEADER_CONTENT_TYPE = "content-type";
+    /** X-TAXII-Accept header name */
     public final static String HEADER_X_TAXII_ACCEPT = "x-taxii-accept";
+    /** X-TAXII-Content-Type header name */
     public final static String HEADER_X_TAXII_CONTENT_TYPE = "x-taxii-content-type";
+    /** The X-TAXII-Protocol header name */
     public final static String HEADER_X_TAXII_PROTOCOL = "x-taxii-protocol";
+    /** The X-TAXII-Services header name */
     public final static String HEADER_X_TAXII_SERVICES = "x-taxii-services";
 
+    /** <a href="http://hc.apache.org">Apache Commons HTTP Client</a> that handles connection management */
     private CloseableHttpClient httpClient;
 
     // Structures to handle multiple versions of TAXII
+    
+    /**
+     * The map of TAXII versions to TaxiiXml objects that process that version.
+     * Each TAXII version may have one and only one TaxiiXml to handle TAXII
+     * messages of that version.
+     */
     private final HashMap<String, TaxiiXml> taxiiXmlMap = new HashMap<>();
+    /** 
+     * Provides a link from package names to TAXII versions.
+     * The TaxiiXml object that handles a version of TAXII must be in its own
+     * package. e.g. com.example.xml10 and com.example.xml11.
+     * So you could not have a com.example.TaxiiXml10 and com.example.TaxiiXml11.
+     * The package names would collide.
+     */
     private final HashMap<String, String> packageToVersionMap = new HashMap<>();
 
     /**
@@ -140,8 +179,8 @@ public class HttpClient {
 
     /**
      * Send a TAXII message to an endpoint. The version of the message will be
-     * determined by its package name. A TAXII message handler will be used
-     * based on this version. If an appropriate message handler cannot be found,
+     * determined by its package name, which must match the package name of a {@link org.mitre.taxii.messages.TaxiiXml}
+     * object in the taxiiXmlMap. If an appropriate message handler cannot be found,
      * an exception is thrown.
      *
      * NOTE: It is expected that the response received will match the version of
@@ -149,8 +188,8 @@ public class HttpClient {
      * in the "x-taxii-accept" header. This library only sets and sends the
      * version of the message being sent.
      *
-     * @param uri
-     * @param message
+     * @param uri The address of the endpoint to send the message to
+     * @param message The message to send.
      * @return resultObj
      *              Either a TAXII response object of the same version as was passed in
      *              or "null" if parsing fails in a way that does not throw an exception.
@@ -186,7 +225,7 @@ public class HttpClient {
         // Make the call to the server.
         try {
             // The TAXII messages must be sent as POST.
-            HttpPost postRequest = new HttpPost(uri);
+            HttpPost postRequest = new HttpPost(uri);            
 
             // Set the required HTTP Headers.
             postRequest.addHeader("User-Agent", "java-taxii.httpclient");
@@ -291,7 +330,7 @@ public class HttpClient {
     /**
      * Get the Apache Components HTTP Client in use by this object.
      *
-     * @return 
+     * @return the Apache Components HTTP Client used by this TAXII HTTP Client.
      */
     public CloseableHttpClient getHttpclient() {
         return httpClient;

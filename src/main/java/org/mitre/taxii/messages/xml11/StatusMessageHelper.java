@@ -75,7 +75,7 @@ public final class StatusMessageHelper {
      * Utility method to create an "Invalid Response Part" Status Message.
      * 
      * @param maxPartNumber
-     * @return 
+     * @return Status Message pre-populated for "Invalid Response Part".
      */
     public static StatusMessage createInvalidResponsePart(int maxPartNumber) {
         final StatusMessage sm = factory.createStatusMessage();
@@ -99,7 +99,7 @@ public final class StatusMessageHelper {
      * @param estimatedWait
      * @param resultId
      * @param willPush
-     * @return
+     * @return pre-populated "Pending" Status Message.
      */
     public static StatusMessage createPending(final int estimatedWait, final URI resultId, final boolean willPush) {
         final StatusMessage sm = new StatusMessage().withStatusType(StatusTypeEnum.PENDING.toString());
@@ -123,7 +123,7 @@ public final class StatusMessageHelper {
      *
      * @param name
      * @param value
-     * @return
+     * @return status detail with a given name and value.
      */
     public static StatusDetailDetailType createStatusDetailDetail(
             final URI name,
@@ -139,7 +139,7 @@ public final class StatusMessageHelper {
      * 
      * @param sm - The Status Message to be modified
      * @param detailsMap - The set of details to add.
-     * @return
+     * @return Status Message with added details.
      */
     public static StatusMessage addDetails(final StatusMessage sm, final Map<URI, Object> detailsMap) {
         final Set<Map.Entry<URI, Object>> entries = detailsMap.entrySet();
@@ -170,7 +170,7 @@ public final class StatusMessageHelper {
      * @param sm
      * @param name
      * @param content - list of values. These will be toString()ed.
-     * @return
+     * @return Status Message with detail(s) added.
      */
     public static StatusMessage addDetail(final StatusMessage sm, final URI name, final Object... content) {
 

@@ -34,19 +34,19 @@ import org.mitre.taxii.messages.xml10.StatusMessage;
 import org.mitre.taxii.messages.xml10.StatusTypeEnum;
 
 /**
- * This class handles generating StatusMessages of the proper TAXII Version when
+ * This class handles generating {@link StatusMessage}s for TAXII 1.0 when
  * an error occurs while handling the response from the TAXII server.
  * 
  * @author jasenj1
  */
 public class ResponseErrorHandler extends org.mitre.taxii.client.HttpResponseErrorHandler {
     /**
-     * We received a response that did not contain the proper HEADER_X_TAXII_CONTENT_TYPE
+     * We received a response that was not a 200 (Success)
      * value. Make up an appropriate Status Message.
      * 
-     * @param response
-     * @param msgIn
-     * @return 
+     * @param response the HTTP response object.
+     * @param msgIn the TAXII message received from the server.
+     * @return StatusMessage based on the HTTP response code.
      */
     @Override
     public StatusMessage buildStatusCodeStatusMessage(CloseableHttpResponse response, Object msgIn) {
@@ -101,7 +101,7 @@ public class ResponseErrorHandler extends org.mitre.taxii.client.HttpResponseErr
      * 
      * @param ex
      * @param message
-     * @return 
+     * @return "UNAUTHORIZED" status message.
      */ 
     @Override
     public StatusMessage buildSSLErrorStatusMessage(SSLException ex, Object message) {

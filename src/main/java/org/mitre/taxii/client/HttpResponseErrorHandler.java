@@ -34,12 +34,16 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
 /**
+ * Abstract class that handles error responses received from a TAXII server.
  * 
  * @author jasenj1
  */
 public abstract class HttpResponseErrorHandler {
     
+    /** Builds a TAXII status message based on the HTTP response code. */
     public abstract Object buildStatusCodeStatusMessage(CloseableHttpResponse response, Object message);
+    
+    /** Builds a TAXDD status message based on an SSL exception. */
     public abstract Object buildSSLErrorStatusMessage(SSLException ex, Object message);
     
     /**
@@ -47,7 +51,7 @@ public abstract class HttpResponseErrorHandler {
      * This could include more things such as the status code.
      * 
      * @param response
-     * @return 
+     * @return A string consisting of the HTTP Response headers nicely formatted.
      */
      public String buildResponseStr(CloseableHttpResponse response) {
         StringBuilder sb = new StringBuilder();

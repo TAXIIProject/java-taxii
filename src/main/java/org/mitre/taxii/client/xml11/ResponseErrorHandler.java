@@ -35,19 +35,19 @@ import org.mitre.taxii.messages.xml11.StatusMessage;
 import org.mitre.taxii.messages.xml11.StatusTypeEnum;
 
 /**
- * This class handles generating StatusMessages of the proper TAXII Version when
+ * This class handles generating {@link StatusMessage}s for TAXII 1.1 when
  * an error occurs while handling the response from the TAXII server.
  * 
  * @author jasenj1
  */
 public class ResponseErrorHandler extends HttpResponseErrorHandler {
     /**
-     * We received a response that did not contain the proper HEADER_X_TAXII_CONTENT_TYPE
+     * We received a response that was not a 200 (Success)
      * value. Make up an appropriate Status Message.
      * 
-     * @param response
-     * @param msgIn
-     * @return 
+     * @param response the HTTP response object.
+     * @param msgIn the TAXII message received from the server.
+     * @return StatusMessage based on the HTTP response code.
      */
     @Override
     public StatusMessage buildStatusCodeStatusMessage(CloseableHttpResponse response, Object msgIn) {

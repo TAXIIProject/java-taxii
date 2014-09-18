@@ -23,11 +23,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.mitre.taxii.Messages;
 import org.mitre.taxii.client.HttpClient;
 import org.mitre.taxii.messages.TaxiiXml;
 import org.mitre.taxii.messages.xml11.DiscoveryRequest;
 import org.mitre.taxii.messages.xml11.DiscoveryResponse;
+import org.mitre.taxii.messages.xml11.MessageHelper;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 
@@ -55,7 +55,7 @@ public class DiscoveryTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         // Call the services
         Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
@@ -86,7 +86,7 @@ public class DiscoveryTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         // Call the service
         final String serverUrl = "http://127.0.0.1:8100/services/discovery/";
@@ -127,7 +127,7 @@ public class DiscoveryTests {
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         // Call the service
         Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
@@ -155,7 +155,7 @@ public class DiscoveryTests {
         
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
-                .withMessageId(Messages.generateMessageId());
+                .withMessageId(MessageHelper.generateMessageId());
 
         // Call the service
         final String serverUrl = "http://taxiitest.mitre.org/services/discovery/";

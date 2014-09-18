@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class provides some convenience methods to make constructing TAXII messages
@@ -37,6 +38,15 @@ import java.util.Map;
  * @author jasenj1
  */
 public class MessageHelper {
+    
+    /**
+     * Generates a random message id.
+     * 
+     * @return a random UUID URN complying with RFC 4122 (a type 4 UUID per RFC 4122).
+     */
+    public static final String generateMessageId() {
+        return "urn:uuid:" + UUID.randomUUID().toString();
+    }    
     
     public static ExtendedHeaderType createExtendedHeader(final URI name, final Object value) {
         final ExtendedHeaderType eht = new ExtendedHeaderType().withName(name.toString());
@@ -65,8 +75,8 @@ public class MessageHelper {
         
     }
     
-    public void addExtendedHeaders(final MessageType m, final Map headerMap) {
-        
+    public static MessageType addExtendedHeaders(final MessageType m, final Map headerMap) {
+        return m;
     }
     
 }

@@ -50,7 +50,6 @@ import net.sf.saxon.s9api.SAXDestination;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-import org.mitre.taxii.Versions;
 import org.mitre.taxii.client.HttpResponseErrorHandler;
 
 import org.mitre.taxii.messages.xmldsig.Signature;
@@ -65,15 +64,26 @@ import org.xml.sax.helpers.DefaultHandler;
  * JAXB utility class.
  * 
  * <p>
- * Note that {@link #validateFast(MessageType)} and {@link #validateAll(MessageType)}
+ * This class provides a JAXB environment for marshaling, unmarshaling, and validating
+ * TAXII messages. There are concrete subclasses to handle specific versions of TAXII.
+ * 
+ * The factory class for a specific version of TAXII should be used to create a TaxiiXml
+ * object. There are a number of version specific parameters that must be set to 
+ * create a useful TaxiiXml, the factories ensure the object is initialized properly.
+ * </p>
+ * 
+ * 
+ * <h3>Validation</h3>
+ * <p>
+ * Note that {@link #validateFast(Object, boolean)} and {@link #validateAll(Object, boolean)}
  * perform validation checks beyond those done by the underlying XML schema; thus,
  * these methods should be preferred over doing schema validation during 
  * JAXB marshalling and unmarshalling.  Specifically, 
  * {@link Marshaller#setSchema(Schema)} and 
  * {@link Unmarshaller#setSchema(Schema)} should NOT be used for validation, as
  * the additional code checks would not be performed;
- * instead, {@link #validateFast(MessageType)} or 
- * {@link #validateAll(MessageType)} should be called before marshalling 
+ * instead, {@link #validateFast(Object, boolean)} or 
+ * {@link #validateAll(Object, boolean)} should be called before marshalling 
  * and after unmarshalling.
  * </p> 
  * 
@@ -87,7 +97,8 @@ import org.xml.sax.helpers.DefaultHandler;
  *  
  * <pre>
  try {
-   TaxiiXml taxiiXml = new TaxiiXml();
+   TaxiiXmlFactory txf = new TaxiiXmlFactory();
+   TaxiiXml taxiiXml = txf.getTaxiiXml();
    Validation results = taxiiXml.validateFast(msg, true);
    if (results.hasWarnings()) {
      System.out.print("Validation warnings: ");
@@ -111,7 +122,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXml taxiiXml = new TaxiiXml();
+   TaxiiXmlFactory txf = new TaxiiXmlFactory();
+   TaxiiXml taxiiXml = txf.getTaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateFast(msg, true);
@@ -136,7 +148,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXml taxiiXml = new TaxiiXml();
+   TaxiiXmlFactory txf = new TaxiiXmlFactory();
+   TaxiiXml taxiiXml = txf.getTaxiiXml();
    Validation results = taxiiXml.validateAll(msg, true);
    if (results.isSuccess()) {
      if (results.hasWarnings()) {
@@ -166,7 +179,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * <pre>
  try {
-   TaxiiXml taxiiXml = new TaxiiXml();
+   TaxiiXmlFactory txf = new TaxiiXmlFactory();
+   TaxiiXml taxiiXml = txf.getTaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateAll(msg, true);
@@ -210,6 +224,9 @@ public abstract class TaxiiXml {
      * 
      * For internal use. Use a TaxiiXmlFactory of the proper version to create
      * a TaxiiXml instance.
+     * 
+     * @see org.mitre.taxii.messages.xml10.TaxiiXmlFactory
+     * @see org.mitre.taxii.messages.xml11.TaxiiXmlFactory
      * 
      * @param taxiiVersion
      * @param serviceVersion
@@ -268,9 +285,9 @@ public abstract class TaxiiXml {
      * 
      * @param prettyPrint
      *              Returns a marshaller that indents the output if true.
-     * @return 
+     * @return a marshaller to serialize TAXII XML objects.
      * @throws JAXBException 
-     *              if an error was encountered while creating the Marshaller
+     *              if an error was encountered while creating the Marshaler
      */
     public Marshaller createMarshaller(
             boolean prettyPrint)
@@ -357,8 +374,7 @@ public abstract class TaxiiXml {
      *       The message to validate
      * @param checkSpecConformance      
      *       Check conformance to specification beyond what XML Schema provides.
-     *
-     * @returns 
+     * @return    
      *       The validation results, including any warnings.  If this method 
      *       returns successfully, then isSuccess() on the returned object will
      *       always return true.  

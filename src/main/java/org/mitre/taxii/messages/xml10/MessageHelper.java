@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class provides some convenience methods to make constructing TAXII messages
@@ -63,6 +64,12 @@ public class MessageHelper {
         
         return m;
         
+    }
+
+    static String generateMessageId() {
+        Random r = new Random();
+        int id = r.nextInt(99999);
+        return String.format("%06d",id);
     }
     
     public void addExtendedHeaders(final MessageType m, final Map headerMap) {

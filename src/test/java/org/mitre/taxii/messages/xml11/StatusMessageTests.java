@@ -36,7 +36,6 @@ import javax.xml.bind.JAXBException;
 import org.junit.Test;
 
 import org.mitre.taxii.ContentBindings;
-import org.mitre.taxii.Messages;
 import org.mitre.taxii.Versions;
 
 import org.xml.sax.SAXException;
@@ -77,7 +76,7 @@ public class StatusMessageTests {
          */
         final StatusMessage sm = factory.createStatusMessage();
         sm.setMessageId("SM01");
-        sm.setInResponseTo(Messages.generateMessageId());
+        sm.setInResponseTo(MessageHelper.generateMessageId());
         sm.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
         StatusMessageHelper.addDetail(sm, new URI("custom_status_detail_name"), "Custom status detail value");
@@ -106,7 +105,7 @@ public class StatusMessageTests {
          */
         final StatusMessage sm02 = factory.createStatusMessage();
         sm02.setMessageId("SM02");
-        sm02.setInResponseTo(Messages.generateMessageId());
+        sm02.setInResponseTo(MessageHelper.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
         
         TestUtil.roundTripMessage(taxiiXml, sm02);
@@ -131,7 +130,7 @@ public class StatusMessageTests {
         */
         final StatusMessage sm03 = new StatusMessage();
         sm03.setMessageId("SM03");
-        sm03.setInResponseTo(Messages.generateMessageId());
+        sm03.setInResponseTo(MessageHelper.generateMessageId());
         sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
                    
         StatusMessageHelper.addDetail(sm03, new URI(StatusDetailEnum.ACCEPTABLE_DESTINATION.name()), "Collection1", "Collection2");
@@ -159,7 +158,7 @@ public class StatusMessageTests {
 
         final StatusMessage sm04 = StatusMessageHelper.createInvalidResponsePart(4);
         sm04.setMessageId("SM04");
-        sm04.setInResponseTo(Messages.generateMessageId());
+        sm04.setInResponseTo(MessageHelper.generateMessageId());
         sm04.setMessage("This is a valid test status message");
         
         TestUtil.roundTripMessage(taxiiXml, sm04);
@@ -181,7 +180,7 @@ public class StatusMessageTests {
         
         StatusMessage sm05 = new StatusMessage()
                                     .withMessageId("SM05")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withInResponseTo(MessageHelper.generateMessageId())
                                     .withStatusType(StatusTypeEnum.NOT_FOUND.toString());
         
         StatusMessageHelper.addDetail(sm05, new URI(StatusDetailEnum.ITEM.name()), "Collection1");
@@ -205,13 +204,13 @@ public class StatusMessageTests {
         
         StatusMessage sm06 = StatusMessageHelper.createPending(900, new URI("Result1"), false);
         sm06.setMessageId("SM06");
-        sm06.setInResponseTo(Messages.generateMessageId());
+        sm06.setInResponseTo(MessageHelper.generateMessageId());
         
         /* The manual way.
         
         StatusMessage sm06 = new StatusMessage()
                                     .withMessageId("SM06")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withInResponseTo(MessageHelper.generateMessageId())
                                     .withStatusType(StatusTypeEnum.PENDING.toString());
         
         StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_ESTIMATED_WAIT, 900);
@@ -239,7 +238,7 @@ public class StatusMessageTests {
         
         StatusMessage sm07 = new StatusMessage()
                                     .withMessageId("SM07")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withInResponseTo(MessageHelper.generateMessageId())
                                     .withStatusType(StatusTypeEnum.RETRY.toString());
         StatusMessageHelper.addDetail(sm07, new URI(StatusDetailEnum.ESTIMATED_WAIT.name()), 900);
         
@@ -261,7 +260,7 @@ public class StatusMessageTests {
         */
         StatusMessage sm08 = new StatusMessage()
                                     .withMessageId("SM08")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withInResponseTo(MessageHelper.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
         StatusMessageHelper.addDetail(sm08, new URI(StatusDetailEnum.SUPPORTED_BINDING.name()), Versions.VID_TAXII_XML_10, Versions.VID_TAXII_XML_11);
         
@@ -284,7 +283,7 @@ public class StatusMessageTests {
         
         StatusMessage sm09 = new StatusMessage()
                                     .withMessageId("SM09")
-                                    .withInResponseTo(Messages.generateMessageId())
+                                    .withInResponseTo(MessageHelper.generateMessageId())
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
         StatusMessageHelper.addDetail(sm09, new URI(StatusDetailEnum.SUPPORTED_CONTENT.name()), ContentBindings.CB_STIX_XML_101);
         

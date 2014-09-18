@@ -72,7 +72,7 @@ public class TaxiiXmlFactory {
         /**
          * Generate a TaxiiXml object configured for TAXII 1.0 messages.
          * 
-         * @return 
+         * @return a TaxiiXml object configured for TAXII 1.0 messages.
          */
         public TaxiiXml getTaxiiXml() {
             TaxiiXml tx =  new TaxiiXml(
