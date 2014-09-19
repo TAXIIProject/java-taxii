@@ -28,7 +28,7 @@ public class CollectionSubscriptionManagementResponseTests {
     
     public CollectionSubscriptionManagementResponseTests() {
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
         setup();        
     }
     

@@ -53,7 +53,7 @@ public class StatusMessageTests {
     
     public StatusMessageTests() {
         txf = new TaxiiXmlFactory();
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
     }
             
     /** 

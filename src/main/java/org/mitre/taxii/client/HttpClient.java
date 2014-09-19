@@ -56,25 +56,25 @@ import org.mitre.taxii.messages.TaxiiXml;
  * This class does its best to comply with the "TAXII HTTP Protocol Binding
  * Specification". It handles interaction with a TAXII HTTP server. This
  * includes serializing TAXII Messages, managing the connection to the remote
- * end point, parsing and unmarshaling the responses and returning a TAXII
+ * end point, parsing and unmarshaling the responses, and returning a TAXII
  * Message back to the user.
  * </p><p>
  * There are two important components of this class.
  * </p>
  * <ol>
- * <li> An Apache Components HttpClient, {@link HttpClient#httpClient} This manages the HTTP protocol interaction.
+ * <li> An Apache Components CloseableHttpClient, {@link HttpClient#getHttpClient} This manages the HTTP protocol interaction.
  * The default constructor will create a simple, pre-configured HttpClient based
  * on the system properties. If you wish to use an HttpClient configured to use
  * an explicit proxy, or a security certificate, you will need to construct and 
  * configure it, then apply it to the TAXII HttpClient.
  * </li>
  * 
- * <li>One or more TaxiiXml objects, {@link HttpClient#taxiiXmlMap}. These objects understand the TAXII JAXB environment.
+ * <li>One or more {@link TaxiiXml} objects, stored in {@link HttpClient#taxiiXmlMap}. These objects understand the TAXII JAXB environment.
  * They are configured to handle parsing and generating a certain version of TAXII
- * messages. There can be only one TaxiiXml object per TAXII version.
- * The default constructor will create TaxiiXml objects for TAXII 1.0 and 1.1.
- * You may, for example, want to provide a TaxiiXml object configured to handle 
- * STIX content blocks.
+ * messages. There can be only one {@link TaxiiXml} object per TAXII version.
+ * The default constructor will create {@link TaxiiXml} objects for TAXII 1.0 and 1.1.
+ * You may, for example, want to provide a {@link TaxiiXml} object configured to handle 
+ * STIX content blocks as well as TAXII 1.1 messages.
  * </li>
  *
  * <h3>Usage example</h3>
@@ -146,9 +146,9 @@ public class HttpClient {
     }
 
     /**
-     * Create a client with a pre-configured Apache HttpClient. For example,
-     * one configured to use a proxy or SSL.
-     * TaxiiXml objects that handle 1.0 and 1.1 will be created.
+     * Create a client with a pre-configured Apache HttpClient.
+     * For example, one configured to use a proxy or SSL.
+     * TaxiiXml objects that handle TAXII 1.0 and 1.1 will be created.
      *
      * @param httpClient
      */
@@ -159,8 +159,8 @@ public class HttpClient {
         org.mitre.taxii.messages.xml10.TaxiiXmlFactory txf10 = new org.mitre.taxii.messages.xml10.TaxiiXmlFactory();
         org.mitre.taxii.messages.xml11.TaxiiXmlFactory txf11 = new org.mitre.taxii.messages.xml11.TaxiiXmlFactory();
 
-        TaxiiXml tx10 = txf10.getTaxiiXml();
-        TaxiiXml tx11 = txf11.getTaxiiXml();
+        TaxiiXml tx10 = txf10.createTaxiiXml();
+        TaxiiXml tx11 = txf11.createTaxiiXml();
 
         taxiiXmlMap.put(tx10.getTaxiiVersion(), tx10);
         taxiiXmlMap.put(tx11.getTaxiiVersion(), tx11);
@@ -169,7 +169,7 @@ public class HttpClient {
     }
 
     /**
-     * Default constructor. Create a basic default HttpClient, handle TAXII 1.0
+     * Default constructor. Create a basic default <a href="http://hc.apache.org/httpcomponents-client-4.3.x/httpclient/apidocs/org/apache/http/client/CloseableHttpClient.html">CloseableHttpClient</a>, handle TAXII 1.0
      * and 1.1 versions.
      *
      */

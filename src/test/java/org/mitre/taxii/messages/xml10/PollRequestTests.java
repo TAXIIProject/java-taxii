@@ -34,7 +34,7 @@ public class PollRequestTests {
     
     public PollRequestTests() {
        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-       taxiiXml = txf.getTaxiiXml();
+       taxiiXml = txf.createTaxiiXml();
        setup();
     }
     

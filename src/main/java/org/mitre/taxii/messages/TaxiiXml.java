@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
@@ -71,8 +72,26 @@ import org.xml.sax.helpers.DefaultHandler;
  * object. There are a number of version specific parameters that must be set to 
  * create a useful TaxiiXml, the factories ensure the object is initialized properly.
  * </p>
+ * <h3>Usage example</h3>
+ * <p>
+ * The following example demonstrates creating a TaxiiXml object and using it to
+ * validate, marshal, and unmarshal a simple TAXII message.
+ * </p>
+ * <pre>
+ *      ObjectFactory of = new ObjectFactory(); // JAXB factory for TAXII 
+ *      TaxiiXmlFactory txf = new TaxiiXmlFactory(); // Create a factory with the default configuration.
+ *      TaxiiXml taxiiXml = txf.createTaxiiXml(); // get a properly configured TaxiiXml
  * 
+ *      DiscoveryMessage dm = of.createDiscoveryMessage()
+ *                              .withMessageId(MessageHelper.generateMessageId());
  * 
+ *      Validation results = taxiiXml.validateFast(dm, true); // Validate, failing on first error encountered, and perfoming Schematron validation.
+ * 
+ *      String xmlStr = taxiiXml.marshalToString(dm, true);
+ * 
+ *      DiscoveryMessage dm2 = taxiiXml.getJaxbContext().createUnmarshaller().unmarshal(new StringReader(xmlString));
+ * 
+ * </pre>
  * <h3>Validation</h3>
  * <p>
  * Note that {@link #validateFast(Object, boolean)} and {@link #validateAll(Object, boolean)}
@@ -98,7 +117,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <pre>
  try {
    TaxiiXmlFactory txf = new TaxiiXmlFactory();
-   TaxiiXml taxiiXml = txf.getTaxiiXml();
+   TaxiiXml taxiiXml = txf.createTaxiiXml();
    Validation results = taxiiXml.validateFast(msg, true);
    if (results.hasWarnings()) {
      System.out.print("Validation warnings: ");
@@ -109,7 +128,7 @@ import org.xml.sax.helpers.DefaultHandler;
  }
  catch (SAXParseException e) {
    System.err.print("Validation error: ");
-   System.err.println(TaxiiXmlImpl.formatException(e));
+   System.err.println(Validation.formatException(e));
  } 
  catch (SAXException e) {
    System.err.print("Validation error: ");
@@ -123,7 +142,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <pre>
  try {
    TaxiiXmlFactory txf = new TaxiiXmlFactory();
-   TaxiiXml taxiiXml = txf.getTaxiiXml();
+   TaxiiXml taxiiXml = txf.createTaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateFast(msg, true);
@@ -135,7 +154,7 @@ import org.xml.sax.helpers.DefaultHandler;
  }
  catch (SAXParseException e) {
    System.err.print("Validation error: ");
-   System.err.println(TaxiiXmlImpl.formatException(e));
+   System.err.println(Validation.formatException(e));
  } 
  catch (SAXException e) {
    System.err.print("Validation error: ");
@@ -149,7 +168,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <pre>
  try {
    TaxiiXmlFactory txf = new TaxiiXmlFactory();
-   TaxiiXml taxiiXml = txf.getTaxiiXml();
+   TaxiiXml taxiiXml = txf.createTaxiiXml();
    Validation results = taxiiXml.validateAll(msg, true);
    if (results.isSuccess()) {
      if (results.hasWarnings()) {
@@ -166,7 +185,7 @@ import org.xml.sax.helpers.DefaultHandler;
  }
  catch (SAXParseException e) {
    System.err.print("Fatal validation error: ");
-   System.err.println(TaxiiXmlImpl.formatException(e));
+   System.err.println(Validation.formatException(e));
  } 
  catch (SAXException e) {
    System.err.print("Fatal validation error: ");
@@ -180,7 +199,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * <pre>
  try {
    TaxiiXmlFactory txf = new TaxiiXmlFactory();
-   TaxiiXml taxiiXml = txf.getTaxiiXml();
+   TaxiiXml taxiiXml = txf.createTaxiiXml();
    Unmarshaller u = taxiiXML.getJaxbContext().createUnmarshaller();
    MessageType msg = (MessageType) u.unmarshal(input);
    Validation results = taxiiXml.validateAll(msg, true);
@@ -198,7 +217,7 @@ import org.xml.sax.helpers.DefaultHandler;
  }
  catch (SAXParseException e) {
    System.err.print("Fatal validation error: ");
-   System.err.println(TaxiiXmlImpl.formatException(e));
+   System.err.println(Validation.formatException(e));
  } 
  catch (SAXException e) {
    System.err.print("Fatal validation error: ");
@@ -277,8 +296,7 @@ public abstract class TaxiiXml {
             throw new RuntimeException("Deployment error", e);
         }
     }
-    
-            
+                
     /**
      * Returns a marshaller for the TAXII XML Message Binding 1.0
      * classes.
@@ -411,17 +429,7 @@ public abstract class TaxiiXml {
         m.marshal(msg, sw);
         return sw.toString();        
     }
-    
-    
-    public static String formatException(SAXParseException e) {
-        return String.format("(%s, line %d, column %d) %s",
-                    e.getSystemId(),
-                    e.getLineNumber(),
-                    e.getColumnNumber(),
-                    e.getMessage());
-    }
-
-
+       
     /**
      * Returns the JAXB Context.
      */

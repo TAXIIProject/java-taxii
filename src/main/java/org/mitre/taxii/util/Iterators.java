@@ -45,6 +45,10 @@ public final class Iterators {
     /**
      * Appends each element from the given Iterator into the given StringBuilder,
      * with trailingDelim following each element.
+     * @param sb
+     * @param it
+     * @param trailingDelim
+     * @return 
      */
     public static StringBuilder append(StringBuilder sb, Iterator<?> it, String trailingDelim) {
         while (it.hasNext()) {
@@ -56,6 +60,9 @@ public final class Iterators {
 
     /**
      * Joins each element from the iterator with the given separator.
+     * @param it
+     * @param sep
+     * @return 
      */
     public static String join(Iterator<?> it, String sep) {
         final StringBuilder sb = new StringBuilder();
@@ -72,6 +79,11 @@ public final class Iterators {
     /**
      * Like append, but it takes a label up-front and then appends the given
      * Iterator to the given StringBuilder.
+     * @param label
+     * @param sb
+     * @param it
+     * @param separator
+     * @return 
      */
     public static StringBuilder appendWithLabel(
             Object label,

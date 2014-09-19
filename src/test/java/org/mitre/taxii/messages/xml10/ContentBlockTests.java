@@ -25,7 +25,7 @@ public class ContentBlockTests {
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public ContentBlockTests() {
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
     }
     
     @Test

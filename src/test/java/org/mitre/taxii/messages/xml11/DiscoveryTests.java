@@ -30,7 +30,7 @@ public class DiscoveryTests {
     
     public DiscoveryTests() {
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
         setupDefaultQueries();
         setupServiceInstances();               
     }

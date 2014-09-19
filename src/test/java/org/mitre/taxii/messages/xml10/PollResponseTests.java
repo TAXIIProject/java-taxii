@@ -22,7 +22,7 @@ public class PollResponseTests {
     
     public PollResponseTests() {
        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-       taxiiXml = txf.getTaxiiXml();
+       taxiiXml = txf.createTaxiiXml();
     }
     
     @Test

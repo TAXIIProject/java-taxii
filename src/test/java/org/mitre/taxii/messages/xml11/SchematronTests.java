@@ -71,7 +71,7 @@ public class SchematronTests {
     @BeforeClass
     public static void init() throws Exception {
         TaxiiXmlFactory txf = new TaxiiXmlFactory();
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
         unmarshaller = taxiiXml.getJaxbContext().createUnmarshaller();
     }
 

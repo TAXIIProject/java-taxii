@@ -44,9 +44,9 @@ public final class Validation {
      * DESIGN NOTE: We use a List here to keeps the warnings, errors, and fatal
      * errors in same order in which they are added.
      */
-    private final List<String> warnings = new ArrayList<String>();
-    private final List<String> errors = new ArrayList<String>();
-    private final List<String> fatalErrors = new ArrayList<String>();
+    private final List<String> warnings = new ArrayList<>();
+    private final List<String> errors = new ArrayList<>();
+    private final List<String> fatalErrors = new ArrayList<>();
 
     /* ======================
      * factory methods

@@ -33,7 +33,7 @@ public class CollectionSubscriptionManagementRequestTests {
     
     public CollectionSubscriptionManagementRequestTests() {
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
         setupQueries();
         setupSubscriptionParameters();
         setupPushParameters();

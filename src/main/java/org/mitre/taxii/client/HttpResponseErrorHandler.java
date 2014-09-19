@@ -40,10 +40,40 @@ import org.apache.http.util.EntityUtils;
  */
 public abstract class HttpResponseErrorHandler {
     
-    /** Builds a TAXII status message based on the HTTP response code. */
+    /**
+     * We received a response that was not a 200 (Success)
+     * value. Make up an appropriate Status Message.
+     * 
+     * @param response the HTTP response object.
+     * @param msgIn the TAXII message received from the server.
+     * @return StatusMessage based on the HTTP response code.
+     */
     public abstract Object buildStatusCodeStatusMessage(CloseableHttpResponse response, Object message);
     
-    /** Builds a TAXDD status message based on an SSL exception. */
+    /**
+     * Construct an "UNAUTHORIZED" StatusMessage.
+     * 
+     * <p>Section 5.2 of the TAXII HTTP Protocol Binding Specification states:</p>
+     * <p>
+     * "If TLS is used, problems with the TLS handshake or connection are indicated
+     * using a TLS Alert Protocol Record. This section defines rules for interpreting
+     * a TLS Alert Protocol Record as a TAXII Status Message. Treat a TLS Alert
+     * Protocol Record as being equivalent to a TAXII Status Message with the 
+     * following properties:
+     * </p>
+     * <ul>
+     * <li>Status = Use the appropriate TAXII Status Type as identified in Table 3.</li>
+     * <li>Message = The TLS Alert, represented as a hexadecimal string."</li>
+     * </ul>
+     * <p>
+     * Unfortunately, Java does not give us access to the TLS Alert, so we'll 
+     * just make all the Statuses UNAUTHORIZED and return the exception's message.
+     * </p>
+     * 
+     * @param ex
+     * @param message
+     * @return "UNAUTHORIZED" status message.
+     */ 
     public abstract Object buildSSLErrorStatusMessage(SSLException ex, Object message);
     
     /**

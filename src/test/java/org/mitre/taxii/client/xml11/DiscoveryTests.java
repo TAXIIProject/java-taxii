@@ -43,7 +43,7 @@ public class DiscoveryTests {
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public DiscoveryTests() {
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
     }
    
     @Test

@@ -36,7 +36,7 @@ public class FailureTests {
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public FailureTests() {
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
     }
     
     @Test

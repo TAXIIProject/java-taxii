@@ -25,7 +25,7 @@ public class PollRequestTest {
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
     public PollRequestTest() {
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
     }
     
     @Test

@@ -33,7 +33,7 @@ public class InboxMessageTests {
     private ContentBlock cb001, cb002;
 
     public InboxMessageTests() {
-       taxiiXml = txf.getTaxiiXml();
+       taxiiXml = txf.createTaxiiXml();
         try {
             setup();
         } catch (ParserConfigurationException ex) {

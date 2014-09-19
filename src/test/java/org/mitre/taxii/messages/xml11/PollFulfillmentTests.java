@@ -16,7 +16,7 @@ public class PollFulfillmentTests {
     private final TaxiiXml taxiiXml;
     
     public PollFulfillmentTests() {
-       taxiiXml = txf.getTaxiiXml();
+       taxiiXml = txf.createTaxiiXml();
     }
 
     @Test

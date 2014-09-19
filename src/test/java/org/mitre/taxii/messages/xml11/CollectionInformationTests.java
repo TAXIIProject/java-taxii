@@ -28,7 +28,7 @@ public class CollectionInformationTests {
         
     public CollectionInformationTests() {
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
-        taxiiXml = txf.getTaxiiXml();
+        taxiiXml = txf.createTaxiiXml();
         setupPushMethods();
         setupServiceContactInfo();
         setupCollectionRecords();

@@ -1,4 +1,4 @@
-package org.mitre.taxii.messages.xml11;
+package org.mitre.taxii.messages;
 /*
  Copyright (c) 2014, The MITRE Corporation
  All rights reserved.
@@ -26,32 +26,55 @@ package org.mitre.taxii.messages.xml11;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
-import org.mitre.taxii.ResourcePaths;
-import org.mitre.taxii.Versions;
+import java.util.ArrayList;
+import java.util.List;
+import org.mitre.taxii.messages.xmldsig.Signature;
+
 
 /**
- * Class used to create instances of TaxiiXml for TAXII 1.1.
- * This factory ensures the TaxiiXml object is initialized properly and ready
- * for use.
- *
+ * Factory for {@link TaxiiXml} objects.
+ * 
+ * Each TAXII version has its own factory implementation.
+ * 
  * @author jasenj1
  */
-public class TaxiiXmlFactory extends org.mitre.taxii.messages.TaxiiXmlFactory {
+public abstract class TaxiiXmlFactory {
+
+    /** List of package names that are JAXB annotated classes. */
+    private final List<String>contextPackages = new ArrayList<>();
 
     /**
-     * Generate a TaxiiXml object configured for TAXII 1.1 messages.
-     *
-     * @return a TaxiiXml object configured for TAXII 1.1 messages.
+     * The constructor automatically adds the Digital Signature JAXB context.
      */
-    public TaxiiXml createTaxiiXml() {
-        TaxiiXml tx = new TaxiiXml(
-                Versions.VID_TAXII_XML_11,
-                Versions.VID_TAXII_SERVICES_11,
-                this.getClass().getPackage().getName(),
-                this.getContextPackages(),
-                ResourcePaths.TAXII_11_SCHEMA_RESOURCE,
-                ResourcePaths.TAXII_11_SCHEMATRON_XSLT_RESOURCE);
-        return tx;
+    public TaxiiXmlFactory() {
+        addJaxbContextPackage(Signature.class.getPackage().getName()); // Add the digital signature JAXB classes automatically.
+    }
+    
+    /**
+     * Add A JAXB context package to this factory. The factory will create
+     * a TaxiiXml object that knows how to handle all of the JAXB classes
+     * declared in the package. For example, "org.mitre.taxii.query" to 
+     * handle the TAXII default query classes.
+     * 
+     * @param packageName 
+     */
+    public final void addJaxbContextPackage(String packageName) {
+            contextPackages.add(packageName);
     }
 
+    /** Returns a live list of context package names. Changing the returned list will
+     * modify the member of the factory.
+     * @return list of context package names.
+     */
+    public List<String>getContextPackages() {
+        return contextPackages;
+    }
+    
+    /**
+     * Return an instance of {@link TaxiiXml} configured with the JAXB contexts
+     * in the context package list.
+     * @return 
+     */
+    public abstract TaxiiXml createTaxiiXml();
+    
 }
