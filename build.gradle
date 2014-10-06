@@ -87,6 +87,13 @@ javadoc {
     options.overview = "src/main/java/overview.html"
 }
 
+task dist << {
+    ant.zip(destfile: "build/java-taxii.zip") {
+        fileset(dir: ".", includes: "README.txt, LICENSE.txt")
+        fileset(dir: "build/libs", includes: "java-taxii.jar")
+    }
+}
+
 // fix dependencies so that generate gets called before compileJava
 compileSchematron.dependsOn extractSchematron
 
@@ -94,3 +101,4 @@ generate.dependsOn extractSchematron
 
 compileJava.dependsOn generate
 
+dist.dependsOn jar
