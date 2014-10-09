@@ -46,7 +46,7 @@ public class ResponseErrorHandler extends HttpResponseErrorHandler {
      * value. Make up an appropriate Status Message.
      * 
      * @param response the HTTP response object.
-     * @param msgIn the TAXII message received from the server.
+     * @param msgIn the TAXII message sent to the server.
      * @return StatusMessage based on the HTTP response code.
      */
     @Override
@@ -54,7 +54,7 @@ public class ResponseErrorHandler extends HttpResponseErrorHandler {
         if (!(msgIn instanceof MessageType)) {
             return null; // Probably ought to throw an exception here.
         }
-        String msgId = ((MessageType)msgIn).getMessageId();
+        String msgId = ((MessageType)msgIn).getMessageId(); // ID of the message sent.
         ObjectFactory factory = new ObjectFactory();
         StatusMessage msg = factory.createStatusMessage()
                                 .withInResponseTo(msgId)

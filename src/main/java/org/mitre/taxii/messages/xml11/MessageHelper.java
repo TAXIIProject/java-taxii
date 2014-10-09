@@ -48,12 +48,25 @@ public class MessageHelper {
         return "urn:uuid:" + UUID.randomUUID().toString();
     }    
     
+    /**
+     * 
+     * @param name
+     * @param value
+     * @return 
+     */
     public static ExtendedHeaderType createExtendedHeader(final URI name, final Object value) {
         final ExtendedHeaderType eht = new ExtendedHeaderType().withName(name.toString());
         eht.getContent().add(value.toString());        
         return eht;
     }
     
+    /**
+     * 
+     * @param m
+     * @param name
+     * @param value
+     * @return 
+     */
     public static MessageType addExtendedHeader(final MessageType m, final URI name, final Object... value) {
         
         ExtendedHeadersType eht = m.getExtendedHeaders();
@@ -75,6 +88,13 @@ public class MessageHelper {
         
     }
     
+    /**
+     * Not implemented yet.
+     * 
+     * @param m
+     * @param headerMap
+     * @return 
+     */
     public static MessageType addExtendedHeaders(final MessageType m, final Map headerMap) {
         return m;
     }

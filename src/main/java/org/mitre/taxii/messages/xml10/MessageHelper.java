@@ -66,12 +66,26 @@ public class MessageHelper {
         
     }
 
+    /**
+     * Generates a random number between 1 and 100000 formatted with leading 
+     * zeros.
+     * NOTE: This should not be used in production as the IDs have no guarantee
+     * of being unique.
+     * 
+     * @return six digit leading zero formatted random number.
+     */
     static String generateMessageId() {
         Random r = new Random();
         int id = r.nextInt(99999);
         return String.format("%06d",id);
     }
     
+    /**
+     * Not implemented yet.
+     * 
+     * @param m
+     * @param headerMap 
+     */
     public void addExtendedHeaders(final MessageType m, final Map headerMap) {
         
     }

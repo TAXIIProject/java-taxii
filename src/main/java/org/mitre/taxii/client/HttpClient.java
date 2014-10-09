@@ -281,7 +281,7 @@ public class HttpClient {
                 }
 
                 if (!contentFound) { // Response is not a TAXII Message we understand.
-                    // go create a TAXII status message based on what we got.
+                    // go create a TAXII status message based on the headers.
                     resultObj = taxiiXml.getResponseHandler().buildStatusCodeStatusMessage(response, message);
                 } else { // We should know how to handle the response.
 
