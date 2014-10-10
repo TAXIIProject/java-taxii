@@ -1,11 +1,13 @@
 package org.mitre.taxii.messages.xml11;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * This class replicates the Python libtaxii to_text() output.
@@ -65,7 +67,22 @@ public class PythonTextOutput {
             return s;
         }
         
-        // TODO: GenericParameters
+        // GenericParameters handled in a method call.
+        
+        if (obj instanceof SubscriptionParametersType) {
+            return genericParameters(obj, line_prepend);
+        }
+        
+        if (obj instanceof PollParametersType) {
+            PollParametersType self = (PollParametersType)obj;
+            s = genericParameters(self, line_prepend);
+            
+            s += line_prepend + String.format("  Allow Asynch: %s\n", self.isAllowAsynch());
+            if(null != self.getDeliveryParameters()) {
+                s += toText(self.getDeliveryParameters(), line_prepend + STD_INDENT);
+            }
+            return s;            
+        }
         
         if (obj instanceof ContentBlock) {
             ContentBlock self = (ContentBlock)obj;
@@ -178,12 +195,146 @@ public class PythonTextOutput {
         
         if (obj instanceof CollectionRecordType) {
             CollectionRecordType self = (CollectionRecordType) obj;
-            
+
+            s = line_prepend + "=== Data Collection Information ===\n";
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Collection Type: %s\n", self.getCollectionType().name());
+            s += line_prepend + String.format("  Available: %s\n", self.isAvailable());
+            s += line_prepend + String.format("  Collection Description: %s\n", self.getDescription());
+            if ( 0 != BigInteger.ZERO.compareTo(self.getCollectionVolume())) {
+                s += line_prepend + String.format("  Volume: %s\n", self.getCollectionVolume());
+            }
+            if (self.getContentBindings().isEmpty()) { // All contents supported:
+                s += line_prepend + String.format("  Supported Content: %s\n", "All");
+            }        
+            for ( ContentBindingIDType cb : self.getContentBindings()) {
+                s += line_prepend + String.format("  Supported Content: %s\n", toText(cb, line_prepend + STD_INDENT));
+            }
+            for (ServiceContactInfoType sci : self.getPollingServices()) {
+                s += toText(sci, line_prepend + STD_INDENT);
+            }
+            for ( PushMethodType pm : self.getPushMethods()) {
+                s += toText(pm, (line_prepend + STD_INDENT));
+            }
+            for (InboxServiceBindingsType isb: self.getReceivingInboxServices()) {
+                s += toText(isb, line_prepend + STD_INDENT);
+            }
+            s += line_prepend + "==================================\n\n";
             return s;
         }
         
+        if (obj instanceof PushMethodType) {
+            PushMethodType self = (PushMethodType) obj;
+
+            s = line_prepend + "=== Push Method ===\n";
+            s += line_prepend + String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
+            for (String mb : self.getMessageBindings()) {
+                s += line_prepend +  String.format("  Message Binding: %s\n", mb);                
+            }
+            return s;            
+        }
+        
+        /* 
+            There are two elements of type ServiceContactInfoType
+            Polling_Service and Subscription_Service.
+            Unfortunately, the Python code treats them as different types and
+            has unique code for each element.
+        */
+        if (obj instanceof ServiceContactInfoType) {
+            ServiceContactInfoType self = (ServiceContactInfoType)obj;
+            
+            XmlRootElement root = self.getClass().getAnnotation(XmlRootElement.class);
+            s = line_prepend + String.format("=== %s Instance ===\n",root.name());
+            s += line_prepend + String.format("  Protocol: %s\n", self.getProtocolBinding());
+            s += line_prepend + String.format("  Address: %s\n", self.getAddress());
+            for (String binding : self.getMessageBindings()) {
+                s += line_prepend + String.format("  Message Binding: %s\n", binding);
+            }
+            return s;            
+        }
+        
+        if (obj instanceof InboxServiceBindingsType) {
+            InboxServiceBindingsType self = (InboxServiceBindingsType)obj;
+            
+            s = line_prepend + "=== Receiving Inbox Service ===\n";
+            s += line_prepend + String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
+            s += line_prepend + String.format("  Address: %s\n", self.getAddress());
+            for (String mb : self.getMessageBindings()) {
+                s += line_prepend +  String.format("  Message Binding: %s\n", mb);
+            }
+            if (self.getContentBindings().isEmpty()) {
+                s += line_prepend + "  Supported Contents: All\n";
+            }            
+            for (ContentBindingIDType cb : self.getContentBindings())
+                s += line_prepend + String.format("  Supported Content: %s\n", toText(cb,""));
+            return s;            
+        }
+
+        if (obj instanceof PollRequest) {
+            PollRequest self = (PollRequest)obj;
+            
+            /* s will be populated by MessageType match above */            
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            if (null !=self.getSubscriptionID()) {
+                s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            }
+            if (null != self.getExclusiveBeginTimestamp().toXMLFormat()) {
+                s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
+            }
+            if (null != self.getInclusiveEndTimestamp().toXMLFormat()) {
+                s += line_prepend + String.format("  Incl. End TS Label: %s\n", self.getInclusiveEndTimestamp().toXMLFormat());
+            }
+            if (null != self.getPollParameters()) {
+                s += toText( self.getPollParameters() , line_prepend + STD_INDENT);
+            }
+
+            return s;            
+        }
+
+            
         s = "Sorry, I do not know how to render a " + obj.getClass().getName();
         return s;
+        
+    }
+    
+    private static String genericParameters(Object obj, String line_prepend) {
+        StringBuilder sb = new StringBuilder();
+        XmlRootElement root = obj.getClass().getAnnotation(XmlRootElement.class);
+        sb.append(line_prepend).append(String.format("=== %s ===\n", root.name()));
+        
+        /* 
+         * Use reflection to get the common fields.
+         * This would be easier in Groovy.
+         */
+        try {
+            // Content Bindings
+            Method getCB = obj.getClass().getMethod("getContentBindings");
+            Object rawCBs = getCB.invoke(obj);
+            List<ContentBindingIDType> cbList = (List)rawCBs;
+            for (ContentBindingIDType cb : cbList) {
+                sb.append(String.format("  Content Binding: %s\n", toText(cb, "")));
+            }
+            
+            // Query
+            Method getQ = obj.getClass().getMethod("getQuery");
+            Object rawQ = getQ.invoke(obj);
+            QueryType q = (QueryType)rawQ;
+            if (null != q) {
+                sb.append(toText(q,line_prepend + STD_INDENT));
+            }                        
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(PythonTextOutput.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(PythonTextOutput.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(PythonTextOutput.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(PythonTextOutput.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(PythonTextOutput.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return sb.toString();
     }
     
     /**
