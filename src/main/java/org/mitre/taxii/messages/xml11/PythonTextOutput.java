@@ -290,11 +290,175 @@ public class PythonTextOutput {
 
             return s;            
         }
+        
+        if (obj instanceof PollResponse) {
+            PollResponse self = (PollResponse)obj;
+            
+            /* s will be populated by MessageType match */
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  More: %s\n", self.isMore());
+            s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
+            if (null != self.getResultPartNumber()) {
+                s += line_prepend + String.format("  Result Part Num: %s\n", self.getResultPartNumber());
+            }
+            if (null != self.getRecordCount()) {
+                s += toText(self.getRecordCount(), line_prepend + STD_INDENT);
+            }
+            if (null != self.getSubscriptionID()) {
+                s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            }                        
+            if (null != self.getMessage()) {
+                s += line_prepend + String.format("  Message: %s\n", self.getMessage());
+            }            
+            if (null != self.getExclusiveBeginTimestamp()) {
+                s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
+            }
+            if (null != self.getInclusiveEndTimestamp()) {
+                s += line_prepend + String.format("  Incl. End TS Label: %s\n", self.getInclusiveEndTimestamp().toXMLFormat());
+            }                        
+            for (ContentBlock cb : self.getContentBlocks()) {
+                s += toText(cb, line_prepend + STD_INDENT);
+            }
+            return s;            
+        }
+        
+        if (obj instanceof StatusMessage) {
+            StatusMessage self = (StatusMessage)obj;
+            
+            /* s will be populated by MessageType match */
+            s += line_prepend + String.format("Status Type: %s\n", self.getStatusType());
+                        
+            StatusDetailType sdt = self.getStatusDetail();
+            if (null != sdt) {
+                for (StatusDetailDetailType sddt : sdt.getDetails()) {
+            /* TODO: On the Python side the below is the raw content.
+                libtaxii stores the content internally as a string. On the Java side the content is
+                a list of objects (see AnyMixedContentType). So to really get the
+                value would require marshaling the content - an expensive operation
+                that requires a TaxiiXml object with the proper JAXB context.
+                i.e. It's a pain to do. Skip it for now.
+            */
+                    s += line_prepend + String.format("Status Detail: %s = %s\n", sddt.getName(), sddt.getContent());
+                }
+            }
+                
+            if (null != self.getMessage()) {
+                s += line_prepend + String.format("Message: %s\n", self.getMessage());
+            }
+            return s;            
+        }
+        
+        if (obj instanceof InboxMessage) {
+            InboxMessage self = (InboxMessage)obj;
+            
+            /* s is populated by MessageType match */            
+            if (null != self.getResultId()) {
+                s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
+            }
+            for (String dcn : self.getDestinationCollectionNames()) {
+                s += line_prepend + String.format("  Destination Collection Name: %s\n", dcn);
+            }
+            s += line_prepend + String.format("  Message: %s\n", self.getMessage());
+            if (null != self.getSourceSubscription()) {
+                s += toText(self.getSourceSubscription(), line_prepend + STD_INDENT);
+            }
+            if (null != self.getRecordCount()) {
+                s += toText(self.getRecordCount(), line_prepend + STD_INDENT);
+            }
+       
+            s += line_prepend + String.format("  Message has %s Content Blocks\n", self.getContentBlocks().size());
+            
+            for (ContentBlock cb : self.getContentBlocks()) {
+                s += toText(cb, line_prepend + STD_INDENT);
+            }
+            return s;            
+        }
+        
+        if (obj instanceof SourceSubscriptionType) { // Python libtaxii calls this SubscriptionInformation
+            SourceSubscriptionType self = (SourceSubscriptionType)obj;
+            
+            s = line_prepend + "=== Source Subscription ===\n";
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
 
+            if (null != self.getExclusiveBeginTimestamp()) {
+                s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
+            } else {
+                s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", "None");
+            }
+
+            if (null != self.getInclusiveEndTimestamp()) {
+                s += line_prepend + String.format("  Incl. End TS Label: %s\n", self.getInclusiveEndTimestamp());
+                        } else {
+                s += line_prepend + String.format("  Incl. End TS Label: %s\n", "None");
+            }
+            return s;            
+        }
+        
+        if (obj instanceof SubscriptionManagementRequest) { // Python libtaxii calls this ManageCollectionSubscriptionRequest
+            SubscriptionManagementRequest self = (SubscriptionManagementRequest) obj;
+            
+            /* s will be prepopulated by MessageType match */
+            CollectionActionEnum action = self.getAction();                
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Action: %s\n", action.name());                
+            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+        
+            if  (CollectionActionEnum.SUBSCRIBE == action) {
+                s += toText(self.getSubscriptionParameters(), line_prepend + STD_INDENT);
+            }
+
+            if ((CollectionActionEnum.SUBSCRIBE == action) && (null != self.getPushParameters())) {
+                s += toText(self.getPushParameters(), line_prepend + STD_INDENT);
+            }
+            return s;
+            
+        }
+        
+        if (obj instanceof SubscriptionManagementResponse) { // Python libtaxii calls this ManageCollectionSubscriptionResponse
+            SubscriptionManagementResponse self = (SubscriptionManagementResponse)obj;
+            
+            /* s will be prepopulated by MessageType match */
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Message: %s\n", self.getMessage());
+            for (SubscriptionRecordType srt: self.getSubscriptions()) {
+                s += toText(srt, line_prepend + STD_INDENT);
+            }
+            return s;            
+        }
+        
+        if (obj instanceof SubscriptionRecordType) { // Python libtaxii calls this SubscriptionInstance
+            SubscriptionRecordType self = (SubscriptionRecordType)obj;
+
+            s = line_prepend + "=== Subscription Instance ===\n";
+            s += line_prepend + String.format("  Status: %s\n", self.getStatus().name());
+            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            if (null != self.getSubscriptionParameters()) {
+                s += toText(self.getSubscriptionParameters(), line_prepend + STD_INDENT);
+            }
+            if (null != self.getPushParameters()) {
+                s += toText(self.getPushParameters(), line_prepend + STD_INDENT);
+            }
+            for (ServiceContactInfoType sci : self.getPollInstances()) {
+                s += toText(sci, line_prepend + STD_INDENT);
+            }
+            return s;        
+        }
+        
+        if (obj instanceof PollFulfillment){
+            PollFulfillment self = (PollFulfillment)obj;
+            
+            /* s will be populated by MessageType match */
+            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
+            s += line_prepend + String.format("  Result Part Number: %s\n", self.getResultPartNumber());
+            return s;            
+        }
+        
+        
             
         s = "Sorry, I do not know how to render a " + obj.getClass().getName();
-        return s;
-        
+        return s;        
     }
     
     private static String genericParameters(Object obj, String line_prepend) {
