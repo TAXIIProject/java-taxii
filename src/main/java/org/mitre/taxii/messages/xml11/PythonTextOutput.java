@@ -454,9 +454,7 @@ public class PythonTextOutput {
             s += line_prepend + String.format("  Result Part Number: %s\n", self.getResultPartNumber());
             return s;            
         }
-        
-        
-            
+                           
         s = "Sorry, I do not know how to render a " + obj.getClass().getName();
         return s;        
     }
