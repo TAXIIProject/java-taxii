@@ -39,6 +39,9 @@ import java.util.Random;
  */
 public class MessageHelper {
     
+    private static final int ID_LIMIT = 999999;
+    private static int nextId = new Random().nextInt(ID_LIMIT);
+    
     public static ExtendedHeaderType createExtendedHeader(final URI name, final Object value) {
         final ExtendedHeaderType eht = new ExtendedHeaderType().withName(name.toString());
         eht.getContent().add(value.toString());        
@@ -67,16 +70,16 @@ public class MessageHelper {
     }
 
     /**
-     * Generates a random number between 1 and 100000 formatted with leading 
-     * zeros.
-     * NOTE: This should not be used in production as the IDs have no guarantee
-     * of being unique.
-     * 
+     * Generates sequential IDs starting at a random number between 1 and 999999
+     * formatted with leading zeros.
+     *      
      * @return six digit leading zero formatted random number.
      */
     static String generateMessageId() {
-        Random r = new Random();
-        int id = r.nextInt(99999);
+        int id = nextId++;
+        if (ID_LIMIT < nextId) {
+            nextId = 1;
+        }
         return String.format("%06d",id);
     }
     
