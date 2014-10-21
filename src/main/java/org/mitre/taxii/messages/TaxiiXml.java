@@ -272,7 +272,7 @@ public abstract class TaxiiXml {
     
     /**
      * Initialize the JAXB Context with known contexts that every instance of
-     * TaxiiXmlImpl will need to know.
+     * TaxiiXml will need to know.
      * 
      */
     private static List<String> initializeJaxbContextEntries() {
