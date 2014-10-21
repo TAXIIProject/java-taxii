@@ -63,7 +63,7 @@ public class PythonTextOutput {
             RecordCountType self = (RecordCountType)obj;
             s = line_prepend + "=== Record Count ===\n";
             s += line_prepend + String.format("  Record Count: %s\n", self.getValue());
-            s += line_prepend + String.format("  Partial Count: %s\n", self.isPartialCount());            
+            s += line_prepend + String.format("  Partial Count: %s\n", String.valueOf(self.isPartialCount()).toUpperCase());            
             return s;
         }
         
@@ -77,7 +77,7 @@ public class PythonTextOutput {
             PollParametersType self = (PollParametersType)obj;
             s = genericParameters(self, line_prepend);
             
-            s += line_prepend + String.format("  Allow Asynch: %s\n", self.isAllowAsynch());
+            s += line_prepend + String.format("  Allow Asynch: %s\n", String.valueOf(self.isAllowAsynch()).toUpperCase());
             if(null != self.getDeliveryParameters()) {
                 s += toText(self.getDeliveryParameters(), line_prepend + STD_INDENT);
             }
@@ -88,8 +88,7 @@ public class PythonTextOutput {
             ContentBlock self = (ContentBlock)obj;
             
             s = line_prepend + "=== Content Block ===\n";
-            s += line_prepend + String.format("  Content Binding: %s\n", toText(self.getContentBinding(), ""));
-
+            s += line_prepend + String.format("  Content Binding: %s\n", toText(self.getContentBinding(), "")); // ContentInstanceType
             /* TODO: On the Python side the below is the length of the marshaled/serialized content.
                 libtaxii stores the content internally as a string. On the Java side the content is
                 a list of objects (see AnyMixedContentType). So to really get the
@@ -106,6 +105,15 @@ public class PythonTextOutput {
             s += line_prepend + String.format("  Padding: %s\n",self.getPadding());
             
             return s;            
+        }
+        
+        if (obj instanceof ContentInstanceType) {
+            ContentInstanceType self = (ContentInstanceType)obj;
+            s = line_prepend;
+            s += self.getBindingId();
+            if (null != self.getSubtype()) {
+                s += ">" + self.getSubtype();
+            }
         }
 
         if (obj instanceof PushParameterType) {
@@ -173,7 +181,7 @@ public class PythonTextOutput {
                 s += line_prepend + String.format("  Inbox Service AC: %s\n", toText(cb, line_prepend));
             }
             
-            s += line_prepend +  String.format("  Available: %s\n", self.isAvailable());
+            s += line_prepend +  String.format("  Available: %s\n", String.valueOf(self.isAvailable()).toUpperCase());
             s += line_prepend +  String.format("  Message: %s\n",self.getMessage());
             
             for (SupportedQueryType q : self.getSupportedQueries()) {
@@ -199,7 +207,7 @@ public class PythonTextOutput {
             s = line_prepend + "=== Data Collection Information ===\n";
             s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
             s += line_prepend + String.format("  Collection Type: %s\n", self.getCollectionType().name());
-            s += line_prepend + String.format("  Available: %s\n", self.isAvailable());
+            s += line_prepend + String.format("  Available: %s\n", String.valueOf(self.isAvailable()).toUpperCase());
             s += line_prepend + String.format("  Collection Description: %s\n", self.getDescription());
             if ( 0 != BigInteger.ZERO.compareTo(self.getCollectionVolume())) {
                 s += line_prepend + String.format("  Volume: %s\n", self.getCollectionVolume());
@@ -296,7 +304,7 @@ public class PythonTextOutput {
             
             /* s will be populated by MessageType match */
             s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  More: %s\n", self.isMore());
+            s += line_prepend + String.format("  More: %s\n", String.valueOf(self.isMore()).toUpperCase());
             s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
             if (null != self.getResultPartNumber()) {
                 s += line_prepend + String.format("  Result Part Num: %s\n", self.getResultPartNumber());
@@ -455,7 +463,9 @@ public class PythonTextOutput {
             return s;            
         }
                            
-        s = "Sorry, I do not know how to render a " + obj.getClass().getName();
+        if (s.isEmpty()) {
+            s = "Sorry, I do not know how to render a " + obj.getClass().getName();
+        }
         return s;        
     }
     
