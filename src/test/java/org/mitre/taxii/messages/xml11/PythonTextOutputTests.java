@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import org.junit.Test;
 
 public class PythonTextOutputTests {
-
+           
     @Test
     public void SupportedQueryTypeTest() {
         ObjectFactory of = new ObjectFactory();        
@@ -69,8 +69,8 @@ public class PythonTextOutputTests {
         System.out.println(s);                
     }
     
-    @Test
-    public void DiscoveryResponseTest() {
+    @Test    
+    public void DiscoveryResponseTest1() {
         ObjectFactory of = new ObjectFactory();
         DiscoveryResponse obj = of.createDiscoveryResponse()
                 .withInResponseTo("in response to 10")
@@ -113,5 +113,5 @@ public class PythonTextOutputTests {
 
         String s = PythonTextOutput.toText(obj);
         System.out.println(s);                        
-    }
+    }    
 }
