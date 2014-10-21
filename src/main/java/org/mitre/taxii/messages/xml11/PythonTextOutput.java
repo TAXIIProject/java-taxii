@@ -34,14 +34,14 @@ public class PythonTextOutput {
         if (obj instanceof SupportedQueryType) {
             SupportedQueryType self = (SupportedQueryType) obj;
             s = line_prepend + "=== Supported Query Information ===\n";
-            s += line_prepend + String.format("  Query Format: %s\n", self.getFormatId());
+            s += line_prepend + String.format("  Query Format: %s\n", toStringOrNone(self.getFormatId()));
             return s;
         }
         
         if (obj instanceof QueryType) {
             QueryType self = (QueryType) obj;
             s = line_prepend + "=== Query ===\n";
-            s += line_prepend + String.format("  Query Format: %s\n", self.getFormatId());
+            s += line_prepend + String.format("  Query Format: %s\n", toStringOrNone(self.getFormatId()));
             return s;
         }
         
@@ -52,7 +52,7 @@ public class PythonTextOutput {
             if (!self.getSubtypes().isEmpty()) {
                 List<String> subtypes = new ArrayList();
                 for (SubtypeType st : self.getSubtypes()) {
-                    subtypes.add(st.getSubtypeId());
+                    subtypes.add(toStringOrNone(st.getSubtypeId()));
                 }                
                 s += ">" + join(",",subtypes);
             }            
@@ -62,22 +62,22 @@ public class PythonTextOutput {
         if (obj instanceof RecordCountType) {
             RecordCountType self = (RecordCountType)obj;
             s = line_prepend + "=== Record Count ===\n";
-            s += line_prepend + String.format("  Record Count: %s\n", self.getValue());
-            s += line_prepend + String.format("  Partial Count: %s\n", String.valueOf(self.isPartialCount()).toUpperCase());            
+            s += line_prepend + String.format("  Record Count: %s\n", toStringOrNone(self.getValue()));
+            s += line_prepend + String.format("  Partial Count: %s\n", booleanString(self.isPartialCount()));            
             return s;
         }
         
         // GenericParameters handled in a method call.
         
         if (obj instanceof SubscriptionParametersType) {
-            return genericParameters(obj, line_prepend);
+            return genericParameters(obj, "Subscription_Parameters", line_prepend);
         }
         
         if (obj instanceof PollParametersType) {
             PollParametersType self = (PollParametersType)obj;
-            s = genericParameters(self, line_prepend);
+            s = genericParameters(self, "Poll_Parameters", line_prepend);
             
-            s += line_prepend + String.format("  Allow Asynch: %s\n", String.valueOf(self.isAllowAsynch()).toUpperCase());
+            s += line_prepend + String.format("  Allow Asynch: %s\n", booleanString(self.isAllowAsynch()));
             if(null != self.getDeliveryParameters()) {
                 s += toText(self.getDeliveryParameters(), line_prepend + STD_INDENT);
             }
@@ -100,9 +100,9 @@ public class PythonTextOutput {
                         
             s += line_prepend + "  (Content not printed for brevity)\n";
             if (null != self.getTimestampLabel()) {
-                s += line_prepend + String.format("  Timestamp Label: %s\n",self.getTimestampLabel().toXMLFormat());
+                s += line_prepend + String.format("  Timestamp Label: %s\n", self.getTimestampLabel().toXMLFormat());
             }
-            s += line_prepend + String.format("  Padding: %s\n",self.getPadding());
+            s += line_prepend + String.format("  Padding: %s\n", toStringOrNone(self.getPadding()));
             
             return s;            
         }
@@ -110,7 +110,7 @@ public class PythonTextOutput {
         if (obj instanceof ContentInstanceType) {
             ContentInstanceType self = (ContentInstanceType)obj;
             s = line_prepend;
-            s += self.getBindingId();
+            s += toStringOrNone(self.getBindingId());
             if (null != self.getSubtype()) {
                 s += ">" + self.getSubtype();
             }
@@ -119,9 +119,9 @@ public class PythonTextOutput {
         if (obj instanceof PushParameterType) {
             PushParameterType self = (PushParameterType) obj;
             s = line_prepend + "=== Push Parameters ===\n";
-            s += line_prepend + String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
-            s += line_prepend + String.format("  Inbox Address: %s\n", self.getAddress());
-            s += line_prepend + String.format("  Message Binding: %s\n",self.getMessageBinding());            
+            s += line_prepend + String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
+            s += line_prepend + String.format("  Inbox Address: %s\n", toStringOrNone(self.getAddress()));
+            s += line_prepend + String.format("  Message Binding: %s\n", toStringOrNone(self.getMessageBinding()));
             return s;
         }
         
@@ -137,10 +137,10 @@ public class PythonTextOutput {
 
             XmlRootElement root = self.getClass().getAnnotation(XmlRootElement.class);
             s = line_prepend + String.format("Message Type: %s\n", root.name());
-            s += line_prepend + String.format("Message ID: %s", self.getMessageId());
+            s += line_prepend + String.format("Message ID: %s", toStringOrNone(self.getMessageId()));
             if (self instanceof ResponseMessageType) {       
                 ResponseMessageType rmt = (ResponseMessageType)self;                
-                s += String.format("; In Response To: %s", rmt.getInResponseTo());
+                s += String.format("; In Response To: %s", toStringOrNone(rmt.getInResponseTo()));
             }
             s += "\n";
                     
@@ -168,10 +168,10 @@ public class PythonTextOutput {
         if (obj instanceof ServiceInstanceType) {
             ServiceInstanceType self = (ServiceInstanceType)obj;
             s = line_prepend +  "=== Service Instance ===\n";
-            s += line_prepend +  String.format("  Service Type: %s\n", self.getServiceType().name());
-            s += line_prepend +  String.format("  Service Version: %s\n", self.getServiceVersion());
-            s += line_prepend +  String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
-            s += line_prepend +  String.format("  Service Address: %s\n", self.getAddress());
+            s += line_prepend +  String.format("  Service Type: %s\n", toStringOrNone(self.getServiceType().name()));
+            s += line_prepend +  String.format("  Service Version: %s\n", toStringOrNone(self.getServiceVersion()));
+            s += line_prepend +  String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
+            s += line_prepend +  String.format("  Service Address: %s\n", toStringOrNone(self.getAddress()));
             
             for (String mb : self.getMessageBindings()) {
                 s += line_prepend +  String.format("  Message Binding: %s\n", mb);
@@ -181,8 +181,8 @@ public class PythonTextOutput {
                 s += line_prepend + String.format("  Inbox Service AC: %s\n", toText(cb, line_prepend));
             }
             
-            s += line_prepend +  String.format("  Available: %s\n", String.valueOf(self.isAvailable()).toUpperCase());
-            s += line_prepend +  String.format("  Message: %s\n",self.getMessage());
+            s += line_prepend +  String.format("  Available: %s\n", booleanString(self.isAvailable()));
+            s += line_prepend +  String.format("  Message: %s\n",toStringOrNone(self.getMessage()));
             
             for (SupportedQueryType q : self.getSupportedQueries()) {
                 s += toText(q, line_prepend + STD_INDENT);
@@ -205,11 +205,11 @@ public class PythonTextOutput {
             CollectionRecordType self = (CollectionRecordType) obj;
 
             s = line_prepend + "=== Data Collection Information ===\n";
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
             s += line_prepend + String.format("  Collection Type: %s\n", self.getCollectionType().name());
-            s += line_prepend + String.format("  Available: %s\n", String.valueOf(self.isAvailable()).toUpperCase());
-            s += line_prepend + String.format("  Collection Description: %s\n", self.getDescription());
-            if ( 0 != BigInteger.ZERO.compareTo(self.getCollectionVolume())) {
+            s += line_prepend + String.format("  Available: %s\n", booleanString(self.isAvailable()));
+            s += line_prepend + String.format("  Collection Description: %s\n", toStringOrNone(self.getDescription()));
+            if ((null != self.getCollectionVolume()) && (0 != BigInteger.ZERO.compareTo(self.getCollectionVolume()))) {
                 s += line_prepend + String.format("  Volume: %s\n", self.getCollectionVolume());
             }
             if (self.getContentBindings().isEmpty()) { // All contents supported:
@@ -219,6 +219,8 @@ public class PythonTextOutput {
                 s += line_prepend + String.format("  Supported Content: %s\n", toText(cb, line_prepend + STD_INDENT));
             }
             for (ServiceContactInfoType sci : self.getPollingServices()) {
+                String name = "Polling Service";
+                s += line_prepend + STD_INDENT + String.format("=== %s Instance ===\n",name);
                 s += toText(sci, line_prepend + STD_INDENT);
             }
             for ( PushMethodType pm : self.getPushMethods()) {
@@ -235,38 +237,19 @@ public class PythonTextOutput {
             PushMethodType self = (PushMethodType) obj;
 
             s = line_prepend + "=== Push Method ===\n";
-            s += line_prepend + String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
+            s += line_prepend + String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
             for (String mb : self.getMessageBindings()) {
                 s += line_prepend +  String.format("  Message Binding: %s\n", mb);                
             }
             return s;            
         }
-        
-        /* 
-            There are two elements of type ServiceContactInfoType
-            Polling_Service and Subscription_Service.
-            Unfortunately, the Python code treats them as different types and
-            has unique code for each element.
-        */
-        if (obj instanceof ServiceContactInfoType) {
-            ServiceContactInfoType self = (ServiceContactInfoType)obj;
-            
-            XmlRootElement root = self.getClass().getAnnotation(XmlRootElement.class);
-            s = line_prepend + String.format("=== %s Instance ===\n",root.name());
-            s += line_prepend + String.format("  Protocol: %s\n", self.getProtocolBinding());
-            s += line_prepend + String.format("  Address: %s\n", self.getAddress());
-            for (String binding : self.getMessageBindings()) {
-                s += line_prepend + String.format("  Message Binding: %s\n", binding);
-            }
-            return s;            
-        }
-        
+                
         if (obj instanceof InboxServiceBindingsType) {
             InboxServiceBindingsType self = (InboxServiceBindingsType)obj;
             
             s = line_prepend + "=== Receiving Inbox Service ===\n";
-            s += line_prepend + String.format("  Protocol Binding: %s\n", self.getProtocolBinding());
-            s += line_prepend + String.format("  Address: %s\n", self.getAddress());
+            s += line_prepend + String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
+            s += line_prepend + String.format("  Address: %s\n", toStringOrNone(self.getAddress()));
             for (String mb : self.getMessageBindings()) {
                 s += line_prepend +  String.format("  Message Binding: %s\n", mb);
             }
@@ -282,9 +265,9 @@ public class PythonTextOutput {
             PollRequest self = (PollRequest)obj;
             
             /* s will be populated by MessageType match above */            
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
             if (null !=self.getSubscriptionID()) {
-                s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+                s += line_prepend + String.format("  Subscription ID: %s\n", toStringOrNone(self.getSubscriptionID()));
             }
             if (null != self.getExclusiveBeginTimestamp().toXMLFormat()) {
                 s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
@@ -303,9 +286,9 @@ public class PythonTextOutput {
             PollResponse self = (PollResponse)obj;
             
             /* s will be populated by MessageType match */
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  More: %s\n", String.valueOf(self.isMore()).toUpperCase());
-            s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
+            s += line_prepend + String.format("  More: %s\n", booleanString(self.isMore()));
+            s += line_prepend + String.format("  Result ID: %s\n", toStringOrNone(self.getResultId()));
             if (null != self.getResultPartNumber()) {
                 s += line_prepend + String.format("  Result Part Num: %s\n", self.getResultPartNumber());
             }
@@ -334,7 +317,7 @@ public class PythonTextOutput {
             StatusMessage self = (StatusMessage)obj;
             
             /* s will be populated by MessageType match */
-            s += line_prepend + String.format("Status Type: %s\n", self.getStatusType());
+            s += line_prepend + String.format("Status Type: %s\n", toStringOrNone(self.getStatusType()));
                         
             StatusDetailType sdt = self.getStatusDetail();
             if (null != sdt) {
@@ -351,7 +334,7 @@ public class PythonTextOutput {
             }
                 
             if (null != self.getMessage()) {
-                s += line_prepend + String.format("Message: %s\n", self.getMessage());
+                s += line_prepend + String.format("Message: %s\n", toStringOrNone(self.getMessage()));
             }
             return s;            
         }
@@ -361,12 +344,12 @@ public class PythonTextOutput {
             
             /* s is populated by MessageType match */            
             if (null != self.getResultId()) {
-                s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
+                s += line_prepend + String.format("  Result ID: %s\n", toStringOrNone(self.getResultId()));
             }
             for (String dcn : self.getDestinationCollectionNames()) {
-                s += line_prepend + String.format("  Destination Collection Name: %s\n", dcn);
+                s += line_prepend + String.format("  Destination Collection Name: %s\n", toStringOrNone(dcn));
             }
-            s += line_prepend + String.format("  Message: %s\n", self.getMessage());
+            s += line_prepend + String.format("  Message: %s\n", toStringOrNone(self.getMessage()));
             if (null != self.getSourceSubscription()) {
                 s += toText(self.getSourceSubscription(), line_prepend + STD_INDENT);
             }
@@ -386,8 +369,8 @@ public class PythonTextOutput {
             SourceSubscriptionType self = (SourceSubscriptionType)obj;
             
             s = line_prepend + "=== Source Subscription ===\n";
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
+            s += line_prepend + String.format("  Subscription ID: %s\n", toStringOrNone(self.getSubscriptionID()));
 
             if (null != self.getExclusiveBeginTimestamp()) {
                 s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
@@ -408,9 +391,9 @@ public class PythonTextOutput {
             
             /* s will be prepopulated by MessageType match */
             CollectionActionEnum action = self.getAction();                
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  Action: %s\n", action.name());                
-            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
+            s += line_prepend + String.format("  Action: %s\n", toStringOrNone(action.name()));                
+            s += line_prepend + String.format("  Subscription ID: %s\n", toStringOrNone(self.getSubscriptionID()));
         
             if  (CollectionActionEnum.SUBSCRIBE == action) {
                 s += toText(self.getSubscriptionParameters(), line_prepend + STD_INDENT);
@@ -427,8 +410,8 @@ public class PythonTextOutput {
             SubscriptionManagementResponse self = (SubscriptionManagementResponse)obj;
             
             /* s will be prepopulated by MessageType match */
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  Message: %s\n", self.getMessage());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
+            s += line_prepend + String.format("  Message: %s\n", toStringOrNone(self.getMessage()));
             for (SubscriptionRecordType srt: self.getSubscriptions()) {
                 s += toText(srt, line_prepend + STD_INDENT);
             }
@@ -440,7 +423,7 @@ public class PythonTextOutput {
 
             s = line_prepend + "=== Subscription Instance ===\n";
             s += line_prepend + String.format("  Status: %s\n", self.getStatus().name());
-            s += line_prepend + String.format("  Subscription ID: %s\n", self.getSubscriptionID());
+            s += line_prepend + String.format("  Subscription ID: %s\n", toStringOrNone(self.getSubscriptionID()));
             if (null != self.getSubscriptionParameters()) {
                 s += toText(self.getSubscriptionParameters(), line_prepend + STD_INDENT);
             }
@@ -448,18 +431,31 @@ public class PythonTextOutput {
                 s += toText(self.getPushParameters(), line_prepend + STD_INDENT);
             }
             for (ServiceContactInfoType sci : self.getPollInstances()) {
+                String name = "Poll";
+                s += line_prepend + STD_INDENT + String.format("=== %s Instance ===\n",name);                
                 s += toText(sci, line_prepend + STD_INDENT);
             }
             return s;        
+        }
+        
+        if (obj instanceof ServiceContactInfoType) {
+            ServiceContactInfoType self = (ServiceContactInfoType)obj;
+            
+            s += line_prepend + String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
+            s += line_prepend + String.format("  Address: %s\n", toStringOrNone(self.getAddress()));
+            for (String mb : self.getMessageBindings()) {
+                s += line_prepend +  String.format("  Message Binding: %s\n", mb);
+            } 
+            return s;
         }
         
         if (obj instanceof PollFulfillment){
             PollFulfillment self = (PollFulfillment)obj;
             
             /* s will be populated by MessageType match */
-            s += line_prepend + String.format("  Collection Name: %s\n", self.getCollectionName());
-            s += line_prepend + String.format("  Result ID: %s\n", self.getResultId());
-            s += line_prepend + String.format("  Result Part Number: %s\n", self.getResultPartNumber());
+            s += line_prepend + String.format("  Collection Name: %s\n", toStringOrNone(self.getCollectionName()));
+            s += line_prepend + String.format("  Result ID: %s\n", toStringOrNone(self.getResultId()));
+            s += line_prepend + String.format("  Result Part Number: %s\n", toStringOrNone(self.getResultPartNumber()));
             return s;            
         }
                            
@@ -469,10 +465,9 @@ public class PythonTextOutput {
         return s;        
     }
     
-    private static String genericParameters(Object obj, String line_prepend) {
-        StringBuilder sb = new StringBuilder();
-        XmlRootElement root = obj.getClass().getAnnotation(XmlRootElement.class);
-        sb.append(line_prepend).append(String.format("=== %s ===\n", root.name()));
+    private static String genericParameters(Object obj, String name, String line_prepend) {
+        StringBuilder sb = new StringBuilder();            
+        sb.append(line_prepend).append(String.format("=== %s ===\n", name));
         
         /* 
          * Use reflection to get the common fields.
@@ -530,6 +525,21 @@ public class PythonTextOutput {
         }
         
         return sb.toString();
+    }
+
+    /**
+     * Turn a Boolean into a Python string representation.
+     * 
+     * @ return "None", "True", or "False".
+     */
+    private static String booleanString(Boolean value) {
+        if (null == value) return "None";        
+        return value ? "True" : "False";
+    }
+    
+    private static String toStringOrNone(Object obj) {
+        if (null == obj) return "None";
+        return obj.toString();
     }
     
 }
