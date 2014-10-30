@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -25,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mitre.taxii.query.DefaultQuery;
 
 /**
  *
@@ -47,6 +47,7 @@ public class PythonTextOutputFileTests {
     @BeforeClass
     public static void init() throws Exception {
         TaxiiXmlFactory txf = new TaxiiXmlFactory();
+        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
         taxiiXml = txf.createTaxiiXml();
         unmarshaller = taxiiXml.getJaxbContext().createUnmarshaller();
         outDir = new File(outputPath);
@@ -72,14 +73,23 @@ public class PythonTextOutputFileTests {
     @Test
     public void testFile() throws Exception {
         MessageType m = (MessageType) unmarshaller.unmarshal(file);
-        String s = PythonTextOutput.toText(m);
         String outName = file.getName().replaceFirst("[.][^.]+$", "");
-        File outFile = new File(outDir,outName + ".txt");
         
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "utf-8"));
+        // Write Python text output
+        File txtOutFile = new File(outDir, outName + ".txt");
+        Writer txtWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txtOutFile), "utf-8"));
+        String s = PythonTextOutput.toText(m);
         System.out.println(s);
-        writer.write(s);
-        writer.close();
+        txtWriter.write(s);
+        txtWriter.close();
+        
+        // Write XML output
+        File xmlOutFile = new File(outDir, outName + ".xml");
+        Writer xmlWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(xmlOutFile), "utf-8"));
+        String xml = taxiiXml.marshalToString(m, true);
+        System.out.println(xml);
+        xmlWriter.write(xml);
+        xmlWriter.close();
     }
     
 }
