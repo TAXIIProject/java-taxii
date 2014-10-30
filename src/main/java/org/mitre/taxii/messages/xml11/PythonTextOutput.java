@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.mitre.taxii.query.DefaultQuery;
+import org.mitre.taxii.query.DefaultQueryInfo;
 
 /**
  * This class replicates the Python libtaxii to_text() output.
@@ -35,6 +37,11 @@ public class PythonTextOutput {
             SupportedQueryType self = (SupportedQueryType) obj;
             s = line_prepend + "=== Supported Query Information ===\n";
             s += line_prepend + String.format("  Query Format: %s\n", toStringOrNone(self.getFormatId()));
+            for (Object child : self.getContent()) {
+                if (child instanceof DefaultQueryInfo) {
+                    s += org.mitre.taxii.query.PythonTextOutput.toText(child, line_prepend);                    
+                }
+            }
             return s;
         }
         
@@ -42,9 +49,21 @@ public class PythonTextOutput {
             QueryType self = (QueryType) obj;
             s = line_prepend + "=== Query ===\n";
             s += line_prepend + String.format("  Query Format: %s\n", toStringOrNone(self.getFormatId()));
+            /* QueryType contains an AnyMixedContentType child - which is a List of Object.
+               The format id tells us what the child is at a semantic level, but not in an XML/Object way.
+               From an XML/object perspective all we can do is see what the children are instanceof.
+            
+                Because on the Python side, to_text() is a method on the object, libtaxii can simply obj.to_text()
+                the children of the Query.
+            */
+            for (Object child : self.getContent()) {
+                if (child instanceof DefaultQuery) { // Is it a TAXII Default Query? It will only be this if the query JAXB context was added to the TaxiiXml object.
+                    s+= org.mitre.taxii.query.PythonTextOutput.toText(child, line_prepend);
+                }
+            }
             return s;
         }
-        
+                
         if (obj instanceof ContentBindingIDType) {
             ContentBindingIDType self = (ContentBindingIDType)obj;
             s = line_prepend;
