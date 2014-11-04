@@ -32,18 +32,18 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="CriteriaType">
-        <xs:choice maxOccurs="unbounded">
-            <xs:element maxOccurs="1" minOccurs="1" name="Criteria" type="tdq:CriteriaType">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Criteria" type="tdq:CriteriaType">
                 <xs:annotation>
                     <xs:documentation>An XML element. This element MUST consist only of the indicated XML fields. The subfields of this Criteria are the same as the parent Criteria (e.g., this is a recursive field), though they are not listed here.</xs:documentation>
-                </xs:annotation>
+                </xs:annotation>                
             </xs:element>
-            <xs:element maxOccurs="1" minOccurs="1" name="Criterion" type="tdq:CriterionType">
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Criterion" type="tdq:CriterionType">
                 <xs:annotation>
                     <xs:documentation>An XML element. This element MUST consist only of the indicated XML fields.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-        </xs:choice>
+        </xs:sequence>
         <xs:attribute name="operator" use="required">
             <xs:annotation>
                 <xs:documentation>An XML string containing an operator. Must be one of "AND" or "OR".</xs:documentation>
@@ -54,7 +54,7 @@
                     <xs:pattern value="AND"/>
                 </xs:restriction>
             </xs:simpleType>
-        </xs:attribute>
+        </xs:attribute>        
     </xs:complexType>
     <xs:complexType name="CriterionType">
         <xs:sequence>
