@@ -36,8 +36,11 @@ public class PythonTextOutput {
             CriteriaType self = (CriteriaType)obj;
             s = line_prepend + "=== Criteria ===\n";
             s += line_prepend + String.format("  Operator: %s\n", self.getOperator());
-            for (Object criteria : self.getCriteriasAndCriterions()) {
+            for (CriteriaType criteria : self.getCriterias()) {
                 s += toText(criteria, line_prepend + STD_INDENT);
+            }
+            for (CriterionType criterion : self.getCriterions()) {
+                s += toText(criterion, line_prepend + STD_INDENT);
             }
             return s;            
         }
