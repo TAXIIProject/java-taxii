@@ -71,7 +71,7 @@ public class PythonTextOutput {
             if (!self.getSubtypes().isEmpty()) {
                 List<String> subtypes = new ArrayList();
                 for (SubtypeType st : self.getSubtypes()) {
-                    subtypes.add(toStringOrNone(st.getSubtypeId()));
+                    subtypes.add(st.getSubtypeId());
                 }                
                 s += ">" + join(",",subtypes);
             }            
@@ -121,6 +121,7 @@ public class PythonTextOutput {
             if (null != self.getTimestampLabel()) {
                 s += line_prepend + String.format("  Timestamp Label: %s\n", self.getTimestampLabel().toXMLFormat());
             }
+            s += line_prepend + String.format("  Message: %s\n", toStringOrNone(self.getMessage()));
             s += line_prepend + String.format("  Padding: %s\n", toStringOrNone(self.getPadding()));
             
             return s;            
@@ -131,7 +132,7 @@ public class PythonTextOutput {
             s = line_prepend;
             s += toStringOrNone(self.getBindingId());
             if (null != self.getSubtype()) {
-                s += ">" + self.getSubtype();
+                s += ">" + self.getSubtype().getSubtypeId();
             }
         }
 
@@ -190,16 +191,17 @@ public class PythonTextOutput {
             s += line_prepend +  String.format("  Service Type: %s\n", toStringOrNone(self.getServiceType().name()));
             s += line_prepend +  String.format("  Service Version: %s\n", toStringOrNone(self.getServiceVersion()));
             s += line_prepend +  String.format("  Protocol Binding: %s\n", toStringOrNone(self.getProtocolBinding()));
-            s += line_prepend +  String.format("  Service Address: %s\n", toStringOrNone(self.getAddress()));
-            
+            s += line_prepend +  String.format("  Service Address: %s\n", toStringOrNone(self.getAddress()));            
             for (String mb : self.getMessageBindings()) {
                 s += line_prepend +  String.format("  Message Binding: %s\n", mb);
-            }
-
-            for (ContentBindingIDType cb : self.getContentBindings()) {
-                s += line_prepend + String.format("  Inbox Service AC: %s\n", toText(cb, line_prepend));
-            }
-            
+            }            
+            if (ServiceTypeEnum.INBOX == self.getServiceType()) {
+                List<String> bindings = new ArrayList();
+                for (ContentBindingIDType binding : self.getContentBindings()) {
+                    bindings.add("'"+toText(binding, "")+"'");
+                }
+                s += line_prepend + String.format("  Inbox Service AC: [%s]\n", join(",", bindings)); 
+            }            
             s += line_prepend +  String.format("  Available: %s\n", booleanString(self.isAvailable()));
             s += line_prepend +  String.format("  Message: %s\n",toStringOrNone(self.getMessage()));
             
