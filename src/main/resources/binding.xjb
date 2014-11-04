@@ -2,7 +2,8 @@
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-               version="1.0">
+               xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+               version="2.1">
   <!-- global bindings -->
   <jaxb:globalBindings>
     <!-- 
@@ -17,24 +18,28 @@
     Binding customizations defining package names for generated code.
   -->
   <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.1-with-sch-xjc.xsd" node="/xsd:schema">
+    <namespace:prefix name="taxii_11"/>
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xml11"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
 
   <jaxb:bindings schemaLocation="TAXII_XMLMessageBinding_Schema-1.0-with-sch-xjc.xsd" node="/xsd:schema">
+    <namespace:prefix name="taxii_10"/>
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xml10"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
 
   <jaxb:bindings schemaLocation="TAXII_DefaultQuery_Schema.xsd" node="/xsd:schema">
+    <namespace:prefix name="tdq"/>
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.query"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
 
   <jaxb:bindings schemaLocation="xmldsig-core-schema-xjc.xsd" node="/xsd:schema">
+    <namespace:prefix name="xmldsig"/>
     <jaxb:schemaBindings>
       <jaxb:package name="org.mitre.taxii.messages.xmldsig"/>
     </jaxb:schemaBindings>
