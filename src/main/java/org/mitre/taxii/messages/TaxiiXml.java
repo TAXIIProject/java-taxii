@@ -28,7 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,12 +52,11 @@ import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.mitre.taxii.client.HttpResponseErrorHandler;
 
-import org.mitre.taxii.messages.xmldsig.Signature;
+// import org.mitre.taxii.messages.xmldsig.Signature;
 import org.mitre.taxii.util.Iterators;
 import org.mitre.taxii.util.Validation;
 import org.mitre.taxii.util.ValidationErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -277,7 +275,8 @@ public abstract class TaxiiXml {
      */
     private static List<String> initializeJaxbContextEntries() {
         List<String> contextEntries = new ArrayList<>();
-        contextEntries.add(Signature.class.getPackage().getName());
+// The Python library does not include the digital signature schema by default. No need for Java to.        
+//        contextEntries.add(Signature.class.getPackage().getName());
         return contextEntries;
     }
 

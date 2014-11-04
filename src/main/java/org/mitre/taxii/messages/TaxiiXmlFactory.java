@@ -28,7 +28,7 @@ package org.mitre.taxii.messages;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.mitre.taxii.messages.xmldsig.Signature;
+// import org.mitre.taxii.messages.xmldsig.Signature;
 
 
 /**
@@ -44,10 +44,10 @@ public abstract class TaxiiXmlFactory {
     private final List<String>contextPackages = new ArrayList<>();
 
     /**
-     * The constructor automatically adds the Digital Signature JAXB context.
+     * 
      */
     public TaxiiXmlFactory() {
-        addJaxbContextPackage(Signature.class.getPackage().getName()); // Add the digital signature JAXB classes automatically.
+//        addJaxbContextPackage(Signature.class.getPackage().getName()); // Add the digital signature JAXB classes automatically.
     }
     
     /**
