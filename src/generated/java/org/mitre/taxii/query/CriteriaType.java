@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
@@ -29,10 +28,10 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  * &lt;complexType name="CriteriaType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice maxOccurs="unbounded">
- *         &lt;element name="Criteria" type="{http://taxii.mitre.org/query/taxii_default_query-1}CriteriaType"/>
- *         &lt;element name="Criterion" type="{http://taxii.mitre.org/query/taxii_default_query-1}CriterionType"/>
- *       &lt;/choice>
+ *       &lt;sequence>
+ *         &lt;element name="Criteria" type="{http://taxii.mitre.org/query/taxii_default_query-1}CriteriaType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Criterion" type="{http://taxii.mitre.org/query/taxii_default_query-1}CriterionType" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
  *       &lt;attribute name="operator" use="required">
  *         &lt;simpleType>
  *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -50,16 +49,16 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CriteriaType", propOrder = {
-    "criteriasAndCriterions"
+    "criterias",
+    "criterions"
 })
 public class CriteriaType implements Equals, HashCode
 {
 
-    @XmlElements({
-        @XmlElement(name = "Criteria", type = CriteriaType.class),
-        @XmlElement(name = "Criterion", type = CriterionType.class)
-    })
-    protected List<Object> criteriasAndCriterions;
+    @XmlElement(name = "Criteria")
+    protected List<CriteriaType> criterias;
+    @XmlElement(name = "Criterion")
+    protected List<CriterionType> criterions;
     @XmlAttribute(name = "operator", required = true)
     protected String operator;
 
@@ -75,39 +74,68 @@ public class CriteriaType implements Equals, HashCode
      * Fully-initialising value constructor
      * 
      */
-    public CriteriaType(final List<Object> criteriasAndCriterions, final String operator) {
-        this.criteriasAndCriterions = criteriasAndCriterions;
+    public CriteriaType(final List<CriteriaType> criterias, final List<CriterionType> criterions, final String operator) {
+        this.criterias = criterias;
+        this.criterions = criterions;
         this.operator = operator;
     }
 
     /**
-     * Gets the value of the criteriasAndCriterions property.
+     * Gets the value of the criterias property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the criteriasAndCriterions property.
+     * This is why there is not a <CODE>set</CODE> method for the criterias property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getCriteriasAndCriterions().add(newItem);
+     *    getCriterias().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CriteriaType }
+     * 
+     * 
+     */
+    public List<CriteriaType> getCriterias() {
+        if (criterias == null) {
+            criterias = new ArrayList<CriteriaType>();
+        }
+        return this.criterias;
+    }
+
+    /**
+     * Gets the value of the criterions property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the criterions property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getCriterions().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
      * {@link CriterionType }
      * 
      * 
      */
-    public List<Object> getCriteriasAndCriterions() {
-        if (criteriasAndCriterions == null) {
-            criteriasAndCriterions = new ArrayList<Object>();
+    public List<CriterionType> getCriterions() {
+        if (criterions == null) {
+            criterions = new ArrayList<CriterionType>();
         }
-        return this.criteriasAndCriterions;
+        return this.criterions;
     }
 
     /**
@@ -143,11 +171,20 @@ public class CriteriaType implements Equals, HashCode
         }
         final CriteriaType that = ((CriteriaType) object);
         {
-            List<Object> lhsCriteriasAndCriterions;
-            lhsCriteriasAndCriterions = (((this.criteriasAndCriterions!= null)&&(!this.criteriasAndCriterions.isEmpty()))?this.getCriteriasAndCriterions():null);
-            List<Object> rhsCriteriasAndCriterions;
-            rhsCriteriasAndCriterions = (((that.criteriasAndCriterions!= null)&&(!that.criteriasAndCriterions.isEmpty()))?that.getCriteriasAndCriterions():null);
-            if (!strategy.equals(LocatorUtils.property(thisLocator, "criteriasAndCriterions", lhsCriteriasAndCriterions), LocatorUtils.property(thatLocator, "criteriasAndCriterions", rhsCriteriasAndCriterions), lhsCriteriasAndCriterions, rhsCriteriasAndCriterions)) {
+            List<CriteriaType> lhsCriterias;
+            lhsCriterias = (((this.criterias!= null)&&(!this.criterias.isEmpty()))?this.getCriterias():null);
+            List<CriteriaType> rhsCriterias;
+            rhsCriterias = (((that.criterias!= null)&&(!that.criterias.isEmpty()))?that.getCriterias():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "criterias", lhsCriterias), LocatorUtils.property(thatLocator, "criterias", rhsCriterias), lhsCriterias, rhsCriterias)) {
+                return false;
+            }
+        }
+        {
+            List<CriterionType> lhsCriterions;
+            lhsCriterions = (((this.criterions!= null)&&(!this.criterions.isEmpty()))?this.getCriterions():null);
+            List<CriterionType> rhsCriterions;
+            rhsCriterions = (((that.criterions!= null)&&(!that.criterions.isEmpty()))?that.getCriterions():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "criterions", lhsCriterions), LocatorUtils.property(thatLocator, "criterions", rhsCriterions), lhsCriterions, rhsCriterions)) {
                 return false;
             }
         }
@@ -171,9 +208,14 @@ public class CriteriaType implements Equals, HashCode
     public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
         int currentHashCode = 1;
         {
-            List<Object> theCriteriasAndCriterions;
-            theCriteriasAndCriterions = (((this.criteriasAndCriterions!= null)&&(!this.criteriasAndCriterions.isEmpty()))?this.getCriteriasAndCriterions():null);
-            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "criteriasAndCriterions", theCriteriasAndCriterions), currentHashCode, theCriteriasAndCriterions);
+            List<CriteriaType> theCriterias;
+            theCriterias = (((this.criterias!= null)&&(!this.criterias.isEmpty()))?this.getCriterias():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "criterias", theCriterias), currentHashCode, theCriterias);
+        }
+        {
+            List<CriterionType> theCriterions;
+            theCriterions = (((this.criterions!= null)&&(!this.criterions.isEmpty()))?this.getCriterions():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "criterions", theCriterions), currentHashCode, theCriterions);
         }
         {
             String theOperator;
@@ -188,18 +230,34 @@ public class CriteriaType implements Equals, HashCode
         return this.hashCode(null, strategy);
     }
 
-    public CriteriaType withCriteriasAndCriterions(Object... values) {
+    public CriteriaType withCriterias(CriteriaType... values) {
         if (values!= null) {
-            for (Object value: values) {
-                getCriteriasAndCriterions().add(value);
+            for (CriteriaType value: values) {
+                getCriterias().add(value);
             }
         }
         return this;
     }
 
-    public CriteriaType withCriteriasAndCriterions(Collection<Object> values) {
+    public CriteriaType withCriterias(Collection<CriteriaType> values) {
         if (values!= null) {
-            getCriteriasAndCriterions().addAll(values);
+            getCriterias().addAll(values);
+        }
+        return this;
+    }
+
+    public CriteriaType withCriterions(CriterionType... values) {
+        if (values!= null) {
+            for (CriterionType value: values) {
+                getCriterions().add(value);
+            }
+        }
+        return this;
+    }
+
+    public CriteriaType withCriterions(Collection<CriterionType> values) {
+        if (values!= null) {
+            getCriterions().addAll(values);
         }
         return this;
     }

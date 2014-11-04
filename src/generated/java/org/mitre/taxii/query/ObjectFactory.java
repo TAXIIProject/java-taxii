@@ -30,22 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefaultQueryInfo }
-     * 
-     */
-    public DefaultQueryInfo createDefaultQueryInfo() {
-        return new DefaultQueryInfo();
-    }
-
-    /**
-     * Create an instance of {@link TargetingExpressionInfoType }
-     * 
-     */
-    public TargetingExpressionInfoType createTargetingExpressionInfoType() {
-        return new TargetingExpressionInfoType();
-    }
-
-    /**
      * Create an instance of {@link DefaultQuery }
      * 
      */
@@ -62,6 +46,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DefaultQueryInfo }
+     * 
+     */
+    public DefaultQueryInfo createDefaultQueryInfo() {
+        return new DefaultQueryInfo();
+    }
+
+    /**
+     * Create an instance of {@link TargetingExpressionInfoType }
+     * 
+     */
+    public TargetingExpressionInfoType createTargetingExpressionInfoType() {
+        return new TargetingExpressionInfoType();
+    }
+
+    /**
      * Create an instance of {@link ParameterType }
      * 
      */
@@ -70,19 +70,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TestType }
-     * 
-     */
-    public TestType createTestType() {
-        return new TestType();
-    }
-
-    /**
      * Create an instance of {@link CriterionType }
      * 
      */
     public CriterionType createCriterionType() {
         return new CriterionType();
+    }
+
+    /**
+     * Create an instance of {@link TestType }
+     * 
+     */
+    public TestType createTestType() {
+        return new TestType();
     }
 
 }
