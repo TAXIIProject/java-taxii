@@ -53,7 +53,7 @@ public class PollRequestTests {
         
         criteria1 = new CriteriaType()
                         .withOperator(DefaultQueryXml.OP_AND)
-                        .withCriteriasAndCriterions(criterion1);
+                        .withCriterions(criterion1);
         
         query1 = new DefaultQuery()
             .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11)

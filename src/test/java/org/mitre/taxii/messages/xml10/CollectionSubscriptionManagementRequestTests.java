@@ -75,15 +75,16 @@ public class CollectionSubscriptionManagementRequestTests {
         
         criteria1 = new CriteriaType()
                         .withOperator(DefaultQueryXml.OP_AND)
-                        .withCriteriasAndCriterions(criterion1);
+                        .withCriterions(criterion1);
 
         criteria2 = new CriteriaType()
                         .withOperator(DefaultQueryXml.OP_OR)
-                        .withCriteriasAndCriterions(criterion1, criterion2, criterion3);
+                        .withCriterions(criterion1, criterion2, criterion3);
         
         criteria3 = new CriteriaType()
                         .withOperator(DefaultQueryXml.OP_AND)
-                        .withCriteriasAndCriterions(criterion1, criterion3, criteria2);
+                        .withCriterias(criteria2)
+                        .withCriterions(criterion1, criterion3);
         
         query1 = new DefaultQuery()
                     .withTargetingExpressionId(ContentBindings.CB_STIX_XML_11)
