@@ -36,6 +36,12 @@ dependencies {
     xjc 'org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0'
     xjc 'org.jvnet.jaxb2_commons:jaxb2-value-constructor:3.0'
     xjc 'org.jvnet.jaxb2_commons:jaxb2-default-value:1.1'
+    
+    // This plugin adds 'javax.xml.bind.annotation.XmlNs' annotations to
+    // 'package-info.java' file according to specific definitions in
+    // bindings.xml file. Those annotations associate namespace prefixes
+    // with XML namespace URIs.
+    xjc 'org.jvnet.jaxb2_commons:jaxb2-namespace-prefix:1.1'    
 
     compile 'javax.xml.bind:jaxb-api:2.2.+'
     compile 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:0.6.5'
@@ -59,7 +65,7 @@ task generate << {
     ant.xjc(destdir: srcGeneratedJavaDir, header: false, readonly: true,
             extension: true, classpath: configurations.xjc.asPath) {
         // generate an equals method - this uses an XJC plugin
-        arg(line: '-Xequals -XhashCode -Xfluent-api -Xvalue-constructor -Xdefault-value')
+        arg(line: '-Xequals -XhashCode -Xfluent-api -Xvalue-constructor -Xdefault-value -Xnamespace-prefix')
         binding(dir: srcXsdDir, includes: '*.xjb')
         schema(dir: srcXsdDir, includes: '*.xsd')
         produces(dir: srcGeneratedJavaDir, includes: '**/*.java')
