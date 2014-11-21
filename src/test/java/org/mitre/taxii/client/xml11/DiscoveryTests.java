@@ -14,6 +14,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -22,6 +23,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import static org.junit.Assert.assertTrue;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.mitre.taxii.client.HttpClient;
 import org.mitre.taxii.messages.TaxiiXml;
@@ -42,16 +45,33 @@ public class DiscoveryTests {
     private final TaxiiXml taxiiXml;
     private final boolean debug = true; // Boolean.getBoolean("debug");
 
+    private static final String serverURL = "http://127.0.0.1:8080/";
+    
     public DiscoveryTests() {
         taxiiXml = txf.createTaxiiXml();
     }
-   
+
+    /*
+        Confirm that the local TAXII server is running.
+        If not, skip these tests. That is what the Assume is supposed to do.
+        If the Assume is false, the tests will be ignored.
+        In NetBeans, the Assume causes an ERROR rather than ignoring the tests.
+    */
+    @Before
+    public void confirmConnection() {
+        try {
+            Request.Get(serverURL).execute();
+        } catch (Exception ex) {
+            Assume.assumeNoException(ex);
+        }
+    }
+
     @Test
     public void simpleDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
-        
+
         HttpClient taxiiClient = new HttpClient();
-        
-        final String serverUrl = "http://127.0.0.1:8080/services/discovery/";
+
+        final String serverUrl = serverURL + "services/discovery/";
 
         // Prepare the message to send.
         DiscoveryRequest dr = factory.createDiscoveryRequest()
@@ -68,17 +88,16 @@ public class DiscoveryTests {
         assertTrue("Received Discovery Response", (responseObj instanceof DiscoveryResponse));
     }
 
-    /*
     @Test
     public void basicAuthDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
-        
+
         // Create a client that uses basic authentication (user & password).
         HttpClientBuilder cb = HttpClientBuilder.create();
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
                 AuthScope.ANY,
-                new UsernamePasswordCredentials("taxii", "taxii"));        
-        cb.setDefaultCredentialsProvider(credsProvider);        
+                new UsernamePasswordCredentials("taxii", "taxii"));
+        cb.setDefaultCredentialsProvider(credsProvider);
         CloseableHttpClient httpClient = cb.build();
 
         // Create a Taxii Client with the HttpClient object.
@@ -89,7 +108,7 @@ public class DiscoveryTests {
                 .withMessageId(MessageHelper.generateMessageId());
 
         // Call the service
-        final String serverUrl = "http://127.0.0.1:8100/services/discovery/";
+        final String serverUrl = serverURL + "services/discovery/";
         Object responseObj = taxiiClient.callTaxiiService(new URI(serverUrl), dr);
 
         if (debug) {
@@ -99,7 +118,7 @@ public class DiscoveryTests {
 
         assertTrue("Received Discovery Response", (responseObj instanceof DiscoveryResponse));
     }
-    
+
     @Test
     public void sslDiscoveryTest() throws IOException, JAXBException, KeyStoreException, NoSuchAlgorithmException, CertificateException, KeyManagementException, URISyntaxException {
         final String serverUrl = "https://127.0.0.1:8443/services/discovery/";
@@ -120,8 +139,8 @@ public class DiscoveryTests {
                 SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setSSLSocketFactory(sslsf)
-                .build();        
-        
+                .build();
+
         // Create a Taxii Client with the HttpClient and TaxiiXml objects.
         HttpClient taxiiClient = new HttpClient(httpClient);
 
@@ -139,11 +158,10 @@ public class DiscoveryTests {
 
         assertTrue("Received Discovery Response", (responseObj instanceof DiscoveryResponse));
     }
-    */
-        
+
     @Test
     public void proxyDiscoveryTest() throws IOException, JAXBException, URISyntaxException {
-        
+
         // Create a client that connects via a proxy.
         HttpHost proxy = new HttpHost("gatekeeper-w.mitre.org", 80, "http");        
         HttpClientBuilder cb = HttpClientBuilder.create();        
