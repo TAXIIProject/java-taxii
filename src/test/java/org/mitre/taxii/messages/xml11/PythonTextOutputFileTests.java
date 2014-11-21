@@ -26,6 +26,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mitre.taxii.query.DefaultQuery;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  *
  * @author jasenj1
@@ -35,15 +38,15 @@ import org.mitre.taxii.query.DefaultQuery;
 public class PythonTextOutputFileTests {
     private static TaxiiXml taxiiXml;
     private static Unmarshaller unmarshaller;
-    
+
     private static final String inputPath = "src/test/resources/python_output/1.1";
     private static final String outputPath = "build/test-results";
-    
+
+    private static File outDir;
+
     @Parameterized.Parameter(0)
     public File file;
-    
-    private static File outDir;
-    
+
     @BeforeClass
     public static void init() throws Exception {
         TaxiiXmlFactory txf = new TaxiiXmlFactory();
@@ -55,7 +58,7 @@ public class PythonTextOutputFileTests {
 
     @Parameterized.Parameters(name="{index} - {0}")
     public static Iterable<File[]> data() throws IOException {
-        final List<File[]> data = new ArrayList<>();        
+        final List<File[]> data = new ArrayList<>();
         Files.walkFileTree(
                 Paths.get(inputPath),
                 new SimpleFileVisitor<Path>() {
@@ -72,7 +75,18 @@ public class PythonTextOutputFileTests {
     
     @Test
     public void testFile() throws Exception {
-        MessageType m = (MessageType) unmarshaller.unmarshal(file);
+        MessageType m;
+        try {
+            m = (MessageType) unmarshaller.unmarshal(file);
+        } catch (Exception ex) {
+            if (file.getName().endsWith("-invalid.xml")) {
+                assertTrue(ex.toString(),true);
+            } else {
+                fail(ex.toString());
+            }
+            System.out.println(String.format("'%s' failed validation. %s", file.getName(),ex.toString()));
+            return;
+        }
         String outName = file.getName().replaceFirst("[.][^.]+$", "");
         
         // Write Python text output
