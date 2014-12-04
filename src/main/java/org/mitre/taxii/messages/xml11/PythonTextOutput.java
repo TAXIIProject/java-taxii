@@ -290,10 +290,10 @@ public class PythonTextOutput {
             if (null !=self.getSubscriptionID()) {
                 s += line_prepend + String.format("  Subscription ID: %s\n", toStringOrNone(self.getSubscriptionID()));
             }
-            if (null != self.getExclusiveBeginTimestamp().toXMLFormat()) {
+            if (null != self.getExclusiveBeginTimestamp()) {
                 s += line_prepend + String.format("  Excl. Begin TS Label: %s\n", self.getExclusiveBeginTimestamp().toXMLFormat());
             }
-            if (null != self.getInclusiveEndTimestamp().toXMLFormat()) {
+            if (null != self.getInclusiveEndTimestamp()) {
                 s += line_prepend + String.format("  Incl. End TS Label: %s\n", self.getInclusiveEndTimestamp().toXMLFormat());
             }
             if (null != self.getPollParameters()) {
