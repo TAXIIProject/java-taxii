@@ -47,10 +47,10 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlSeeAlso({
-    SupportedQueryType.class,
-    QueryType.class,
     StatusDetailDetailType.class,
-    ExtendedHeaderType.class
+    ExtendedHeaderType.class,
+    SupportedQueryType.class,
+    QueryType.class
 })
 public class AnyMixedContentType implements Equals, HashCode
 {
@@ -93,9 +93,9 @@ public class AnyMixedContentType implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link Object }
      * {@link String }
      * {@link Element }
-     * {@link Object }
      * 
      * 
      */

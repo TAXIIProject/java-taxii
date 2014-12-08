@@ -92,8 +92,8 @@ public class CanonicalizationMethod implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
      * {@link java.lang.Object }
+     * {@link String }
      * 
      * 
      */

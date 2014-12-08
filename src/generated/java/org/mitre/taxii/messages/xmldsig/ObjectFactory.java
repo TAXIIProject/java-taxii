@@ -25,17 +25,17 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _MgmtData_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "MgmtData");
     private final static QName _KeyName_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "KeyName");
+    private final static QName _MgmtData_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "MgmtData");
     private final static QName _DigestValue_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "DigestValue");
-    private final static QName _X509DataX509IssuerSerial_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509IssuerSerial");
-    private final static QName _X509DataX509Certificate_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509Certificate");
-    private final static QName _X509DataX509SKI_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SKI");
-    private final static QName _X509DataX509SubjectName_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SubjectName");
-    private final static QName _X509DataX509CRL_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509CRL");
+    private final static QName _TransformXPath_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "XPath");
     private final static QName _SignatureMethodHMACOutputLength_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "HMACOutputLength");
     private final static QName _SPKIDataSPKISexp_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "SPKISexp");
-    private final static QName _TransformXPath_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "XPath");
+    private final static QName _X509DataX509IssuerSerial_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509IssuerSerial");
+    private final static QName _X509DataX509CRL_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509CRL");
+    private final static QName _X509DataX509SubjectName_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SubjectName");
+    private final static QName _X509DataX509SKI_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509SKI");
+    private final static QName _X509DataX509Certificate_QNAME = new QName("http://www.w3.org/2000/09/xmldsig#", "X509Certificate");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.mitre.taxii.messages.xmldsig
@@ -224,18 +224,18 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "MgmtData")
-    public JAXBElement<String> createMgmtData(String value) {
-        return new JAXBElement<String>(_MgmtData_QNAME, String.class, null, value);
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "KeyName")
+    public JAXBElement<String> createKeyName(String value) {
+        return new JAXBElement<String>(_KeyName_QNAME, String.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "KeyName")
-    public JAXBElement<String> createKeyName(String value) {
-        return new JAXBElement<String>(_KeyName_QNAME, String.class, null, value);
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "MgmtData")
+    public JAXBElement<String> createMgmtData(String value) {
+        return new JAXBElement<String>(_MgmtData_QNAME, String.class, null, value);
     }
 
     /**
@@ -248,48 +248,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509IssuerSerial", scope = X509Data.class)
-    public JAXBElement<X509IssuerSerialType> createX509DataX509IssuerSerial(X509IssuerSerialType value) {
-        return new JAXBElement<X509IssuerSerialType>(_X509DataX509IssuerSerial_QNAME, X509IssuerSerialType.class, X509Data.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509Certificate", scope = X509Data.class)
-    public JAXBElement<byte[]> createX509DataX509Certificate(byte[] value) {
-        return new JAXBElement<byte[]>(_X509DataX509Certificate_QNAME, byte[].class, X509Data.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509SKI", scope = X509Data.class)
-    public JAXBElement<byte[]> createX509DataX509SKI(byte[] value) {
-        return new JAXBElement<byte[]>(_X509DataX509SKI_QNAME, byte[].class, X509Data.class, ((byte[]) value));
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509SubjectName", scope = X509Data.class)
-    public JAXBElement<String> createX509DataX509SubjectName(String value) {
-        return new JAXBElement<String>(_X509DataX509SubjectName_QNAME, String.class, X509Data.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509CRL", scope = X509Data.class)
-    public JAXBElement<byte[]> createX509DataX509CRL(byte[] value) {
-        return new JAXBElement<byte[]>(_X509DataX509CRL_QNAME, byte[].class, X509Data.class, ((byte[]) value));
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "XPath", scope = Transform.class)
+    public JAXBElement<String> createTransformXPath(String value) {
+        return new JAXBElement<String>(_TransformXPath_QNAME, String.class, Transform.class, value);
     }
 
     /**
@@ -311,12 +275,48 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509IssuerSerial", scope = X509Data.class)
+    public JAXBElement<X509IssuerSerialType> createX509DataX509IssuerSerial(X509IssuerSerialType value) {
+        return new JAXBElement<X509IssuerSerialType>(_X509DataX509IssuerSerial_QNAME, X509IssuerSerialType.class, X509Data.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509CRL", scope = X509Data.class)
+    public JAXBElement<byte[]> createX509DataX509CRL(byte[] value) {
+        return new JAXBElement<byte[]>(_X509DataX509CRL_QNAME, byte[].class, X509Data.class, ((byte[]) value));
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "XPath", scope = Transform.class)
-    public JAXBElement<String> createTransformXPath(String value) {
-        return new JAXBElement<String>(_TransformXPath_QNAME, String.class, Transform.class, value);
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509SubjectName", scope = X509Data.class)
+    public JAXBElement<String> createX509DataX509SubjectName(String value) {
+        return new JAXBElement<String>(_X509DataX509SubjectName_QNAME, String.class, X509Data.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509SKI", scope = X509Data.class)
+    public JAXBElement<byte[]> createX509DataX509SKI(byte[] value) {
+        return new JAXBElement<byte[]>(_X509DataX509SKI_QNAME, byte[].class, X509Data.class, ((byte[]) value));
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.w3.org/2000/09/xmldsig#", name = "X509Certificate", scope = X509Data.class)
+    public JAXBElement<byte[]> createX509DataX509Certificate(byte[] value) {
+        return new JAXBElement<byte[]>(_X509DataX509Certificate_QNAME, byte[].class, X509Data.class, ((byte[]) value));
     }
 
 }

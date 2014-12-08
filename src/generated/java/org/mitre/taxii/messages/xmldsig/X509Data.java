@@ -58,11 +58,11 @@ public class X509Data implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509IssuerSerial", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "X509SubjectName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "X509Certificate", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509SKI", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "X509CRL", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
     })
     @XmlAnyElement
     protected List<java.lang.Object> x509IssuerSerialsAndX509SKISAndX509SubjectNames;
@@ -101,10 +101,10 @@ public class X509Data implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     * {@link Element }
      * {@link JAXBElement }{@code <}{@link X509IssuerSerialType }{@code >}
      * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * {@link JAXBElement }{@code <}{@link byte[]}{@code >}
      * 

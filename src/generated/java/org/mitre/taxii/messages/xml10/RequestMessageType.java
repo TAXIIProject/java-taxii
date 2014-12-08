@@ -37,9 +37,9 @@ import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 @XmlSeeAlso({
     SubscriptionManagementRequest.class,
     DiscoveryRequest.class,
-    PollRequest.class,
     FeedInformationRequest.class,
-    InboxMessage.class
+    InboxMessage.class,
+    PollRequest.class
 })
 public abstract class RequestMessageType
     extends MessageType

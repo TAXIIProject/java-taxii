@@ -65,13 +65,13 @@ public class KeyInfo implements Equals, HashCode
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "PGPData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = PGPData.class, required = false),
-        @XmlElementRef(name = "X509Data", namespace = "http://www.w3.org/2000/09/xmldsig#", type = X509Data.class, required = false),
+        @XmlElementRef(name = "MgmtData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "KeyValue", namespace = "http://www.w3.org/2000/09/xmldsig#", type = KeyValue.class, required = false),
         @XmlElementRef(name = "SPKIData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = SPKIData.class, required = false),
+        @XmlElementRef(name = "KeyName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "RetrievalMethod", namespace = "http://www.w3.org/2000/09/xmldsig#", type = RetrievalMethod.class, required = false),
-        @XmlElementRef(name = "MgmtData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "KeyName", namespace = "http://www.w3.org/2000/09/xmldsig#", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "X509Data", namespace = "http://www.w3.org/2000/09/xmldsig#", type = X509Data.class, required = false),
+        @XmlElementRef(name = "PGPData", namespace = "http://www.w3.org/2000/09/xmldsig#", type = PGPData.class, required = false)
     })
     @XmlMixed
     @XmlAnyElement(lax = true)
@@ -117,16 +117,16 @@ public class KeyInfo implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link PGPData }
-     * {@link X509Data }
-     * {@link KeyValue }
-     * {@link SPKIData }
-     * {@link String }
-     * {@link java.lang.Object }
-     * {@link RetrievalMethod }
      * {@link Element }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link String }
+     * {@link KeyValue }
+     * {@link java.lang.Object }
+     * {@link SPKIData }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link RetrievalMethod }
+     * {@link X509Data }
+     * {@link PGPData }
      * 
      * 
      */

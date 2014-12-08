@@ -90,9 +90,9 @@ public class AnyMixedContentType implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link Object }
      * {@link String }
      * {@link Element }
-     * {@link Object }
      * 
      * 
      */

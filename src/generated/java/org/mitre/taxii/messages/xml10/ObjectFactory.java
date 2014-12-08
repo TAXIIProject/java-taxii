@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InboxMessage }
+     * Create an instance of {@link PollRequest }
      * 
      */
-    public InboxMessage createInboxMessage() {
-        return new InboxMessage();
+    public PollRequest createPollRequest() {
+        return new PollRequest();
     }
 
     /**
@@ -43,6 +43,22 @@ public class ObjectFactory {
      */
     public ExtendedHeadersType createExtendedHeadersType() {
         return new ExtendedHeadersType();
+    }
+
+    /**
+     * Create an instance of {@link StatusMessage }
+     * 
+     */
+    public StatusMessage createStatusMessage() {
+        return new StatusMessage();
+    }
+
+    /**
+     * Create an instance of {@link InboxMessage }
+     * 
+     */
+    public InboxMessage createInboxMessage() {
+        return new InboxMessage();
     }
 
     /**
@@ -78,22 +94,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PollRequest }
-     * 
-     */
-    public PollRequest createPollRequest() {
-        return new PollRequest();
-    }
-
-    /**
-     * Create an instance of {@link DiscoveryRequest }
-     * 
-     */
-    public DiscoveryRequest createDiscoveryRequest() {
-        return new DiscoveryRequest();
-    }
-
-    /**
      * Create an instance of {@link SubscriptionManagementResponse }
      * 
      */
@@ -107,6 +107,38 @@ public class ObjectFactory {
      */
     public SubscriptionRecordType createSubscriptionRecordType() {
         return new SubscriptionRecordType();
+    }
+
+    /**
+     * Create an instance of {@link DiscoveryResponse }
+     * 
+     */
+    public DiscoveryResponse createDiscoveryResponse() {
+        return new DiscoveryResponse();
+    }
+
+    /**
+     * Create an instance of {@link ServiceInstanceType }
+     * 
+     */
+    public ServiceInstanceType createServiceInstanceType() {
+        return new ServiceInstanceType();
+    }
+
+    /**
+     * Create an instance of {@link PollResponse }
+     * 
+     */
+    public PollResponse createPollResponse() {
+        return new PollResponse();
+    }
+
+    /**
+     * Create an instance of {@link DiscoveryRequest }
+     * 
+     */
+    public DiscoveryRequest createDiscoveryRequest() {
+        return new DiscoveryRequest();
     }
 
     /**
@@ -142,43 +174,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StatusMessage }
+     * Create an instance of {@link ExtendedHeaderType }
      * 
      */
-    public StatusMessage createStatusMessage() {
-        return new StatusMessage();
-    }
-
-    /**
-     * Create an instance of {@link PollResponse }
-     * 
-     */
-    public PollResponse createPollResponse() {
-        return new PollResponse();
-    }
-
-    /**
-     * Create an instance of {@link DiscoveryResponse }
-     * 
-     */
-    public DiscoveryResponse createDiscoveryResponse() {
-        return new DiscoveryResponse();
-    }
-
-    /**
-     * Create an instance of {@link ServiceInstanceType }
-     * 
-     */
-    public ServiceInstanceType createServiceInstanceType() {
-        return new ServiceInstanceType();
-    }
-
-    /**
-     * Create an instance of {@link ServiceContactInfoType }
-     * 
-     */
-    public ServiceContactInfoType createServiceContactInfoType() {
-        return new ServiceContactInfoType();
+    public ExtendedHeaderType createExtendedHeaderType() {
+        return new ExtendedHeaderType();
     }
 
     /**
@@ -190,11 +190,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ExtendedHeaderType }
+     * Create an instance of {@link ServiceContactInfoType }
      * 
      */
-    public ExtendedHeaderType createExtendedHeaderType() {
-        return new ExtendedHeaderType();
+    public ServiceContactInfoType createServiceContactInfoType() {
+        return new ServiceContactInfoType();
     }
 
 }

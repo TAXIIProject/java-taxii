@@ -35,13 +35,12 @@
 
     <!-- GLOBAL TYPES -->
 
-    <xs:complexType name="MessageType">
+    <xs:complexType name="MessageType" abstract="true">
         <xs:annotation>
             <xs:documentation>The root of all TAXII messages. This is used to define header fields. This will never be instantiated directly but the TAXII Message Body types all extend this type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="Extended_Headers" minOccurs="0" maxOccurs="1"
-                type="ExtendedHeadersType">
+            <xs:element name="Extended_Headers" type="ExtendedHeadersType" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>Represents any number of extended headers for this message.</xs:documentation>
                 </xs:annotation>
@@ -305,7 +304,7 @@
                     <sch:title>Status Message Rules</sch:title>
                     <sch:rule context="/taxii:Status_Message[@status_type = 'INVALID_RESPONSE_PART']">
                         <sch:assert 
-                            test="taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) > 0">
+                            test="(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:integer) and (xs:integer(taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER']) > 0)">
                             A Status Message of type INVALID_RESPONSE_PART requires a MAX_PART_NUMBER Status Detail that is
                             a positive integer.
                         </sch:assert>
@@ -313,12 +312,12 @@
                     
                     <sch:rule context="/taxii:Status_Message[@status_type = 'PENDING']">
                         <sch:assert 
-                            test="taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer and xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) > 0">
+                            test="(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT'] castable as xs:integer) and (xs:integer(taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']) > 0)">
                             A Status Message of type PENDING requires an ESTIMATED_WAIT Status Detail that is 
                             a positiveInteger.
                         </sch:assert>
                         <sch:assert 
-                            test="string-length(taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) > 0">
+                            test="taxii:Status_Detail/taxii:Detail[@name='RESULT_ID']) castable as xs:anyURI">
                             A Status Message of type PENDING requires a RESULT_ID Status Detail that is 
                             a URI.
                         </sch:assert>
@@ -330,7 +329,7 @@
                     </sch:rule>
                     
                     <sch:rule context="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail/taxii:Detail[@name='ESTIMATED_WAIT']">
-                        <sch:assert test=". castable as xs:integer and xs:integer(.) > 0">
+                        <sch:assert test="(. castable as xs:integer) and (xs:integer(.) > 0)">
                             A Status Message of type RETRY has an optional ESTIMATED_WAIT Status
                             Detail of type positiveInteger.
                         </sch:assert>
@@ -669,8 +668,7 @@
         <xs:complexContent>
             <xs:extension base="ResponseMessageType">
                 <xs:sequence>
-                    <xs:element name="Collection" minOccurs="0" maxOccurs="unbounded"
-                        type="taxii:CollectionRecordType">
+                    <xs:element name="Collection" type="taxii:CollectionRecordType" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>One element provided for each Data Collection in the response.</xs:documentation>
                         </xs:annotation>
@@ -695,7 +693,7 @@
                     <xs:documentation>A prose description of this TAXII Data Collection.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element minOccurs="0" name="Collection_Volume" type="xs:nonNegativeInteger" maxOccurs="1">
+            <xs:element name="Collection_Volume" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>This field indicates the typical number of daily records subscribers can expect to receive from this Data Collection.</xs:documentation>
                 </xs:annotation>
@@ -707,20 +705,17 @@
                     <xs:documentation>The content bindings used in this Data Collection as indicated by Content Binding Identifiers.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-             <xs:element name="Push_Method" minOccurs="0" maxOccurs="unbounded"
-                type="PushMethodType">
+            <xs:element name="Push_Method" type="PushMethodType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Identify ways that content from this Data Collection can be pushed.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Polling_Service" minOccurs="0" maxOccurs="unbounded"
-                type="ServiceContactInfoType">
+            <xs:element name="Polling_Service" type="ServiceContactInfoType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Identify ways to contact a Poll service to collect information for this Data Collection.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Subscription_Service" minOccurs="0" maxOccurs="unbounded"
-                type="ServiceContactInfoType">
+            <xs:element name="Subscription_Service" type="ServiceContactInfoType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Identify Collection Management Services to use when establishing a subscription to this Data Collection.</xs:documentation>
                 </xs:annotation>
@@ -1112,8 +1107,7 @@
                     <xs:documentation>Indicate the type of response (full content or count only).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element maxOccurs="unbounded" minOccurs="0" name="Content_Binding"
-                type="ContentBindingIDType">
+            <xs:element name="Content_Binding" type="ContentBindingIDType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Indicate the acceptable Content Bindings for the response</xs:documentation>
                 </xs:annotation>
@@ -1163,7 +1157,7 @@
         <xs:complexContent>
             <xs:extension base="ResponseMessageType">
                 <xs:sequence>
-                    <xs:element name="Subscription_ID" type="xs:anyURI" maxOccurs="1" minOccurs="0">
+                    <xs:element name="Subscription_ID" type="xs:anyURI" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation>The Subscription ID of the subscription associated
                                 with this Poll Response (if applicable)</xs:documentation>
@@ -1197,8 +1191,7 @@
                             <xs:documentation>An additional message intended for human consumption.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element ref="Content_Block" minOccurs="0"
-                        maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>

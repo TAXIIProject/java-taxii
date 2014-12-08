@@ -38,11 +38,11 @@ import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResponseMessageType")
 @XmlSeeAlso({
-    DiscoveryResponse.class,
-    PollResponse.class,
-    StatusMessage.class,
     FeedInformationResponse.class,
-    SubscriptionManagementResponse.class
+    PollResponse.class,
+    DiscoveryResponse.class,
+    SubscriptionManagementResponse.class,
+    StatusMessage.class
 })
 public abstract class ResponseMessageType
     extends MessageType

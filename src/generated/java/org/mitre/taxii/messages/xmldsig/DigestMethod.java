@@ -93,9 +93,9 @@ public class DigestMethod implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link java.lang.Object }
      * {@link String }
      * {@link Element }
-     * {@link java.lang.Object }
      * 
      * 
      */

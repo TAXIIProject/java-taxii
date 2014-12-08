@@ -97,10 +97,10 @@ public class Transform implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link String }
      * {@link java.lang.Object }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link Element }
+     * {@link String }
      * 
      * 
      */

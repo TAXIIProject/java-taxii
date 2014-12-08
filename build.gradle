@@ -16,6 +16,9 @@ sourceSets {
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 configurations {
@@ -50,6 +53,9 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient-cache:4.3.5'
     compile 'org.apache.httpcomponents:httpmime:4.3.5'
     compile 'org.apache.httpcomponents:fluent-hc:4.3.5'
+    
+    // Java-STIX library
+    compile files('lib/java_stix-0.1.jar')
     
     testCompile 'junit:junit:4.11'
 }

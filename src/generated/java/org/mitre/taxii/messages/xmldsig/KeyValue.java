@@ -94,11 +94,11 @@ public class KeyValue implements Equals, HashCode
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link RSAKeyValue }
-     * {@link DSAKeyValue }
-     * {@link Element }
-     * {@link String }
      * {@link java.lang.Object }
+     * {@link RSAKeyValue }
+     * {@link Element }
+     * {@link DSAKeyValue }
+     * {@link String }
      * 
      * 
      */

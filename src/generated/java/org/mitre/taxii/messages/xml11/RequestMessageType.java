@@ -35,12 +35,12 @@ import org.jvnet.jaxb2_commons.locator.ObjectLocator;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RequestMessageType")
 @XmlSeeAlso({
-    CollectionInformationRequest.class,
     SubscriptionManagementRequest.class,
-    PollFulfillment.class,
+    CollectionInformationRequest.class,
     DiscoveryRequest.class,
-    PollRequest.class,
-    InboxMessage.class
+    PollFulfillment.class,
+    InboxMessage.class,
+    PollRequest.class
 })
 public abstract class RequestMessageType
     extends MessageType
