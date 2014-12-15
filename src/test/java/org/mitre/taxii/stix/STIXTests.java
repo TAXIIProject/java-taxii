@@ -28,7 +28,7 @@ import org.mitre.cybox.common_2.HashType;
 import org.mitre.cybox.common_2.SimpleHashValueType;
 import org.mitre.cybox.common_2.TimeType;
 import org.mitre.cybox.cybox_2.ObjectType;
-import org.mitre.cybox.cybox_2.ObservableType;
+import org.mitre.cybox.cybox_2.Observable;
 import org.mitre.cybox.default_vocabularies_2.HashNameVocab10;
 import org.mitre.cybox.objects.FileObjectType;
 import org.mitre.stix.common_1.IndicatorBaseType;
@@ -36,10 +36,10 @@ import org.mitre.stix.common_1.InformationSourceType;
 import org.mitre.stix.common_1.StructuredTextType;
 import org.mitre.stix.extensions.identity.CIQIdentity30InstanceType;
 import org.mitre.stix.extensions.identity.STIXCIQIdentity30Type;
-import org.mitre.stix.indicator_2.IndicatorType;
+import org.mitre.stix.indicator_2.Indicator;
 import org.mitre.stix.stix_1.IndicatorsType;
 import org.mitre.stix.stix_1.STIXHeaderType;
-import org.mitre.stix.stix_1.STIXType;
+import org.mitre.stix.stix_1.STIXPackage;
 import org.mitre.taxii.ContentBindings;
 import org.mitre.taxii.messages.xml11.ContentBlock;
 import org.mitre.taxii.messages.xml11.MessageHelper;
@@ -50,15 +50,6 @@ import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author jasenj1
- */
 public class STIXTests {
 
     private final ObjectFactory factory = new ObjectFactory();
@@ -78,62 +69,44 @@ public class STIXTests {
                         new GregorianCalendar(TimeZone.getTimeZone("UTC")));
 
         ContactNumbers contactNumbers = new ContactNumbers()
-                .withContactNumber(new ArrayList<ContactNumbers.ContactNumber>() {
-                    {
-                        add(new ContactNumbers.ContactNumber()
-                                .withContactNumberElement(new ArrayList<ContactNumbers.ContactNumber.ContactNumberElement>() {
-                                    {
-                                        add(new ContactNumbers.ContactNumber.ContactNumberElement()
-                                                .withValue("555-555-5555"));
-                                        add(new ContactNumbers.ContactNumber.ContactNumberElement()
-                                                .withValue("555-555-5556"));
-                                    }
-                                }));
-                        
-                    }
-                });
+                .withContactNumbers(new ContactNumbers.ContactNumber()
+                                    .withContactNumberElements(
+                                        new ContactNumbers.ContactNumber.ContactNumberElement()
+                                                .withValue("555-555-5555"),
+                                        new ContactNumbers.ContactNumber.ContactNumberElement()
+                                                .withValue("555-555-5556")
+                                    ));
 
         ElectronicAddressIdentifiers electronicAddressIdentifiers = new ElectronicAddressIdentifiers()
-                .withElectronicAddressIdentifier(new ArrayList<ElectronicAddressIdentifiers.ElectronicAddressIdentifier>() {
-                    {
-                        add(new ElectronicAddressIdentifiers.ElectronicAddressIdentifier()
-                                .withValue("jsmith@example.com"));
-                    }
-                });
+                .withElectronicAddressIdentifiers(new ElectronicAddressIdentifiers.ElectronicAddressIdentifier()
+                                .withValue("jsmith@example.com")
+                );
 
         FreeTextLines freeTextLines = new FreeTextLines()
-                .withFreeTextLine(new ArrayList<FreeTextLines.FreeTextLine>() {
-                    {
-                        add(new FreeTextLines.FreeTextLine()
-                                .withValue("Demonstrating Free Text!"));
-                    }
-                });
+                .withFreeTextLines(
+                        new FreeTextLines.FreeTextLine()
+                                .withValue("Demonstrating Free Text!")
+                );                    
 
         PartyNameType partyName = new PartyNameType()
-                .withNameLine(new ArrayList<NameLine>() {
-                    {
-                        add(new NameLine().withValue("Foo"));
-                        add(new NameLine().withValue("Bar"));
-                    }
-                }).withPersonName(new ArrayList<PartyNameType.PersonName>() {
-                    {
-                        add(new PartyNameType.PersonName()
-                                .withNameElement(new oasis.names.tc.ciq.xnl._3.PersonNameType.NameElement()
-                                        .withValue("John Smith")));
-                        add(new PartyNameType.PersonName()
-                                .withNameElement(new oasis.names.tc.ciq.xnl._3.PersonNameType.NameElement()
-                                        .withValue("Jill Smith")));
-                    }
-                }).withOrganisationName(new ArrayList<PartyNameType.OrganisationName>() {
-                    {
-                        add(new PartyNameType.OrganisationName()
-                                .withNameElement(new oasis.names.tc.ciq.xnl._3.OrganisationNameType.NameElement()
-                                        .withValue("Foo Inc.")));
-                        add(new PartyNameType.OrganisationName()
-                                .withNameElement(new oasis.names.tc.ciq.xnl._3.OrganisationNameType.NameElement()
-                                        .withValue("Bar Corp.")));
-                    }
-                });
+                .withNameLines(                    
+                        new NameLine().withValue("Foo"),
+                        new NameLine().withValue("Bar")
+                ).withPersonNames(
+                        new PartyNameType.PersonName()
+                            .withNameElements(new oasis.names.tc.ciq.xnl._3.PersonNameType.NameElement()
+                                .withValue("John Smith")),
+                        new PartyNameType.PersonName()
+                            .withNameElements(new oasis.names.tc.ciq.xnl._3.PersonNameType.NameElement()
+                                .withValue("Jill Smith"))
+                ).withOrganisationNames(
+                        new PartyNameType.OrganisationName()
+                                .withNameElements(new oasis.names.tc.ciq.xnl._3.OrganisationNameType.NameElement()
+                                        .withValue("Foo Inc.")),
+                        new PartyNameType.OrganisationName()
+                                .withNameElements(new oasis.names.tc.ciq.xnl._3.OrganisationNameType.NameElement()
+                                        .withValue("Bar Corp."))
+                );
 
         STIXCIQIdentity30Type specification = new STIXCIQIdentity30Type()
                 .withContactNumbers(contactNumbers)
@@ -167,10 +140,10 @@ public class STIXTests {
 
         ObjectType obj = new ObjectType().withProperties(fileObject);
 
-        ObservableType observable = new org.mitre.cybox.cybox_2.ObservableType();
+        Observable observable = new org.mitre.cybox.cybox_2.Observable();
         observable.setObject(obj);
 
-        final IndicatorType indicator = new IndicatorType()
+        final Indicator indicator = new Indicator()
                 .withTitle("File Hash Example")
                 .withDescription(
                         new StructuredTextType(
@@ -188,7 +161,7 @@ public class STIXTests {
         STIXHeaderType header = new STIXHeaderType()
                 .withDescription(new StructuredTextType("Example", null));
 
-        STIXType stix = new STIXType()
+        STIXPackage stix = new STIXPackage()
                 .withSTIXHeader(header)
                 .withIndicators(indicators)
                 .withVersion("1.1.1")
@@ -196,12 +169,10 @@ public class STIXTests {
                 .withId(new QName("http://example.com/", "package-"
                                 + UUID.randomUUID().toString(), "example"));
 
-        JAXBContext stixContext = JAXBContext.newInstance(STIXType.class.getPackage().getName());
-        org.mitre.stix.stix_1.ObjectFactory sof = new org.mitre.stix.stix_1.ObjectFactory();
-        JAXBElement sp = sof.createSTIXPackage(stix);
+        JAXBContext stixContext = JAXBContext.newInstance(STIXPackage.class.getPackage().getName());
 
         DOMResult dr = new DOMResult();
-        stixContext.createMarshaller().marshal(sp, dr);
+        stixContext.createMarshaller().marshal(stix, dr);
 
         // Create ContentBlock for TAXII
         ContentBlock cb = factory.createContentBlock()
@@ -273,11 +244,9 @@ public class STIXTests {
                 + "    </stix:Indicators>\n"
                 + "</stix:STIX_Package>";
 
-        JAXBContext stixContext = JAXBContext.newInstance(STIXType.class.getPackage().getName());
+        JAXBContext stixContext = JAXBContext.newInstance(STIXPackage.class.getPackage().getName());
 
-        STIXType st = STIXType.fromXMLString(stixStr);
-        org.mitre.stix.stix_1.ObjectFactory sof = new org.mitre.stix.stix_1.ObjectFactory();
-        JAXBElement sp = sof.createSTIXPackage(st);
+        STIXPackage sp = STIXPackage.fromXMLString(stixStr);
 
         DOMResult dr = new DOMResult();
         stixContext.createMarshaller().marshal(sp, dr);

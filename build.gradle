@@ -56,6 +56,7 @@ dependencies {
     
     // Java-STIX library
     compile files('lib/java_stix-0.1.jar')
+//        compile files('lib/JAVA_STIX-1.0-SNAPSHOT.jar')
     
     testCompile 'junit:junit:4.11'
 }
