@@ -7,12 +7,6 @@
     targetNamespace="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
     elementFormDefault="qualified" version="1.1">
     
-    <!-- 
-        Additions to original 1.1 schema marked with ADDED below:
-        - Added schematron rules to enforce additional constraints described
-            in the specification.
-    -->
-    
     <xs:annotation>
         <xs:appinfo>
             <schema>TAXII XML Message Binding Schema</schema>
@@ -20,7 +14,6 @@
             <date>1/13/2014</date>
             <short_description>The following specifies the fields and types of the TAXII XML Message Binding.</short_description>
             <terms_of_use>Copyright (c) 2014, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the TAXII License located at http://taxii.mitre.org/about/termsofuse.html. See the TAXII License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the TAXII XML Message Binding Schema, this license header must be included.</terms_of_use>
-            <!-- ADDED -->
             <sch:ns prefix="taxii" uri="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" />
         </xs:appinfo>
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
@@ -299,7 +292,6 @@
     <xs:complexType name="TAXIIStatusMessageType">
         <xs:annotation>
             <xs:documentation>Type used by TAXII Status Messages.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Status Message Rules</sch:title>
@@ -572,7 +564,17 @@
             <xs:element name="Content_Binding" type="ContentBindingIDType" minOccurs="0"
                 maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Ignored if @service_version has a value other than INBOX. If @service_version=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_version=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
+                    <xs:documentation>Ignored if @service_type has a value other than INBOX. 
+                        If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs.
+                        If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
+                    <xs:appinfo>
+                        <sch:pattern>
+                            <sch:title>Content_Binding only present when @service_type=INBOX. XML Binding Spec section 3.3. </sch:title>
+                            <sch:rule context="taxii:Service_Instance/taxii:Content_Binding">
+                                <sch:assert test="../@service_type='INBOX'">If Content_Binding is present, @service_type SHOULD be "INBOX".</sch:assert>
+                            </sch:rule>                                                           
+                        </sch:pattern>
+                    </xs:appinfo>
                 </xs:annotation>
             </xs:element>
             <xs:element name="Message" type="xs:string" minOccurs="0" maxOccurs="1">
@@ -808,7 +810,6 @@
     <xs:complexType name="TAXIISubscriptionManagementRequestType">
         <xs:annotation>
             <xs:documentation>Request management of a Data Collection subscription (including creation of a new subscription).</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Subscription Management Request Rules</sch:title>
@@ -1035,7 +1036,6 @@
     <xs:complexType name="TAXIIPollRequestType">
         <xs:annotation>
             <xs:documentation>A request to Poll a data collection.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Poll Request Rules</sch:title>
@@ -1144,7 +1144,6 @@
     <xs:complexType name="TAXIIPollResponseType">
         <xs:annotation>
             <xs:documentation>Type for the Poll Response Messages.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Poll Response Rules</sch:title>
@@ -1197,8 +1196,7 @@
                             <xs:documentation>An additional message intended for human consumption.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element ref="Content_Block" minOccurs="0"
-                        maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
@@ -1259,7 +1257,6 @@
     <xs:complexType name="TAXIIInboxMessageType">
         <xs:annotation>
             <xs:documentation>Push message to exchange content.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Inbox Message Rules</sch:title>
@@ -1297,8 +1294,7 @@
                             <xs:documentation>A count of the number of applicable records.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element ref="Content_Block" minOccurs="0"
-                        maxOccurs="unbounded">
+                    <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
                         </xs:annotation>
