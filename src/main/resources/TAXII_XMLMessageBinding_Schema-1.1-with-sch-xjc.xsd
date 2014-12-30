@@ -18,8 +18,6 @@
             anywhere in the schema where one TAXII_Message can be substituted
             for another, so the substitionGroup wasn't being used and was
             resulting in extraneous (and useless) code being generated.
-        - Added schematron rules to enforce additional constraints described
-            in the specification.
     -->
     
     <xs:annotation>
@@ -29,7 +27,6 @@
             <date>1/13/2014</date>
             <short_description>The following specifies the fields and types of the TAXII XML Message Binding.</short_description>
             <terms_of_use>Copyright (c) 2014, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the TAXII License located at http://taxii.mitre.org/about/termsofuse.html. See the TAXII License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the TAXII XML Message Binding Schema, this license header must be included.</terms_of_use>
-            <!-- ADDED -->
             <sch:ns prefix="taxii" uri="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" />
         </xs:appinfo>
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
@@ -315,7 +312,6 @@
     <xs:complexType name="TAXIIStatusMessageType">
         <xs:annotation>
             <xs:documentation>Type used by TAXII Status Messages.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Status Message Rules</sch:title>
@@ -832,7 +828,6 @@
     <xs:complexType name="TAXIISubscriptionManagementRequestType">
         <xs:annotation>
             <xs:documentation>Request management of a Data Collection subscription (including creation of a new subscription).</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Subscription Management Request Rules</sch:title>
@@ -1059,7 +1054,6 @@
     <xs:complexType name="TAXIIPollRequestType">
         <xs:annotation>
             <xs:documentation>A request to Poll a data collection.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Poll Request Rules</sch:title>
@@ -1168,7 +1162,6 @@
     <xs:complexType name="TAXIIPollResponseType">
         <xs:annotation>
             <xs:documentation>Type for the Poll Response Messages.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Poll Response Rules</sch:title>
@@ -1221,6 +1214,9 @@
                             <xs:documentation>An additional message intended for human consumption.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
+                    <!-- CHANGED
+                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0" maxOccurs="unbounded">
+                    -->
                     <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
@@ -1282,7 +1278,6 @@
     <xs:complexType name="TAXIIInboxMessageType">
         <xs:annotation>
             <xs:documentation>Push message to exchange content.</xs:documentation>
-            <!-- ADDED -->
             <xs:appinfo>
                 <sch:pattern>
                     <sch:title>Inbox Message Rules</sch:title>
@@ -1320,6 +1315,9 @@
                             <xs:documentation>A count of the number of applicable records.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
+                    <!-- CHANGED
+                    <xs:element name="Content_Block" type="ContentBlockType" minOccurs="0" maxOccurs="unbounded">
+                    -->                    
                     <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Returned content.</xs:documentation>
@@ -1414,47 +1412,40 @@
     </xs:complexType>
 
     <!-- GLOBAL ELEMENTS -->
+    
     <!-- CHANGED
     <xs:element name="TAXII_Message" abstract="true" type="MessageType">
         <xs:annotation>
             <xs:documentation>Abstract super-type of all message elements.</xs:documentation>
         </xs:annotation>
     </xs:element>
-    <xs:element name="Status_Message" type="TAXIIStatusMessageType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Collection_Information_Request" type="TAXIICollectionInformationRequestType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Collection_Information_Response" type="TAXIICollectionInformationResponseType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Subscription_Management_Request" type="TAXIISubscriptionManagementRequestType"
-        substitutionGroup="TAXII_Message"/>
-    <xs:element name="Subscription_Management_Response"
-        type="TAXIISubscriptionManagementResponseType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Status_Message" type="TAXIIStatusMessageType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Collection_Information_Request" type="TAXIICollectionInformationRequestType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Collection_Information_Response" type="TAXIICollectionInformationResponseType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Subscription_Management_Request" type="TAXIISubscriptionManagementRequestType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Subscription_Management_Response" type="TAXIISubscriptionManagementResponseType" substitutionGroup="TAXII_Message"/>
     <xs:element name="Poll_Request" type="TAXIIPollRequestType" substitutionGroup="TAXII_Message"/>
     <xs:element name="Poll_Response" type="TAXIIPollResponseType" substitutionGroup="TAXII_Message"/>
-    <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" substitutionGroup="TAXII_Message"
-    />
-    <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"
-        substitutionGroup="TAXII_Message"/>
+    <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" substitutionGroup="TAXII_Message"/>
+    <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType" substitutionGroup="TAXII_Message"/>
     -->
+
     <xs:element name="Status_Message" type="TAXIIStatusMessageType"/>
     <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType"/>
     <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType"/>
     <xs:element name="Collection_Information_Request" type="TAXIICollectionInformationRequestType"/>
     <xs:element name="Collection_Information_Response" type="TAXIICollectionInformationResponseType"/>
     <xs:element name="Subscription_Management_Request" type="TAXIISubscriptionManagementRequestType"/>
-    <xs:element name="Subscription_Management_Response"
-        type="TAXIISubscriptionManagementResponseType"/>
+    <xs:element name="Subscription_Management_Response" type="TAXIISubscriptionManagementResponseType"/>
     <xs:element name="Poll_Request" type="TAXIIPollRequestType" />
     <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
     <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
     <xs:element name="Poll_Fulfillment" type="TAXIIPollFulfillmentType"/>
 
-    <!-- The below is/are pulled global to support creating objects of the type within JAXB not inside
+    <!-- CHANGED
+        The below is pulled global to support creating objects of the type within JAXB not inside
         the enclosing parent elements.
     -->
     <xs:element name="Content_Block" type="ContentBlockType"/>        

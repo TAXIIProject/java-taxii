@@ -3,6 +3,7 @@
            xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1"
            xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1"
            xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
            targetNamespace="http://taxii.mitre.org/messages/taxii_xml_binding-1"
            elementFormDefault="qualified" version="1.0">
 
@@ -25,6 +26,8 @@
             <date>4/30/2013</date>
             <short_description>The following specifies the fields and types of the TAXII XML Message Binding.</short_description>
             <terms_of_use>Copyright (c) 2012 - 2013, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the TAXII License located at http://taxii.mitre.org/about/termsofuse.html. See the TAXII License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the TAXII XML Message Binding Schema, this license header must be included.</terms_of_use>
+            <!-- ADDED -->
+            <sch:ns prefix="taxii" uri="http://taxii.mitre.org/messages/taxii_xml_binding-1" />
         </xs:appinfo>
         <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
     </xs:annotation>
@@ -34,7 +37,7 @@
         schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"> 
     -->
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="xmldsig-core-schema-xjc.xsd">
+        schemaLocation="xmldsig-core-schema.xsd">
         <xs:annotation>
             <xs:documentation>XML Digital Signature schema imported to support signatures of messages and contents.</xs:documentation>
         </xs:annotation>
@@ -204,6 +207,32 @@
     <xs:complexType name="TAXIIStatusMessageType">
         <xs:annotation>
             <xs:documentation>Type used by TAXII Status Messages.</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Status Message Rules</sch:title>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'RETRY']/taxii:Status_Detail">
+                        <sch:assert test=". castable as xs:dateTime">
+                            A Status Message of type RETRY should have a Status_Detail containing a timestamp.
+                        </sch:assert>
+                    </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_MESSAGE']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Message Binding IDs indicating supported message bindings.
+                        </sch:assert>
+                    </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_CONTENT']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Content Binding IDs indicating supported content bindings.
+                        </sch:assert>
+                    </sch:rule>
+                    <sch:rule context="/taxii:Status_Message[@status_type = 'UNSUPPORTED_PROTOCOL']/taxii:Status_Detail">
+                        <sch:assert test="every $token in tokenize(., ' ') satisfies $token castable as xs:anyURI">
+                            Status_Detail must contain a space-separated list of Protocol Binding IDs indicating supported protocol bindings.
+                        </sch:assert>
+                    </sch:rule>
+                </sch:pattern>
+            </xs:appinfo>            
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="ResponseMessageType">
@@ -366,6 +395,14 @@
             <xs:element name="Content_Binding" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Ignored if @service_type has a value other than INBOX. If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
+                    <xs:appinfo>
+                        <sch:pattern>
+                            <sch:title>Content_Binding only present when @service_type=INBOX. XML Binding Spec section 3.3. </sch:title>
+                            <sch:rule context="taxii:Service_Instance/taxii:Content_Binding">
+                                <sch:assert test="../@service_type='INBOX'">If Content_Binding is present, @service_type SHOULD be "INBOX".</sch:assert>
+                            </sch:rule>                                                           
+                        </sch:pattern>
+                    </xs:appinfo>
                 </xs:annotation>
             </xs:element>
             <xs:element name="Message" type="xs:string" minOccurs="0" maxOccurs="1">
@@ -540,6 +577,27 @@
     <xs:complexType name="TAXIISubscriptionManagementRequestType">
         <xs:annotation>
             <xs:documentation>Request management of a feed subscription (including creation of a new subscription).</xs:documentation>
+            <!-- ADDED -->
+            <xs:appinfo>
+                <sch:pattern>
+                    <sch:title>Subscription Management Request Rules</sch:title>
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE']">
+                        <sch:assert test="@subscription_id">
+                            @subscription_id MUST be present if the action is UNSUBSCRIBE.
+                        </sch:assert>
+                    </sch:rule>                    
+                    <sch:rule context="/taxii:Subscription_Management_Request[not(@action='UNSUBSCRIBE')]">
+                        <sch:assert test="not(@subscription_id)">
+                            @subscription_id SHOULD not be present if the action is not UNSUBSCRIBE.
+                        </sch:assert>
+                    </sch:rule>                    
+                    <sch:rule context="/taxii:Subscription_Management_Request[not(@action='SUBSCRIBE')]">
+                        <sch:assert test="not(Push_Parameters)">
+                            For values of @action other than SUBSCRIBE senders SHOULD NOT include Push_Parameters.
+                        </sch:assert>
+                    </sch:rule>                    
+                </sch:pattern>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="RequestMessageType">
@@ -868,9 +926,9 @@
     <xs:element name="Poll_Response" type="TAXIIPollResponseType" />
     <xs:element name="Inbox_Message" type="TAXIIInboxMessageType" />
 
-    <!-- The below is/are pulled global to support creating objects of the type within JAXB not inside
+    <!-- The below is pulled global to support creating objects of the type within JAXB not inside
         the enclosing parent elements.
     -->
     <xs:element name="Content_Block" type="ContentBlockType"/>        
-            
+                
 </xs:schema>

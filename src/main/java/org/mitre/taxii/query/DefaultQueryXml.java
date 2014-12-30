@@ -65,7 +65,7 @@ public final class DefaultQueryXml {
     public static final String FID_TAXII_DEFAULT_QUERY_10 = "urn:taxii.mitre.org:query:default:1.0";
 
     /** XML Schema document location. */
-    private static final String TAXII_DEFAULT_QUERY_SCHEMA = "/TAXII_DefaultQuery_schema.xsd";
+    private static final String TAXII_DEFAULT_QUERY_SCHEMA = "/TAXII_DefaultQuery.xsd";
 
     // Capability Module IDs
     /** Capability Module ID for Core */

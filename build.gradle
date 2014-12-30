@@ -1,21 +1,49 @@
+/*
+ * Copyright (c) 2014, The MITRE Corporation. All rights reserved.
+ * See LICENSE for complete terms.
+ *
+ * Java-TAXII Gradle Buildscript
+ *
+ * Jasen Jacobsen (jasenj1@mitre.org)
+ *
+ * Run
+ *
+ *	gradle
+ *
+ * from the commnand-line.
+ *
+ * Jar will be built to 
+ *
+ * 	build/libs/java-taxii.jar
+ */
+
 defaultTasks 'test'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-String srcGeneratedJavaDir = 'src/generated/java'
+version = 1.1
+
 String srcGeneratedDir = 'src/generated'
+String srcGeneratedJavaDir = srcGeneratedDir + '/java'
+String schemasDir = srcGeneratedDir + "/schemas"
 
 sourceSets {
     main {
         java {
             srcDirs('src/main/java', srcGeneratedJavaDir)
         }
+        resources {
+            srcDirs = [schemasDir]
+        }
     }
 }
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 configurations {
@@ -54,9 +82,76 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
+task retrieveSchemas << {
+    if (project.fileTree(schemasDir).isEmpty()) {
+        // Get the schemas & patch them.
+        println "Retrieving TAXII schemas from reference sources."
+        
+        ant.mkdir(dir:schemasDir)
+/* 
+ * TODO: 
+ * As of this writing, the official schemas on the TAXII web site do not include the Schematron rules, so 
+ * get the schemas from a local directory. Once the official schemas have been modified, the below should be 
+ * pointed at the official schemas.
+ * 
+ * NOTE: The patch files will ned to be updated once new versions are posted to the web site.
+ */                
+        // Get the TAXII 1.1 Schema.
+        def schemaSource = new File(project.rootDir.absolutePath + "/" + "schemas" + "/TAXII_XMLMessageBinding_Schema-1.1-with-sch.xsd")
+//        URL schemaSource = new URL("https://raw.githubusercontent.com/TAXIIProject/TAXII-Specifications/1.1/TAXII_XMLMessageBinding_Schema.xsd")        
+        File outFile = new File(project.rootDir.absolutePath + "/" + schemasDir + "/TAXII_XMLMessageBinding-1.1.xsd")
+        outFile.write(schemaSource.getText())
+        
+        // Get the TAXII 1.0 Schema.
+        schemaSource = new File(project.rootDir.absolutePath + "/" + "schemas" + "/TAXII_XMLMessageBinding_Schema-1.0-with-sch.xsd")
+//        taxiiUrl = new URL("https://raw.githubusercontent.com/TAXIIProject/TAXII-Specifications/1.0/TAXII_XMLMessageBinding_Schema.xsd")        
+        outFile = new File(project.rootDir.absolutePath + "/" + schemasDir + "/TAXII_XMLMessageBinding-1.0.xsd")
+        outFile.write(schemaSource.getText())
+        
+// TODO: The following two schemas are already in a form we can pull from their web site.
+        
+        // Get the DefaultQuery Schema.
+        schemaSource = new URL("https://raw.githubusercontent.com/TAXIIProject/TAXII-Specifications/1.1/TAXII_DefaultQuery_Schema.xsd")        
+        outFile = new File(project.rootDir.absolutePath + "/" + schemasDir + "/TAXII_DefaultQuery.xsd")
+        outFile.write(schemaSource.getText())
+        
+        // Get the XML Digital Signature Schema.
+        schemaSource = new URL("http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd")        
+        outFile = new File(project.rootDir.absolutePath + "/" + schemasDir + "/xmldsig-core-schema.xsd")
+        outFile.write(schemaSource.getText())
+    } else {
+        println "Schemas are present. Retrieval is not needed."
+        didWork = false
+    }    
+}
+
+task patchSchemas << { 
+    // This should only execute if retrieveSchemas did work.
+    if (retrieveSchemas.didWork) {
+        ant.patch(patchfile: "src/main/resources/xmldsig-core-schema.patch", originalfile: schemasDir + "/xmldsig-core-schema.xsd")    
+        ant.patch(patchfile: "src/main/resources/TAXII_XMLMessageBinding_Schema-1.1.patch", originalfile: schemasDir + "/TAXII_XMLMessageBinding-1.1.xsd")    
+        ant.patch(patchfile: "src/main/resources/TAXII_XMLMessageBinding_Schema-1.0.patch", originalfile: schemasDir + "/TAXII_XMLMessageBinding-1.0.xsd")    
+        ant.patch(patchfile: "src/main/resources/TAXII_DefaultQuery.patch", originalfile: schemasDir + "/TAXII_DefaultQuery.xsd")    
+    } else {
+        println "Schemas already exist and are presumed patched. Nothing done."
+        didWork = false
+    }
+}
+
+task extractSchematron << {
+    ant.xslt (destdir: srcGeneratedDir, extension: ".sch", basedir: schemasDir,
+        includes: "TAXII_XMLMessage*.xsd", classpath: configurations.compile.asPath,
+        style: 'src/main/resources/iso-schematron-xslt2/ExtractSchFromXSD-2.xsl')
+}
+
+task compileSchematron << {
+    ant.xslt (destdir: "src/generated/schemas", extension: "-compiled.xsl", basedir: srcGeneratedDir,
+        includes: "TAXII_XMLMessage*.sch", classpath: configurations.compile.asPath,
+        style: 'src/main/resources/iso-schematron-xslt2/iso_schematron_message_xslt2.xsl')    
+}
 
 task generate << {
-    String srcXsdDir = 'src/main/resources'
+    String bindingDir = 'src/main/resources'
 
     ant.taskdef(name: 'xjc', classname: 'org.jvnet.jaxb2_commons.xjc.XJC2Task',
         classpath: configurations.xjc.asPath)
@@ -64,28 +159,16 @@ task generate << {
     ant.mkdir(dir: srcGeneratedJavaDir)
     ant.xjc(destdir: srcGeneratedJavaDir, header: false, readonly: true,
             extension: true, classpath: configurations.xjc.asPath) {
-        // generate an equals method - this uses an XJC plugin
+
         arg(line: '-Xequals -XhashCode -Xfluent-api -Xvalue-constructor -Xdefault-value -Xnamespace-prefix')
-        binding(dir: srcXsdDir, includes: '*.xjb')
-        schema(dir: srcXsdDir, includes: '*.xsd')
+        binding(dir: bindingDir, includes: '*.xjb')
+        schema(dir: schemasDir, includes: '*.xsd')
         produces(dir: srcGeneratedJavaDir, includes: '**/*.java')
     }
 }
 
-task cleanGenerate << {
-    ant.delete(dir: srcGeneratedJavaDir)
-}
-
-task extractSchematron << {
-    ant.xslt (destdir: srcGeneratedDir, extension: ".sch", basedir: "src/main/resources",
-        includes: "TAXII_XMLMessage*.xsd", classpath: configurations.compile.asPath,
-        style: 'src/main/build/iso-schematron-xslt2/ExtractSchFromXSD-2.xsl')
-}
-
-task compileSchematron << {
-    ant.xslt (destdir: "src/main/resources", extension: "-compiled.xsl", basedir: srcGeneratedDir,
-        includes: "TAXII_XMLMessage*.sch", classpath: configurations.compile.asPath,
-        style: 'src/main/build/iso-schematron-xslt2/iso_schematron_message_xslt2.xsl')    
+task cleanGenerated << {
+    ant.delete(dir: srcGeneratedDir)
 }
 
 javadoc {
@@ -100,9 +183,14 @@ task dist << {
 }
 
 // fix dependencies so that generate gets called before compileJava
+
+patchSchemas.dependsOn retrieveSchemas
+
+extractSchematron.dependsOn patchSchemas
+
 compileSchematron.dependsOn extractSchematron
 
-generate.dependsOn extractSchematron
+generate.dependsOn compileSchematron
 
 compileJava.dependsOn generate
 

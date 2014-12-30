@@ -270,7 +270,7 @@
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Subscription_Management_Request[@action='UNSUBSCRIBE']"
-                 priority="1001"
+                 priority="1002"
                  mode="M3">
 
 		<!--ASSERT -->
@@ -287,7 +287,7 @@
 
 	  <!--RULE -->
    <xsl:template match="/taxii:Subscription_Management_Request[not(@action='UNSUBSCRIBE')]"
-                 priority="1000"
+                 priority="1001"
                  mode="M3">
 
 		<!--ASSERT -->
@@ -297,6 +297,23 @@
             <xsl:message>
                             @subscription_id SHOULD not be present if the action is not UNSUBSCRIBE.
                          (not(@subscription_id))</xsl:message>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M3"/>
+   </xsl:template>
+
+	  <!--RULE -->
+   <xsl:template match="/taxii:Subscription_Management_Request[not(@action='SUBSCRIBE')]"
+                 priority="1000"
+                 mode="M3">
+
+		<!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not(Push_Parameters)"/>
+         <xsl:otherwise>
+            <xsl:message>
+                            For values of @action other than SUBSCRIBE senders SHOULD NOT include Push_Parameters.
+                         (not(Push_Parameters))</xsl:message>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*" mode="M3"/>

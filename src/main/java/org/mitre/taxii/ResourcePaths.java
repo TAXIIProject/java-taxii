@@ -34,14 +34,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public abstract class ResourcePaths {
     /** Path to the TAXII 1.0 XSD */
-    public static final String TAXII_10_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.0-with-sch-xjc.xsd";
+    public static final String TAXII_10_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding-1.0.xsd";
     /** Path to the XSLT containing the Schematron rules for TAXII 1.0 */
-    public static final String TAXII_10_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.0-with-sch-xjc-compiled.xsl";
+    public static final String TAXII_10_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding-1.0-compiled.xsl";
 
     /** Path to the TAXII 1.1 XSD */
-    public static final String TAXII_11_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-with-sch-xjc.xsd";
+    public static final String TAXII_11_SCHEMA_RESOURCE = "/TAXII_XMLMessageBinding-1.1.xsd";
     /** Path to the XSLT containing the Schematron rules for TAXII 1.1 */
-    public static final String TAXII_11_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding_Schema-1.1-with-sch-xjc-compiled.xsl";        
+    public static final String TAXII_11_SCHEMATRON_XSLT_RESOURCE = "/TAXII_XMLMessageBinding-1.1-compiled.xsl";        
     
     private ResourcePaths() {}
 }

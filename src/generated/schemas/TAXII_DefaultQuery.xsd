@@ -1,8 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://taxii.mitre.org/query/taxii_default_query-1"
     xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1">
-
+    <xs:annotation>
+        <xs:appinfo>
+            <schema>TAXII Default Query Schema</schema>
+            <version>1.0</version>
+            <date>1/13/2014</date>
+            <short_description>The following specifies the fields and types of the TAXII Default Query Specification.</short_description>
+            <terms_of_use>Copyright (c) 2014, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the TAXII License located at http://taxii.mitre.org/about/termsofuse.html. See the TAXII License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the TAXII XML Message Binding Schema, this license header must be included.</terms_of_use>
+        </xs:appinfo>
+        <xs:documentation>XML schema associated with the TAXII XML Message Binding Specification. Note that in case of conflict, the specification is considered normative.</xs:documentation>
+    </xs:annotation>
     <xs:complexType name="DefaultQueryType">
         <xs:sequence>
             <xs:element name="Criteria" type="tdq:CriteriaType">
@@ -32,11 +41,16 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="CriteriaType">
+        <!-- CHANGED
+            The specicification says that all "Criteria" must come before "Criterion" but the published schema
+            does not enforce this restriction. Fix this so that the Java objects comply with the spec.
+            Hopefully, someday the published schema will be fixed.
+        -->
         <xs:sequence>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="Criteria" type="tdq:CriteriaType">
                 <xs:annotation>
                     <xs:documentation>An XML element. This element MUST consist only of the indicated XML fields. The subfields of this Criteria are the same as the parent Criteria (e.g., this is a recursive field), though they are not listed here.</xs:documentation>
-                </xs:annotation>                
+                </xs:annotation>
             </xs:element>
             <xs:element maxOccurs="unbounded" minOccurs="0" name="Criterion" type="tdq:CriterionType">
                 <xs:annotation>
@@ -54,7 +68,7 @@
                     <xs:pattern value="AND"/>
                 </xs:restriction>
             </xs:simpleType>
-        </xs:attribute>        
+        </xs:attribute>
     </xs:complexType>
     <xs:complexType name="CriterionType">
         <xs:sequence>
