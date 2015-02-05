@@ -2,22 +2,22 @@ ROADMAP
 =========
 0.1
 TAXII XML Message Binding Spec 1.1
-- Create messages programmatically
+[Done]- Create messages programmatically
     + Move TaxiiXml up a level so that it can be factory for 1.1 and 1.0 XML
-- Marshal/unmarshal messages
-- Marshal/unmarshal content blocks (to support content-block nesting)
-- add additional conformance checks using Schematron. Translate the Schematron
+[Done]- Marshal/unmarshal messages
+[Done]- Marshal/unmarshal content blocks (to support content-block nesting)
+[Done]- add additional conformance checks using Schematron. Translate the Schematron
 	into XSLT and bundle the XSLT in with java-taxii.
 
 
 0.2
 TAXII Default Query Spec 1.0
-- Add support for Default Query Format and associated structures and messages
+[Done]- Add support for Default Query Format and associated structures and messages
     bindings.
 
 0.3
 TAXII HTTP Protocol Binding Spec 1.1
-- client-side interactions with server, using HTTP Protocol Binding
+[Done]- client-side interactions with server, using HTTP Protocol Binding
 
 .
 .
@@ -27,7 +27,7 @@ TAXII HTTP Protocol Binding Spec 1.1
 - Any other features needed to reach parity with libtaxii WRT TAXII 1.1  
 
 post-1.1.0
-- Add support for TAXII 1.0.
+[Done]- Add support for TAXII 1.0.
 - Add support for JSON Message Binding.
 - add support for creating and validating XML Signatures using Java XML Digital 
     Signature API
@@ -42,7 +42,7 @@ Subscription_Parameters/Query,
 Poll_Parameters/Query,
 Content_Block/Content
 
-* @status_type a union between xs:string and xs:anyURI - make sure constants are available
+[Done. There is StatusTypeEnum in the 1.1 schema & generated code]* @status_type a union between xs:string and xs:anyURI - make sure constants are available
 for known status types
 
 * Check javax.xml.datatype.XMLGregorianCalendar, the default binding for xs:dateTime.
