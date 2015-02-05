@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Poll_Request xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+   collection_name="test-collection" message_id="valid-poll-request">
+    <!-- This Poll_Request is invalid because it contains both a subscription_ID and Poll_Parameters -->
+   <Subscription_ID>test-subscription-id</Subscription_ID>
+   <Poll_Parameters>
+       <Response_Type>COUNT_ONLY</Response_Type>
+   </Poll_Parameters>
+</Poll_Request>
