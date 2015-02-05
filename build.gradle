@@ -14,7 +14,7 @@
  *
  * Jar will be built to 
  *
- * 	build/libs/java-taxii.jar
+ * 	build/libs/java-taxii-${version}.jar
  */
 
 defaultTasks 'test'
@@ -178,7 +178,7 @@ javadoc {
 task dist << {
     ant.zip(destfile: "build/java-taxii.zip") {
         fileset(dir: ".", includes: "README.txt, LICENSE.txt")
-        fileset(dir: "build/libs", includes: "java-taxii.jar")
+        fileset(dir: "build/libs", includes: "java-taxii-${version}.jar")
     }
 }
 
