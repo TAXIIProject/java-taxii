@@ -1,9 +1,14 @@
+[JJ 10 Feb 2015.
+DEPRECATED!!!
+Move to-do items to GitHub. I went through and marked the progress on all
+the items below.]
+
 ROADMAP
 =========
 0.1
 TAXII XML Message Binding Spec 1.1
 [Done]- Create messages programmatically
-    + Move TaxiiXml up a level so that it can be factory for 1.1 and 1.0 XML
+[Done]    + Move TaxiiXml up a level so that it can be factory for 1.1 and 1.0 XML
 [Done]- Marshal/unmarshal messages
 [Done]- Marshal/unmarshal content blocks (to support content-block nesting)
 [Done]- add additional conformance checks using Schematron. Translate the Schematron
@@ -28,13 +33,15 @@ TAXII HTTP Protocol Binding Spec 1.1
 
 post-1.1.0
 [Done]- Add support for TAXII 1.0.
-- Add support for JSON Message Binding.
-- add support for creating and validating XML Signatures using Java XML Digital 
+[Added GitHub issue]- Add support for JSON Message Binding.
+[Added GitHub issue]- add support for creating and validating XML Signatures using Java XML Digital 
     Signature API
 
 
 Things to check on marshalling/API usage in unit tests
 =======================================================
+[I don't think this needs to be done. The JAXB mapping tool handles mixed 
+content. I don't think we need explicit tests to ensure it works.]
 * mixed content in Extended Header, 
 Status Details, 
 Discovery_Response/Service_Instance/Supported_Query,
@@ -45,7 +52,7 @@ Content_Block/Content
 [Done. There is StatusTypeEnum in the 1.1 schema & generated code]* @status_type a union between xs:string and xs:anyURI - make sure constants are available
 for known status types
 
-* Check javax.xml.datatype.XMLGregorianCalendar, the default binding for xs:dateTime.
+[The dateTime requirements in the spec seem unnecessary. And the pattern in the schema appears broken.] * Check javax.xml.datatype.XMLGregorianCalendar, the default binding for xs:dateTime.
     Does it always map to dateTime values that are valid according to the regex for
     TimestampLabelType in the schema?  If not, need to do a custom mapping so that
     only valid timestamps are created via the API.
@@ -53,12 +60,12 @@ for known status types
 
 Things to check on unmarshalling/API usage in unit tests
 ===========================================================
-* digital signatures 
+[Added issue to GitHub] * digital signatures 
 
-* verify that schema validation detects if Subscription_ID and Poll_Parameters
+[DONE]* verify that schema validation detects if Subscription_ID and Poll_Parameters
 are both set in Poll_Request
 
-* Does unmarshalling detect dateTime values that are invalid according to the regex for
+[The unmarshaller appears to create date-times that are schema valid. The regex appears to be wrong, though.]* Does unmarshalling detect dateTime values that are invalid according to the regex for
     TimestampLabelType in the schema?  Does it require schema validation to
     detect it?
 
@@ -67,7 +74,7 @@ Things the XSD schema doesn't check - Add these to a Schematron schema
 ===============================================================================
 StatusMessage
 ----------------
-* co-occurrence constraints between @status_type and specific <Detail> elements, expressed using XPath 2.
+[DONE]* co-occurrence constraints between @status_type and specific <Detail> elements, expressed using XPath 2.
   This expression verifies that the required Detail record exists and is the right type. 
     if (@status_type = 'INVALID_RESPONSE_PART') 
     then (taxii:Status_Detail/taxii:Detail[@name='MAX_PART_NUMBER'] castable as xs:positiveInteger)
@@ -79,7 +86,7 @@ StatusMessage
     else true
 
 
-* type checking on predefined Status Detail fields
+[DONE]* type checking on predefined Status Detail fields
   This expression verifies that if a Detail record exists, then it is the right type.
     if (@status_type = 'DESTINATION_COLLECTION_ERROR'
         and taxii:Status_Detail/taxii:Detail[@name='ACCEPTABLE_DESTINATION'])
@@ -114,26 +121,25 @@ StatusMessage
 Subscription_Management_Request
 -----------------------------------
 * co-occurrence constraints
-    - Subscription_ID MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
-    - Subscription_Parameters is present if and only if @action="SUBSCRIBE".
-
+    [DONE]- Subscription_ID MUST be present if @action="UNSUBSCRIBE", @action="PAUSE", or @action="RESUME".
+    [DONE]- Subscription_Parameters is present if and only if @action="SUBSCRIBE". 
 
 Poll_Request
 ---------------
 * co-occurrence constraint
-    - Note that if both <Exclusive_Begin_Timestamp> 
+    [DONE]- Note that if both <Exclusive_Begin_Timestamp> 
 and <Inclusive_End_Timestamp> are present in this message, the value in <Inclusive_End_Timestamp> 
 MUST be greater than the value in <Exclusive_Begin_Timestamp>.  
 
 
 Poll_Response
 -----------------
-* co-occurrence constraint: @result_id MUST be present if @more="true".
+[DONE] * co-occurrence constraint: @result_id MUST be present if @more="true".
 
 
 Inbox_Message and Poll_Response
 -------------------------------- 
-* co-occurrence constraint: 
+[DONE]* co-occurrence constraint: 
     Record_Count >= count(Content_Block)
     
 (For Poll_Response, is it expected that @more=true when Record_Count > count(Content_Block)?
@@ -141,20 +147,20 @@ Should it be a rule?)
 
 TODO
 -----
-* Circle back and embed Schematron into XSD.
-* Convert to XSLT in build.gradle.
+[DONE - but not in the official released schema.]* Circle back and embed Schematron into XSD.
+[DONE]* Convert to XSLT in build.gradle.
 
 
 Additional tasks
 ================
-* Write utility factory methods to facilitate creating valid messages via the API. 
+[DONE]* Write utility factory methods to facilitate creating valid messages via the API. 
 * Generate license blurb at top of each generated file.
-* Add to Travis CI.
-* Run example code in TaxiiXml through a command-line driver to test it out.
+[DONE]* Add to Travis CI.
+[DONE - I think this implies the client]* Run example code in TaxiiXml through a command-line driver to test it out.
 * look at mapping extended headers and status details using 
     a map instead of a list - that would make it easier to find headers
     or status details by name.  Look at using a multimap to allow a Status Detail
     or Extended Header to have a collection of list of values and avoid 
     marshalling problems in XML.
     See http://stackoverflow.com/questions/11329388/jaxb-mapping-for-a-map
-* Enhance the XSD schema by adding length checks to simple types - detect empty strings
+[Out of scope. This is a change to the XSD, not the Java library.]* Enhance the XSD schema by adding length checks to simple types - detect empty strings
