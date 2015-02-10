@@ -27,27 +27,21 @@
 31a50,51
 > 	-->
 > 	<xs:complexType name="MessageType" abstract="true">
-567,569c587
-<                     <xs:documentation>Ignored if @service_type has a value other than INBOX. 
-<                         If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs.
-<                         If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
----
->                     <xs:documentation>Ignored if @service_type has a value other than INBOX. If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
-1198a1217
+1206a1227
 >                     <!-- CHANGED
-1199a1219,1220
+1207a1229,1230
 >                     -->
 >                     <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
-1296a1318
+1304a1328
 >                     <!-- CHANGED
-1297a1320,1321
+1305a1330,1331
 >                     -->                    
 >                     <xs:element ref="Content_Block" minOccurs="0" maxOccurs="unbounded">
-1391a1416
+1399a1426
 >     <!-- CHANGED
-1407a1433
+1415a1443
 >     -->
-1408a1435,1452
+1416a1445,1462
 >     <xs:element name="Status_Message" type="TAXIIStatusMessageType"/>
 >     <xs:element name="Discovery_Request" type="TAXIIDiscoveryRequestType"/>
 >     <xs:element name="Discovery_Response" type="TAXIIDiscoveryResponseType"/>

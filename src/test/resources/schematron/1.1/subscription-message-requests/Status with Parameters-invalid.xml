@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subscription_Management_Request xmlns="http://taxii.mitre.org/messages/taxii_xml_binding-1.1"
+  action="STATUS" collection_name="test" message_id="subscribe-valid">
+  <!-- 
+    This test message is invalid because it has Subscription Parameters
+    (even though they're empty). 
+  -->
+  <Subscription_Parameters/>
+</Subscription_Management_Request>

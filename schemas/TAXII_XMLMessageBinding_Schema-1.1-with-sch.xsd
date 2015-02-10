@@ -824,6 +824,12 @@
                             Subscription Parameters MUST be present if the action is SUBSCRIBE.
                         </sch:assert>
                     </sch:rule>
+
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action !='SUBSCRIBE']">
+                        <sch:report test="taxii:Subscription_Parameters">
+                            Subscription Parameters MUST NOT be present unless the action is SUBSCRIBE.
+                        </sch:report>
+                    </sch:rule>
                 </sch:pattern>
             </xs:appinfo>
         </xs:annotation>
@@ -841,7 +847,9 @@
                     <xs:element name="Subscription_Parameters" type="SubscriptionParametersType"
                         minOccurs="0" maxOccurs="1">
                         <xs:annotation>
-                            <xs:documentation>Parameters associated with this subscription.</xs:documentation>
+                            <xs:documentation>Parameters associated with this subscription.
+                            This field MUST be included if and ONLY if the Action of this message is SUBSCRIBE.
+                            </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Push_Parameters" type="PushParameterType" minOccurs="0"

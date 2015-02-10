@@ -37,7 +37,7 @@
         schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"> 
     -->
 	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
-        schemaLocation="xmldsig-core-schema-xjc.xsd">
+        schemaLocation="xmldsig-core-schema.xsd">
         <xs:annotation>
             <xs:documentation>XML Digital Signature schema imported to support signatures of messages and contents.</xs:documentation>
         </xs:annotation>
@@ -584,7 +584,9 @@
             <xs:element name="Content_Binding" type="ContentBindingIDType" minOccurs="0"
                 maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Ignored if @service_type has a value other than INBOX. If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs. If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
+                    <xs:documentation>Ignored if @service_type has a value other than INBOX.
+                        If @service_type=INBOX and these fields are present, indicates a list of supported content bindings and version, identified using the appropriate Content Binding IDs.
+                        If @service_type=INBOX and these fields are not present, this indicates that the Inbox Service accepts all content types.</xs:documentation>
                     <xs:appinfo>
                         <sch:pattern>
                             <sch:title>Content_Binding only present when @service_type=INBOX. XML Binding Spec section 3.3. </sch:title>
@@ -842,6 +844,12 @@
                             Subscription Parameters MUST be present if the action is SUBSCRIBE.
                         </sch:assert>
                     </sch:rule>
+
+                    <sch:rule context="/taxii:Subscription_Management_Request[@action !='SUBSCRIBE']">
+                        <sch:report test="taxii:Subscription_Parameters">
+                            Subscription Parameters MUST not be present unless the action is SUBSCRIBE.
+                        </sch:report>
+                    </sch:rule>
                 </sch:pattern>
             </xs:appinfo>
         </xs:annotation>
@@ -859,7 +867,9 @@
                     <xs:element name="Subscription_Parameters" type="SubscriptionParametersType"
                         minOccurs="0" maxOccurs="1">
                         <xs:annotation>
-                            <xs:documentation>Parameters associated with this subscription.</xs:documentation>
+                            <xs:documentation>Parameters associated with this subscription.
+                            This field MUST be included if and ONLY if the Action of this message is SUBSCRIBE.
+                            </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Push_Parameters" type="PushParameterType" minOccurs="0"
