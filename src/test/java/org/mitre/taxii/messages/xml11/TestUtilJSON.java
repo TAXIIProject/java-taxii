@@ -6,20 +6,27 @@ import java.io.StringWriter;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import org.eclipse.persistence.oxm.MediaType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.mitre.taxii.util.Validation;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Utilities for marshalling/serializing and unmarshalling/parsing 
+ * TAXII items as JSON. This assumes the TaxiiXml implementation supports
+ * JSON.
+ * This was written using the EclipseLink MOXy JAXB provider.
+ * http://eclipse.org/eclipselink/moxy.php
+ * 
  * @author jasenj1
  */
-public class TestUtil {
+public class TestUtilJSON {
     private static final boolean debug = true; // Boolean.getBoolean("debug"); 
 
     /**
-     * Render a JAXB object to an XML string and back to a JAXB Object.
+     * Render a JAXB object to a JSON string and back to a JAXB Object.
      * This does NOT validate the object because it may be schema invalid.
      * e.g. The element may represent an item that only exists in the schema as
      * a child of another element, but we need to create one on its own, like a
@@ -35,40 +42,43 @@ public class TestUtil {
         final Marshaller m = taxiiXml.createMarshaller(false); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
         
-        m.setProperty(Marshaller.JAXB_FRAGMENT, true); // Don't generate xml declaration.
-        
+        // Tell the marshaller to output JSON.
+        m.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+        // Tell the unmarshaller to parse JSON.
+        u.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+
         // Render the JAXB object to a string.
         final StringWriter sw = new StringWriter();
         m.marshal(obj, sw);        
-        String xmlString = sw.toString();
+        String jsonString = sw.toString();
         
         if (debug) {            
             System.out.println("Original Object:\n");
-            System.out.println(xmlString);
+            System.out.println(jsonString);
             System.out.println("\n");
         }
 
         // Parse the rendered string back into a JAXB object.
-        final Object objFromXml = u.unmarshal(new StringReader(xmlString));
+        final Object objFromJSON = u.unmarshal(new StringReader(jsonString));
 
         // Render the reconstructed JAXB object to a string.
         sw.getBuffer().setLength(0);
-        m.marshal(objFromXml, sw);
-        final String xmlString2 = sw.toString();
+        m.marshal(objFromJSON, sw);
+        final String jsonString2 = sw.toString();
 
         if (debug) {            
             System.out.println("Unmarshaled Object:\n");
-            System.out.println(xmlString2);
+            System.out.println(jsonString2);
         }
         
-        // do the XML-object-XML round trip comparison first because it's
+        // do the JSON-object-JSON round trip comparison first because it's
         // easier to debug
-        assertEquals("round tripping from XML to object back to XML failed",
-                xmlString, xmlString2);
+        assertEquals("round tripping from JSON to object back to JSON failed",
+                jsonString, jsonString2);
         
         if(compareObject) {
-            assertEquals("round tripping from object to XML back to object failed! ",
-                    obj, objFromXml);
+            assertEquals("round tripping from object to JSON back to object failed! ",
+                    obj, objFromJSON);
         }        
     }
     
@@ -91,45 +101,48 @@ public class TestUtil {
 
         final Marshaller m = taxiiXml.createMarshaller(prettyPrint); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
-        
-        m.setProperty(Marshaller.JAXB_FRAGMENT, true); // Don't generate xml declaration.
 
+        // Tell the marshaller to output JSON.
+        m.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+        // Tell the unmarshaller to parse JSON.
+        u.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+        
         if (debug) {
             final String rawString = taxiiXml.marshalToString(m, msg);
-            System.out.println("raw marshalled XML:\n");
+            System.out.println("raw marshalled JSON:\n");
             System.out.println(rawString);
             System.out.println("\n");
         }
         
         assertValid(taxiiXml, msg);
         // Render the JAXB object to a string.
-        final String xmlString = taxiiXml.marshalToString(m, msg);
+        final String jsonString = taxiiXml.marshalToString(m, msg);
         
         // Parse the rendered string back into a JAXB object.
-        final MessageType msgFromXml = (MessageType) u.unmarshal(new StringReader(xmlString));
-        assertValid(taxiiXml, msgFromXml);
+        final MessageType msgFromJSON = (MessageType) u.unmarshal(new StringReader(jsonString));
+        assertValid(taxiiXml, msgFromJSON);
         
         // Render the reconstructed JAXB object to a string.
-        final String xmlString2 = taxiiXml.marshalToString(m, msgFromXml);
+        final String jsonString2 = taxiiXml.marshalToString(m, msgFromJSON);
         
         if (debug) {
-            System.out.println("validated XML:\n");
-            System.out.println(xmlString);
+            System.out.println("validated JSON:\n");
+            System.out.println(jsonString);
             System.out.println("\n");
             
-            System.out.println("Parsed & re-marshalled XML:\n");
-            System.out.println(xmlString2);
+            System.out.println("Parsed & re-marshalled JSON:\n");
+            System.out.println(jsonString2);
             System.out.println("\n");
         }
         
         // do the XML-object-XML round trip comparison first because it's
         // easier to debug
-        assertEquals("round tripping from XML to object back to XML failed",
-                xmlString, xmlString2);
+        assertEquals("round tripping from JSON to object back to JSON failed",
+                jsonString, jsonString2);
         
         if (compareObject) {
-        assertEquals("round tripping from object to XML back to object failed! ",
-                msg, msgFromXml);
+        assertEquals("round tripping from object to JSON back to object failed! ",
+                msg, msgFromJSON);
         }
         
     }    

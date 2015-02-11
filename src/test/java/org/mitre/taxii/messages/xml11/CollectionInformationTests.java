@@ -2,6 +2,7 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
@@ -27,6 +28,9 @@ public class CollectionInformationTests {
     CollectionRecordType collection1, collection2, collection3, collection4;
         
     public CollectionInformationTests() {
+        // Use MOXy so we get JSON support
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory");
+        
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
         taxiiXml = txf.createTaxiiXml();
         setupPushMethods();
@@ -133,6 +137,7 @@ public class CollectionInformationTests {
         CollectionInformationRequest cir = factory.createCollectionInformationRequest()
                                                 .withMessageId("CIReq01");
         TestUtil.roundTripMessage(taxiiXml, cir);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);
     }
     
     @Test
@@ -142,6 +147,7 @@ public class CollectionInformationTests {
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1);
         TestUtil.roundTripMessage(taxiiXml, cir01);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir01);
     }
 
     @Test
@@ -151,6 +157,7 @@ public class CollectionInformationTests {
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1, collection2, collection3, collection4);
         TestUtil.roundTripMessage(taxiiXml, cir02);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir02);        
     }
 
     @Test
@@ -160,6 +167,7 @@ public class CollectionInformationTests {
                                                     .withInResponseTo("0")
                                                     .withCollections(collection3);
         TestUtil.roundTripMessage(taxiiXml, cir03);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir03);        
     }
 
     @Test
@@ -169,6 +177,7 @@ public class CollectionInformationTests {
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1, collection4);
         TestUtil.roundTripMessage(taxiiXml, cir04);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir04);        
     }
 
     @Test
@@ -178,6 +187,7 @@ public class CollectionInformationTests {
                                                     .withInResponseTo("0")
                                                     .withCollections(collection2, collection4);
         TestUtil.roundTripMessage(taxiiXml, cir05);        
+        TestUtilJSON.roundTripMessage(taxiiXml, cir05);        
     }
 
     @Test
@@ -216,5 +226,6 @@ public class CollectionInformationTests {
                                                     .withCollections(ci);
 
         TestUtil.roundTripMessage(taxiiXml, cir);
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);
     }
 }

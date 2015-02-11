@@ -78,7 +78,8 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient-cache:4.3.5'
     compile 'org.apache.httpcomponents:httpmime:4.3.5'
     compile 'org.apache.httpcomponents:fluent-hc:4.3.5'
-    
+    compile 'org.eclipse.persistence:org.eclipse.persistence.moxy:2.5.+'
+        
     testCompile 'junit:junit:4.11'
 }
 
