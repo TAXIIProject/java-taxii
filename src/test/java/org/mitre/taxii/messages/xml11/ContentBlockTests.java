@@ -34,7 +34,8 @@ public class ContentBlockTests {
         // Create a DOM Node from an XML string.
         // JAXB can handle a generic DOM NODE, but a String it will escape and treat as a String - not XML.
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();        
         Document doc = db.parse(new InputSource(new StringReader("<stix:STIX_Package xmlns:stix=\"http://stix.mitre.org/stix-1\"/>")));
         Node stix = doc.getDocumentElement();
         
@@ -58,7 +59,7 @@ public class ContentBlockTests {
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()
-                                                    .withContent("<Something thats not XML")
+                                                    .withContent("<Something that's not XML")
                                     );
                         
         TestUtil.roundTripObject(taxiiXml, cb, true);        
@@ -72,7 +73,7 @@ public class ContentBlockTests {
                                     )
                                     .withContent(
                                             factory.createAnyMixedContentType()
-                                                    .withContent("Something thats not XML <xml/>")
+                                                    .withContent("Something that's not XML <xml/>")
                                     );
         
         TestUtil.roundTripObject(taxiiXml, cb, true);        
