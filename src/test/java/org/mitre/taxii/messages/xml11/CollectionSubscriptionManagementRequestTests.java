@@ -2,6 +2,7 @@ package org.mitre.taxii.messages.xml11;
 
 import java.io.IOException;
 import java.util.Date;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.mitre.taxii.ContentBindings;
@@ -32,6 +33,9 @@ public class CollectionSubscriptionManagementRequestTests {
     
     
     public CollectionSubscriptionManagementRequestTests() {
+        // Use MOXy so we get JSON support
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory");
+        
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
         taxiiXml = txf.createTaxiiXml();
         setupQueries();
@@ -111,19 +115,28 @@ public class CollectionSubscriptionManagementRequestTests {
                     .withMessageBinding(Versions.VID_TAXII_XML_11);
     }
     
-    @Test
-    public void testSubsReq1() throws JAXBException, SAXException, IOException {
+    private SubscriptionManagementRequest getSubsReq1() {
         SubscriptionManagementRequest smr1 = factory.createSubscriptionManagementRequest()
                                                 .withMessageId("SubsReq01")
                                                 .withAction(CollectionActionEnum.SUBSCRIBE)
                                                 .withCollectionName("collection1")
                                                 .withSubscriptionParameters(sp1)
                                                 .withPushParameters(pp1);
-        TestUtil.roundTripMessage(taxiiXml, smr1, false, true);                
+        return smr1;
     }
     
     @Test
-    public void testSubsReq2() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq1XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq1(), false, true);        
+    }
+    
+    @Test
+     public void goodSubsReq1JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq1());        
+    }
+    
+    
+    private SubscriptionManagementRequest getSubsReq2() {
         SubscriptionManagementRequest smr2 = factory.createSubscriptionManagementRequest()
                                                 .withMessageId("'SubsReq02'")
                                                 .withAction(CollectionActionEnum.SUBSCRIBE)
@@ -137,11 +150,20 @@ public class CollectionSubscriptionManagementRequestTests {
                                                                             .withContent(query2)
                                                                 )
                                                 );
-        TestUtil.roundTripMessage(taxiiXml, smr2, false, true);                        
+        return smr2;
     }
     
     @Test
-    public void testSubsReq3() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq2XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq2(), false, true);        
+    }
+    
+    @Test
+     public void goodSubsReq2JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq2());        
+    }
+        
+    private SubscriptionManagementRequest getSubsReq3() {
         SubscriptionManagementRequest smr3 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq03")
                                                     .withAction(CollectionActionEnum.SUBSCRIBE)
@@ -149,11 +171,21 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withSubscriptionParameters(
                                                             factory.createSubscriptionParametersType()
                                                     );
-        TestUtil.roundTripMessage(taxiiXml, smr3, false, true);                                                                                    
+        return smr3;
     }
     
     @Test
-    public void testSubsReq4() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq3XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq3());        
+    }
+    
+    @Test
+     public void goodSubsReq3JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq3());        
+    }
+    
+    
+    private SubscriptionManagementRequest getSubsReq4() {
         SubscriptionManagementRequest smr4 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq04")
                                                     .withAction(CollectionActionEnum.SUBSCRIBE)
@@ -162,45 +194,90 @@ public class CollectionSubscriptionManagementRequestTests {
                                                     .withSubscriptionParameters(
                                                             factory.createSubscriptionParametersType()
                                                     );
-        TestUtil.roundTripMessage(taxiiXml, smr4, false, true);                                                                                    
+        return smr4;
+    }
+
+    @Test
+    public void goodSubsReq4XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq4());        
     }
     
     @Test
-    public void testSubsReq5() throws JAXBException, SAXException, IOException {
+     public void goodSubsReq4JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq4());        
+    }
+    
+    private SubscriptionManagementRequest getSubsReq5() {
         SubscriptionManagementRequest smr5 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq05")
                                                     .withAction(CollectionActionEnum.STATUS)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr5, false, true);                                                                                                    
+        return smr5;
     }
 
     @Test
-    public void testSubsReq6() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq5XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq5());        
+    }
+    
+    @Test
+     public void goodSubsReq5JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq5());        
+    }
+
+    private SubscriptionManagementRequest getSubsReq6() throws JAXBException, SAXException, IOException {
         SubscriptionManagementRequest smr6 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq06")
                                                     .withAction(CollectionActionEnum.STATUS)
                                                     .withCollectionName("collection2");
-        TestUtil.roundTripMessage(taxiiXml, smr6, false, true);                                                                                                    
+        return smr6;
     }
 
     @Test
-    public void testSubsReq7() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq6XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq6());        
+    }
+    
+    @Test
+     public void goodSubsReq6JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq6());        
+    }
+    
+    private SubscriptionManagementRequest getSubsReq7() {
         SubscriptionManagementRequest smr7 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq07")
                                                     .withAction(CollectionActionEnum.PAUSE)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr7, false, true);                                                                                                    
+        return smr7;
     }
 
     @Test
-    public void testSubsReq8() throws JAXBException, SAXException, IOException {
+    public void goodSubsReq7XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq7());        
+    }
+    
+    @Test
+     public void goodSubsReq7JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq7());        
+    }
+    
+    private SubscriptionManagementRequest getSubsReq8() {
         SubscriptionManagementRequest smr8 = factory.createSubscriptionManagementRequest()
                                                     .withMessageId("SubsReq08")
                                                     .withAction(CollectionActionEnum.RESUME)
                                                     .withCollectionName("collection2")
                                                     .withSubscriptionID("id1");
-        TestUtil.roundTripMessage(taxiiXml, smr8, false, true);                                                                                                    
+        return smr8;
     }    
+    @Test
+    public void goodSubsReq8XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getSubsReq8());        
+    }
+    
+    @Test
+     public void goodSubsReq8JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getSubsReq8());        
+    }
 }

@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.xml.bind.JAXBContext;
 
 import javax.xml.bind.JAXBException;
 
@@ -52,6 +53,9 @@ public class StatusMessageTests {
     private final TaxiiXml taxiiXml;
     
     public StatusMessageTests() {
+        // Use MOXy so we get JSON support
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory");
+
         txf = new TaxiiXmlFactory();
         taxiiXml = txf.createTaxiiXml();
     }
@@ -60,8 +64,7 @@ public class StatusMessageTests {
      * Verify that a custom status message can be created and round-tripped
      * successfully.
      */
-    @Test
-    public void goodSuccess() throws Exception {
+    private StatusMessage getStatus01() throws URISyntaxException{
         /* test case from libtaxii:
          * 
          * sm01 = tm11.StatusMessage(
@@ -84,14 +87,23 @@ public class StatusMessageTests {
                 
         sm.setMessage("This is a test message");
         
-        TestUtil.roundTripMessage(taxiiXml, sm);
+        return sm;
+    }
+    
+    @Test
+    public void goodStatusMessage01XML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getStatus01());        
+    }
+    
+    @Test
+    public void goodStatusMessage01JSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getStatus01());                
     }
                     
     /**
      * Verify a Success message can be created and round-tripped successfully.
      */
-    @Test
-    public void goodSuccessMessage() throws Exception {
+    private StatusMessage getStatus02() {
         /* test case from libtaxii:
          * 
          * sm02 = tm11.StatusMessage(
@@ -107,16 +119,25 @@ public class StatusMessageTests {
         sm02.setMessageId("SM02");
         sm02.setInResponseTo(MessageHelper.generateMessageId());
         sm02.setStatusType(StatusTypeEnum.SUCCESS.toString());
-        
-        TestUtil.roundTripMessage(taxiiXml, sm02);
+
+        return sm02;
+    }
+    
+    @Test
+    public void goodStatusMessage02XML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getStatus02());        
+    }
+    
+    @Test
+    public void goodStatusMessage02JSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getStatus02());                
     }
                
     /** 
      * Verify a Destination Collection Error can be created and round-tripped 
      * successfully. 
      */
-    @Test
-    public void goodDestinationCollectionError() throws Exception {
+    private StatusMessage getDestinationCollectionError() throws URISyntaxException {
         /* test case from libtaxii:
          * 
         sm03 = tm11.StatusMessage(
@@ -134,16 +155,25 @@ public class StatusMessageTests {
         sm03.setStatusType(StatusTypeEnum.DESTINATION_COLLECTION_ERROR.toString());
                    
         StatusMessageHelper.addDetail(sm03, new URI(StatusDetailEnum.ACCEPTABLE_DESTINATION.name()), "Collection1", "Collection2");
-                
-        TestUtil.roundTripMessage(taxiiXml, sm03);
+
+        return sm03;
     }
 
+    @Test
+    public void goodDestinationCollectionErrorXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getDestinationCollectionError());        
+    }
+    
+    @Test
+    public void goodDestinationCollectionErrorJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getDestinationCollectionError());                
+    }
+    
     /**
      * Verify that an Invalid Response Part status message can be created
      * and successfully round-tripped.
      */
-    @Test
-    public void goodInvalidResponsePart() throws Exception, JAXBException, JAXBException, SAXException {
+    private StatusMessage getInvalidResponsePart() {
     /**
         def test_status_message_04(self):
             sm04 = tm11.StatusMessage(
@@ -160,12 +190,22 @@ public class StatusMessageTests {
         sm04.setMessageId("SM04");
         sm04.setInResponseTo(MessageHelper.generateMessageId());
         sm04.setMessage("This is a valid test status message");
-        
-        TestUtil.roundTripMessage(taxiiXml, sm04);
+
+        return sm04;
     }
     
     @Test
-    public void goodNotFound() throws JAXBException, SAXException, IOException, URISyntaxException {
+    public void goodInvalidResponsePartXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getInvalidResponsePart());        
+    }
+    
+    @Test
+    public void goodInvalidResponsePartJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getInvalidResponsePart());                
+    }
+    
+    
+    private StatusMessage getNotFound() throws URISyntaxException {
         /**
         def test_status_message_05(self):
             sm05 = tm11.StatusMessage(
@@ -185,11 +225,20 @@ public class StatusMessageTests {
         
         StatusMessageHelper.addDetail(sm05, new URI(StatusDetailEnum.ITEM.name()), "Collection1");
 
-        TestUtil.roundTripMessage(taxiiXml, sm05);        
+        return sm05;
+    }
+
+    @Test
+    public void goodNotFoundXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getNotFound());        
     }
     
     @Test
-    public void goodPending() throws JAXBException, SAXException, IOException, URISyntaxException {
+    public void goodNotFoundJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getNotFound());                
+    }
+    
+    private StatusMessage getPending() throws URISyntaxException {
         /**
         def test_status_message_06(self):
             sm06 = tm11.StatusMessage(
@@ -217,12 +266,21 @@ public class StatusMessageTests {
         StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_RESULT_ID, "Result1");
         StatusMessageHelper.addDetail(sm06, STATUS_DETAIL_WILL_PUSH, Boolean.FALSE);
         */
-        
-        TestUtil.roundTripMessage(taxiiXml, sm06);        
+
+        return sm06;
+    }
+
+    @Test
+    public void goodPendingXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getPending());        
     }
     
     @Test
-    public void goodRetry() throws JAXBException, SAXException, IOException, URISyntaxException {
+    public void goodPendingJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getPending());                
+    }
+    
+    private StatusMessage getRetry() throws URISyntaxException {
         /**
         def test_status_message_07(self):
             sm07 = tm11.StatusMessage(
@@ -242,11 +300,20 @@ public class StatusMessageTests {
                                     .withStatusType(StatusTypeEnum.RETRY.toString());
         StatusMessageHelper.addDetail(sm07, new URI(StatusDetailEnum.ESTIMATED_WAIT.name()), 900);
         
-        TestUtil.roundTripMessage(taxiiXml, sm07);
+        return sm07;
     }
     
     @Test
-    public void goodUnsupportedMessageBinding() throws JAXBException, SAXException, IOException, URISyntaxException {
+    public void goodRetryXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getRetry());        
+    }
+    
+    @Test
+    public void goodRetryJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getRetry());                
+    }
+    
+    private StatusMessage getUnsupportedMessageBinding() throws URISyntaxException {
         /*
         def test_status_message_08(self):
             sm08 = tm11.StatusMessage(
@@ -264,11 +331,20 @@ public class StatusMessageTests {
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_MESSAGE.toString());
         StatusMessageHelper.addDetail(sm08, new URI(StatusDetailEnum.SUPPORTED_BINDING.name()), Versions.VID_TAXII_XML_10, Versions.VID_TAXII_XML_11);
         
-        TestUtil.roundTripMessage(taxiiXml, sm08);        
+        return sm08;
+    }
+
+    @Test
+    public void goodUnsupportedMessageBindingXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getUnsupportedMessageBinding());        
     }
     
     @Test
-    public void goodUnsupportedContentBinding() throws JAXBException, SAXException, IOException, URISyntaxException {
+    public void goodUnsupportedMessageBindingJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getUnsupportedMessageBinding());                
+    }
+        
+    private StatusMessage getUnsupportedContentBinding() throws URISyntaxException {
         /*
         def test_status_message_09(self):
         sm09 = tm11.StatusMessage(
@@ -287,8 +363,19 @@ public class StatusMessageTests {
                                     .withStatusType(StatusTypeEnum.UNSUPPORTED_CONTENT.toString());
         StatusMessageHelper.addDetail(sm09, new URI(StatusDetailEnum.SUPPORTED_CONTENT.name()), ContentBindings.CB_STIX_XML_101);
         
-        TestUtil.roundTripMessage(taxiiXml, sm09);                
+        return sm09;
     }
+    
+    @Test
+    public void goodUnsupportedContentBindingXML() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getUnsupportedContentBinding());        
+    }
+    
+    @Test
+    public void goodUnsupportedContentBindingJSON() throws URISyntaxException, JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getUnsupportedContentBinding());                
+    }
+    
     
     //======================================
         

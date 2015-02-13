@@ -53,7 +53,7 @@ public class TestUtilJSON {
         String jsonString = sw.toString();
         
         if (debug) {            
-            System.out.println("Original Object:\n");
+            System.out.println("Original as JSON:\n");
             System.out.println(jsonString);
             System.out.println("\n");
         }
@@ -67,7 +67,7 @@ public class TestUtilJSON {
         final String jsonString2 = sw.toString();
 
         if (debug) {            
-            System.out.println("Unmarshaled Object:\n");
+            System.out.println("Unmarshaled Object as JSON:\n");
             System.out.println(jsonString2);
         }
         
@@ -99,6 +99,9 @@ public class TestUtilJSON {
      */
     public static void roundTripMessage(TaxiiXml taxiiXml, MessageType msg, boolean prettyPrint, boolean compareObject) throws JAXBException, SAXException, IOException {
 
+        // Validate the incoming message
+        assertValid(taxiiXml, msg);
+
         final Marshaller m = taxiiXml.createMarshaller(prettyPrint); // Whether to pretty print. // Using pretty print causes problems with some extra carriage returns being put in during the round trip.
         final Unmarshaller u = taxiiXml.getJaxbContext().createUnmarshaller();
 
@@ -106,30 +109,26 @@ public class TestUtilJSON {
         m.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
         // Tell the unmarshaller to parse JSON.
         u.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
-        
-        if (debug) {
-            final String rawString = taxiiXml.marshalToString(m, msg);
-            System.out.println("raw marshalled JSON:\n");
-            System.out.println(rawString);
-            System.out.println("\n");
-        }
-        
-        assertValid(taxiiXml, msg);
+                
         // Render the JAXB object to a string.
         final String jsonString = taxiiXml.marshalToString(m, msg);
-        
+
+        if (debug) {
+            System.out.println("Original as JSON:\n");
+            System.out.println(jsonString);
+            System.out.println("\n");
+        }
+
         // Parse the rendered string back into a JAXB object.
         final MessageType msgFromJSON = (MessageType) u.unmarshal(new StringReader(jsonString));
+
+        // validate the parsed message
         assertValid(taxiiXml, msgFromJSON);
         
         // Render the reconstructed JAXB object to a string.
         final String jsonString2 = taxiiXml.marshalToString(m, msgFromJSON);
         
-        if (debug) {
-            System.out.println("validated JSON:\n");
-            System.out.println(jsonString);
-            System.out.println("\n");
-            
+        if (debug) {            
             System.out.println("Parsed & re-marshalled JSON:\n");
             System.out.println(jsonString2);
             System.out.println("\n");
@@ -141,10 +140,9 @@ public class TestUtilJSON {
                 jsonString, jsonString2);
         
         if (compareObject) {
-        assertEquals("round tripping from object to JSON back to object failed! ",
+            assertEquals("round tripping from object to JSON back to object failed! ",
                 msg, msgFromJSON);
-        }
-        
+        }        
     }    
     
     public static void assertValid(TaxiiXml taxiiXml, MessageType msg) 

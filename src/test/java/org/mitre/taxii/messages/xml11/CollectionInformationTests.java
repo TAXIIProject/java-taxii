@@ -132,66 +132,127 @@ public class CollectionInformationTests {
                             .withReceivingInboxServices(is1, is2);                                                        
     }
     
-    @Test 
-    public void goodCollectionInformationRequest() throws JAXBException, SAXException, IOException {
+    private CollectionInformationRequest getCollectionInformationRequest() {
         CollectionInformationRequest cir = factory.createCollectionInformationRequest()
                                                 .withMessageId("CIReq01");
+        return cir;
+    }
+    @Test
+    public void goodCollectionInformationRequestXML() throws JAXBException, SAXException, IOException {
+        CollectionInformationRequest cir = getCollectionInformationRequest();
         TestUtil.roundTripMessage(taxiiXml, cir);        
-        TestUtilJSON.roundTripMessage(taxiiXml, cir);
     }
     
     @Test
-    public void goodCollectionInformationResponse01() throws JAXBException, SAXException, IOException {
+     public void goodCollectionInformationRequestJSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationRequest cir = getCollectionInformationRequest();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    private CollectionInformationResponse getCollectionInformationResponse01() {
         CollectionInformationResponse cir01 = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR01")
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1);
-        TestUtil.roundTripMessage(taxiiXml, cir01);        
-        TestUtilJSON.roundTripMessage(taxiiXml, cir01);
+        return cir01;
+    }
+    
+    @Test
+    public void goodCollectionInformationResponse01XML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse01();
+        TestUtil.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    @Test
+     public void goodCollectionInformationResponse01JSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse01();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
     }
 
-    @Test
-    public void goodCollectionInformationResponse02() throws JAXBException, SAXException, IOException {
+    private CollectionInformationResponse getCollectionInformationResponse02() {
         CollectionInformationResponse cir02 = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR02")
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1, collection2, collection3, collection4);
-        TestUtil.roundTripMessage(taxiiXml, cir02);        
-        TestUtilJSON.roundTripMessage(taxiiXml, cir02);        
+        return cir02;
     }
 
     @Test
-    public void goodCollectionInformationResponse03() throws JAXBException, SAXException, IOException {
+    public void goodCollectionInformationResponse02XML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse02();
+        TestUtil.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    @Test
+     public void goodCollectionInformationResponse02JSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse02();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    private CollectionInformationResponse getCollectionInformationResponse03() {
         CollectionInformationResponse cir03 = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR03")
                                                     .withInResponseTo("0")
                                                     .withCollections(collection3);
-        TestUtil.roundTripMessage(taxiiXml, cir03);        
-        TestUtilJSON.roundTripMessage(taxiiXml, cir03);        
+        return cir03;
     }
-
+    
     @Test
-    public void goodCollectionInformationResponse04() throws JAXBException, SAXException, IOException {
+    public void goodCollectionInformationResponse03XML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse03();
+        TestUtil.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    @Test
+     public void goodCollectionInformationResponse03JSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse03();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
+    }
+    
+
+    private CollectionInformationResponse getCollectionInformationResponse04() {
         CollectionInformationResponse cir04 = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR04")
                                                     .withInResponseTo("0")
                                                     .withCollections(collection1, collection4);
-        TestUtil.roundTripMessage(taxiiXml, cir04);        
-        TestUtilJSON.roundTripMessage(taxiiXml, cir04);        
+        return cir04;
     }
-
+    
     @Test
-    public void goodCollectionInformationResponse05() throws JAXBException, SAXException, IOException {
+    public void goodCollectionInformationResponse04XML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse04();
+        TestUtil.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    @Test
+     public void goodCollectionInformationResponse04JSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getCollectionInformationResponse04();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
+    }
+    
+
+    private CollectionInformationResponse getCollectionInformationResponse05() {
         CollectionInformationResponse cir05 = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR05")
                                                     .withInResponseTo("0")
                                                     .withCollections(collection2, collection4);
+        return cir05;
+    }
+    
+    @Test
+    public void goodCollectionInformationResponse05XML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir05 = getCollectionInformationResponse05();
         TestUtil.roundTripMessage(taxiiXml, cir05);        
+    }
+    
+    @Test
+     public void goodCollectionInformationResponse05JSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir05 = getCollectionInformationResponse05();
         TestUtilJSON.roundTripMessage(taxiiXml, cir05);        
     }
+   
 
-    @Test
-    public void deprecatedCollectionInformationResponse()  throws JAXBException, SAXException, IOException {
+    private CollectionInformationResponse getDeprecatedCollectionInformationResponse() {
         
         PushMethodType pm = factory.createPushMethodType()
                                 .withProtocolBinding(Versions.VID_TAXII_HTTP_10)
@@ -223,9 +284,20 @@ public class CollectionInformationTests {
         CollectionInformationResponse cir = factory.createCollectionInformationResponse()
                                                     .withMessageId("CIR05")
                                                     .withInResponseTo("0")
-                                                    .withCollections(ci);
-
-        TestUtil.roundTripMessage(taxiiXml, cir);
-        TestUtilJSON.roundTripMessage(taxiiXml, cir);
+                                                    .withCollections(ci);        
+        return cir;
     }
+    
+    @Test
+    public void deprecatedCollectionInformationResponseXML() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getDeprecatedCollectionInformationResponse();
+        TestUtil.roundTripMessage(taxiiXml, cir);        
+    }
+    
+    @Test
+    public void deprecatedCollectionInformationResponseJSON() throws JAXBException, SAXException, IOException {
+        CollectionInformationResponse cir = getDeprecatedCollectionInformationResponse();
+        TestUtilJSON.roundTripMessage(taxiiXml, cir);        
+    }
+        
 }
