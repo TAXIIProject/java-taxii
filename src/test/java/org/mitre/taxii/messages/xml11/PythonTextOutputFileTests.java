@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -19,7 +20,11 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import org.eclipse.persistence.oxm.MediaType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +54,10 @@ public class PythonTextOutputFileTests {
 
     @BeforeClass
     public static void init() throws Exception {
+        // Use MOXy so we get JSON support
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory");
+        
+        
         TaxiiXmlFactory txf = new TaxiiXmlFactory();
         txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
         taxiiXml = txf.createTaxiiXml();
@@ -104,6 +113,19 @@ public class PythonTextOutputFileTests {
         System.out.println(xml);
         xmlWriter.write(xml);
         xmlWriter.close();
+        
+        // Write JSON output
+        File jsonOutFile = new File(outDir, outName + ".json");
+        Writer jsonWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonOutFile), "utf-8"));
+        final StringWriter sw = new StringWriter();        
+        Marshaller marshaller = taxiiXml.createMarshaller(true);
+        // Tell the marshaller to output JSON.
+        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+        marshaller.marshal(m, sw);
+        String json = sw.toString();
+        System.out.println(json);
+        jsonWriter.write(json);
+        jsonWriter.close();
     }
     
 }

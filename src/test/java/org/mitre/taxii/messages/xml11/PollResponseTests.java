@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -22,12 +23,14 @@ public class PollResponseTests {
     private final TaxiiXml taxiiXml;
     
     public PollResponseTests() {
+        // Use MOXy so we get JSON support
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory");
+        
        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
        taxiiXml = txf.createTaxiiXml();
     }
     
-    @Test
-    public void pollResp1() throws JAXBException, SAXException, IOException, DatatypeConfigurationException {
+    private PollResponse getPollResp1() throws JAXBException, SAXException, IOException, DatatypeConfigurationException {
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date()); // Now.
         XMLGregorianCalendar beginTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
@@ -51,21 +54,41 @@ public class PollResponseTests {
                                                     .withValue(BigInteger.valueOf(22))                                
                                 )
                                 .withMessage("Woooooooo");
-        TestUtil.roundTripMessage(taxiiXml, pr1);                                
+        
+        return pr1;
     }
     
     @Test
-    public void pollResp2() throws JAXBException, SAXException, IOException {
-        
+    public void pollResp1XML() throws JAXBException, SAXException, IOException, DatatypeConfigurationException {
+        TestUtil.roundTripMessage(taxiiXml, getPollResp1());                                        
+    }
+    
+    @Test
+    public void pollResp1JSON() throws JAXBException, SAXException, IOException, DatatypeConfigurationException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getPollResp1());                                        
+    }
+
+    
+    private PollResponse getPollResp2(){        
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp2")
                                 .withInResponseTo("tmp")
                                 .withCollectionName("blah");
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
+        return pr;
     }
 
     @Test
-    public void pollResp3() throws JAXBException, SAXException, IOException {
+    public void pollResp2XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getPollResp2());                                        
+    }
+    
+    @Test
+    public void pollResp2JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getPollResp2());                                        
+    }
+
+    
+    private PollResponse getPollResp3() throws JAXBException, SAXException, IOException {
         
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp3")
@@ -76,16 +99,36 @@ public class PollResponseTests {
                                 .withRecordCount(factory.createRecordCountType()
                                                     .withValue(BigInteger.valueOf(22))                                
                                 );
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
+        return pr;
+    }
+
+    @Test
+    public void pollResp3XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getPollResp3());                                        
     }
     
     @Test
-    public void pollResp4() throws JAXBException, SAXException, IOException {
+    public void pollResp3JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getPollResp3());                                        
+    }
+    
+    private PollResponse getPollResp4() {
         
         PollResponse pr = factory.createPollResponse()
                                 .withMessageId("PollResp4")
                                 .withInResponseTo("tmp")
                                 .withCollectionName("blah");
-        TestUtil.roundTripMessage(taxiiXml, pr);                                
+        return pr;
     }
+    
+    @Test
+    public void pollResp4XML() throws JAXBException, SAXException, IOException {
+        TestUtil.roundTripMessage(taxiiXml, getPollResp4());                                        
+    }
+    
+    @Test
+    public void pollResp4JSON() throws JAXBException, SAXException, IOException {
+        TestUtilJSON.roundTripMessage(taxiiXml, getPollResp4());                                        
+    }
+    
 }

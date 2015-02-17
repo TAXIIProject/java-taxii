@@ -27,6 +27,7 @@ public class TestUtil {
      * 
      * @param taxiiXml
      * @param obj
+     * @param compareObject - whether to compare the original incoming object with the marshalled & reparsed object.
      * @throws JAXBException
      * @throws SAXException
      * @throws IOException 
