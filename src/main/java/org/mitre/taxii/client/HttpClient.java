@@ -36,14 +36,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import javax.net.ssl.SSLException;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -198,6 +201,31 @@ public class HttpClient {
      * @throws IOException
      */
     public Object callTaxiiService(final URI uri, final Object message) throws JAXBException, UnsupportedEncodingException, IOException {
+    	return callTaxiiService(uri,message,null);
+    }
+    
+    /**
+     * Send a TAXII message to an endpoint. The version of the message will be
+     * determined by its package name, which must match the package name of a {@link org.mitre.taxii.messages.TaxiiXml}
+     * object in the taxiiXmlMap. If an appropriate message handler cannot be found,
+     * an exception is thrown.
+     *
+     * NOTE: It is expected that the response received will match the version of
+     * the message sent. The TAXII specification allows setting multiple values
+     * in the "x-taxii-accept" header. This library only sets and sends the
+     * version of the message being sent.
+     *
+     * @param uri The address of the endpoint to send the message to
+     * @param message The message to send.
+     * @param context The context to send with the response (to allow preemptive authentication)
+     * @return resultObj
+     *              Either a TAXII response object of the same version as was passed in
+     *              or "null" if parsing fails in a way that does not throw an exception.
+     * @throws JAXBException
+     * @throws UnsupportedEncodingException
+     * @throws IOException
+     */
+    public Object callTaxiiService(final URI uri, final Object message, HttpClientContext context) throws JAXBException, UnsupportedEncodingException, IOException {
 
         // Figure out the version of the message.
         String msgPackage = message.getClass().getPackage().getName();
@@ -266,7 +294,7 @@ public class HttpClient {
             postRequest.setEntity(reqEntity);
 
             // Do the request
-            try (CloseableHttpResponse response = httpClient.execute(postRequest)) {
+            try (CloseableHttpResponse response = httpClient.execute(postRequest,context)) {
 
                 // Check that we got the TAXII Content Type we're expecting.
                 Header[] headers = response.getHeaders(HEADER_X_TAXII_CONTENT_TYPE);
