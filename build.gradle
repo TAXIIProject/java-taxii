@@ -25,10 +25,11 @@ apply plugin: 'signing'
 defaultTasks 'jar'
 
 version = "1.1-SNAPSHOT"
+// version = "0.1"
 group = "org.mitre.taxii"
 archivesBaseName = "taxii"
 
-def isReleaseVersion = !version.endsWith("SNAPSHOT")
+// def isReleaseVersion = !version.endsWith("SNAPSHOT")
 def taxiiSchemaVersion = "1.0 & 1.1"
 
 String srcGeneratedDir = 'src/generated'
@@ -241,15 +242,19 @@ uploadArchives {
                 signing.signPom(deployment)
             }
             
-//            repository(url: "file://${project.projectDir}/build/artifacts/") {
-            repository(url: "https://oss.sonatype.org/service/local/staging/deployment/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)                
+            if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+                repository(url: "https://oss.sonatype.org/service/local/staging/deployment/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)                
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)                
+                }
+            } else {
+                repository(url: "file://${project.projectDir}/build/artifacts/")
+                snapshotRepository(url: "file://${project.projectDir}/build/artifacts/snapshots/")
             }
             
-//            snapshotRepository(url: "file://${project.projectDir}/build/artifacts/snapshots/") {
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)                
-            }
             
             pom.project {
                     name 'taxii'
