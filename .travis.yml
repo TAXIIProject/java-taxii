@@ -7,4 +7,5 @@ notifications:
     email:
         - taxii-commits-list@lists.mitre.org
 
-script: "gradle test"
+script: 
+    - ./gradle test
