@@ -3,9 +3,8 @@ jdk:
     - oraclejdk8
     - oraclejdk7
 
+script: gradle test
+    
 notifications:
     email:
         - taxii-commits-list@lists.mitre.org
-
-script: 
-    - ./gradle test
