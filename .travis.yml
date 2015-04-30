@@ -4,7 +4,7 @@ jdk:
     - oraclejdk7
 
 install: /bin/true
-script: gradle test
+script: "gradle test"
     
 notifications:
     email:
