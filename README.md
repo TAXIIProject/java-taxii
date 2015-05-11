@@ -3,8 +3,7 @@
 A Java library for handling TAXII Messages and invoking TAXII Services.
 For more information, see http://taxii.mitre.org/.
 
-[![Build Status](https://travis-ci.org/TAXIIProject/java-taxii.svg)](https://travis-ci.org/TAXIIProject/java-taxii)
-
+[![Build Status](https://travis-ci.org/TAXIIProject/java-taxii.svg?branch=master)](https://travis-ci.org/TAXIIProject/java-taxii)
 
 ## Overview
 
