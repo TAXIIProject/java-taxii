@@ -3,6 +3,9 @@ jdk:
     - oraclejdk8
     - oraclejdk7
 
+install: /bin/true
+script: "gradle test"
+    
 notifications:
     email:
         - taxii-commits-list@lists.mitre.org
