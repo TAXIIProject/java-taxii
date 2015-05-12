@@ -3,7 +3,7 @@ jdk:
     - oraclejdk8
     - oraclejdk7
 
-install: /bin/true
+install: /bin/true # this keeps 'gradle assemble' from being called which tries to sign the jars.
 script: "gradle test"
     
 notifications:
