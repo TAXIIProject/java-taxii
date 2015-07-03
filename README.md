@@ -21,6 +21,7 @@ see TODO.txt for a tentative roadmap.  Releases will be announced on the
 ## <a name="releases"></a>Releases
 
 v1.1.0 - Initial release. Targets TAXII 1.1 and 1.0.
+
 v1.1.0.1 - Built to target Java 7 instead of 8.
 
 Releases are distributed via the Maven Central Repository. 
