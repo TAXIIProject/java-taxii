@@ -27,16 +27,16 @@ Releases are distributed via the Maven Central Repository.
 	<dependency>
 	  <groupId>org.mitre.taxii</groupId>
 	  <artifactId>taxii</artifactId>
-	  <version>1.1.0</version>
+	  <version>1.1.0.1</version>
 	</dependency>
 
 ### <a name="gradle_dependency_info"></a>Gradle:
 
-	compile 'org.mitre.taxii:taxii:1.1.0'
+	compile 'org.mitre.taxii:taxii:1.1.0.1'
 
 ### <a name="ivy__dependency_info"></a>Apache Ivy:
 
-	<dependency org="org.mitre.taxii" name="taxii" rev="1.1.0" />
+	<dependency org="org.mitre.taxii" name="taxii" rev="1.1.0.1" />
 
 ## <a name="snapshots"></a>Snapshots
 
