@@ -36,6 +36,9 @@ String srcGeneratedDir = 'src/generated'
 String srcGeneratedJavaDir = srcGeneratedDir + '/java'
 String schemasDir = srcGeneratedDir + "/schemas"
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 sourceSets {
     main {
         java {
