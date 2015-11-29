@@ -1,7 +1,7 @@
 # java-taxii
 
 A Java library for handling TAXII Messages and invoking TAXII Services.
-For more information, see [http://taxii.mitre.org/](http://taxii.mitre.org).
+For more information, see [http://taxiiproject.github.io/](http://taxiiproject.github.io/).
 
 [![Build Status](https://travis-ci.org/TAXIIProject/java-taxii.svg?branch=master)](https://travis-ci.org/TAXIIProject/java-taxii)
 
@@ -15,8 +15,7 @@ intuitive both to Java developers and XML developers.
 
 Releases of java-taxii will comply with the Semantic Versioning specification
 at [http://semver.org/](http://semver.org/).  Java-taxii is currently under active development;
-see TODO.txt for a tentative roadmap.  Releases will be announced on the
-[TAXII discussion list](http://taxii.mitre.org/community/registration.html).
+see TODO.txt for a tentative roadmap.
 
 ## <a name="releases"></a>Releases
 
@@ -105,6 +104,4 @@ systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost
 
 ## Feedback
 
-You are encouraged to provide feedback by commenting on open issues or 
-signing up for the [TAXII discussion list](http://taxii.mitre.org/community/registration.html)
-and posting your questions.
+Please provide feedback and/or comments on open issues to taxii@mitre.org.
