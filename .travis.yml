@@ -1,13 +1,13 @@
 language: java
 jdk:
-    - oraclejdk8
-    - oraclejdk7
+  - oraclejdk8
+  - oraclejdk7
 
 # the below keeps 'gradle assemble' from being called which tries to sign the jars.
 install: /bin/true
 
 script: "gradle test"
-    
+
 notifications:
-    email:
-        - taxii-commits-list@lists.mitre.org
+  email:
+    - taxii-commits-list@lists.mitre.org
