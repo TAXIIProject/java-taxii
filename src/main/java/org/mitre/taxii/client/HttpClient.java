@@ -476,31 +476,34 @@ public class HttpClient {
         //return resultObj;
         return resultObj;
     }
-    
-    private void dumpContentBlocks(InputStream input, String dir, final int blockSize) throws Exception{
-        Pattern cbOpen = Pattern.compile("(?i)<\\s*taxii_{0,1}\\d*:content_block\\s*");
-        Pattern cbClose = Pattern.compile("(?i)<\\s*/taxii_{0,1}\\d*:content_block\\s*>");
-        Pattern prOpen = Pattern.compile("(?i)<(\\s*taxii_{0,1}\\d*:poll_response)[^>]*>");
+       
+    public void dumpContentBlocks(InputStream input, String dir, final int blockSize) throws Exception{
+        Pattern cbOpen = Pattern.compile("(?i)<taxii_{0,1}\\d*:content_block");
+        Pattern cbClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:content_block>");
+        Pattern prOpen = Pattern.compile("(?i)<(taxii_{0,1}\\d*:poll_response)[^>]*>");
+        Pattern prClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:poll_response[^>]*>");
         
         final int bufferSize = 8192;
         final char[] buffer = new char[bufferSize];
         Reader in = new InputStreamReader(input, "UTF-8");
         
-        StringBuilder out = new StringBuilder();
-        boolean writeOpen = false;
-        int blockStart = 0;
+        boolean blockCompleted = true;
         int contentSize = 0;
         int bytesRead = -1;
         String pollRespOpen;
         String pollRespClose;
+        StringBuilder out = new StringBuilder();
+        StringBuilder remainder = new StringBuilder();
+        String data = null;
         
         bytesRead = in.read(buffer, 0, buffer.length);
-        Matcher match = prOpen.matcher(new String(buffer));
+        Matcher matchO = prOpen.matcher(new String(buffer));
+        Matcher matchC;
         
         //Look for PollResponse tag
-        if(match.find()){
-            pollRespOpen = match.group(0)+"\n";
-            pollRespClose = "</" + match.group(1) + ">\n";
+        if(matchO.find()){
+            pollRespOpen = matchO.group(0)+"\n";
+            pollRespClose = "</" + matchO.group(1) + ">\n";
         }
         else {
             //error not a taxii response.
@@ -508,62 +511,53 @@ public class HttpClient {
         }
         
         while (bytesRead >= 0){
-            match = cbOpen.matcher(new String(buffer));
-            while (match.find()){
-                //This is a second match within buffer. Everything until this point is part of a previous block.
-                if (writeOpen){//removing -1 from next 3 lines
-                    //System.out.println("Block End: " + (match.start() - 1));
-                    if(match.start() > 0)
-                        out.append(buffer, blockStart, match.start() - blockStart - 1);
-                    contentSize += match.start() - blockStart - 1;
-                    if(contentSize >= blockSize){
-                        out.append(pollRespClose);
-                        writeToFile(dir, out.toString());
-                        contentSize = 0;
-                        out = new StringBuilder();
-                        out.append(pollRespOpen);
-                    }
-                    blockStart = match.start();
-                    //System.out.println("Block Start: " + (match.start()));
-                //this is a first match in buffer. Remember start position and move on
-                } else {
-                    writeOpen = true;
-                    blockStart = match.start();
-                    out.append(pollRespOpen);
-                    //System.out.println("Block Start: " + match.start());
+            data = remainder.toString() + new String(buffer);
+            remainder = new StringBuilder();
+            matchO = cbOpen.matcher(data);
+            matchC = cbClose.matcher(data);
+            
+            while (true){
+                if(!matchO.find()){
+                    //cb not found
+                    break;//?
                 }
-            }
-            //Buffer did not contain the end of block. Dump content starting from blockStart until bytesRead 
-            if(writeOpen){
-                contentSize += bytesRead - blockStart;
-                //System.out.println("buf:"+buffer.length+" start:"+blockStart+" endIndex:"+(bytesRead-1));
-                out.append(buffer, blockStart, bytesRead-blockStart);
-                blockStart = 0;
+                if(!matchC.find()){
+                    remainder.append(data.substring(matchO.start()));
+                    blockCompleted = false;
+                    break;
+                }
+                out.append(data.substring(matchO.start(), matchC.end()));
+                //out.append(buffer, matchO.start(), matchC.end() - matchO.start());
+                contentSize += matchC.end() - matchO.start();
+                blockCompleted = true;
+                if(contentSize >= blockSize){
+                    out.insert(0, pollRespOpen);
+                    out.append(pollRespClose);
+                    writeToFile(dir, out.toString());
+                    contentSize = 0;
+                    out = new StringBuilder();
+                }
             }
             Arrays.fill(buffer, '\0');
             bytesRead = in.read(buffer, 0, buffer.length);
         }
-        // We reached the end of stream. Truncate bytes after the end of content block. (some taxii tags)
-        if(writeOpen){
-            match = cbClose.matcher(out.toString());
-            int end = 0;
-            //find the closing ContentBlock tag for current data block
-            while(match.find()){
-                end = match.end();
+        
+        // We reached the end of stream and did not see the closing tag
+        if(blockCompleted){
+            if(out.length() > 0){
+                out.insert(0, pollRespOpen);
+                out.append(pollRespClose);
+                writeToFile(dir, out.toString());
             }
-            if(end == 0){
-              //Error: stream did not contain end of block.
-                throw new EOFException("Stream terminated before the end of block");
-            }
-            out.delete(end, out.length());
-            out.append(pollRespClose);
-            writeToFile(dir, out.toString());
+            matchC = prClose.matcher(data);
+            if (!matchC.find())
+                throw new EOFException("Stream terminated before closing Poll_Response");    
         } else {
-            //No data in this time frame. Input Stream contained PollResponse tag with no ContentBlock. 
+            throw new EOFException("Stream terminated before the end of block");
         }
         in.close();
     }
-
+    
     public void writeToFile(String path, String data) throws IOException{
         int writeBM = 0;
         File destDir = new File(path);
