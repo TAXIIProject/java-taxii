@@ -477,16 +477,16 @@ public class HttpClient {
         return resultObj;
     }
        
-    public void dumpContentBlocks(InputStream input, String dir, final int blockSize) throws Exception{
+    public void dumpContentBlocks(InputStream input, String dir, final int blockSize) throws Exception {
         Pattern cbOpen = Pattern.compile("(?i)<taxii_{0,1}\\d*:content_block");
         Pattern cbClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:content_block>");
         Pattern prOpen = Pattern.compile("(?i)<(taxii_{0,1}\\d*:poll_response)[^>]*>");
         Pattern prClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:poll_response[^>]*>");
-        
+
         final int bufferSize = 8192;
         final char[] buffer = new char[bufferSize];
         Reader in = new InputStreamReader(input, "UTF-8");
-        
+
         boolean blockCompleted = true;
         int contentSize = 0;
         int bytesRead = -1;
@@ -495,42 +495,41 @@ public class HttpClient {
         StringBuilder out = new StringBuilder();
         StringBuilder remainder = new StringBuilder();
         String data = null;
-        
+
         bytesRead = in.read(buffer, 0, buffer.length);
         Matcher matchO = prOpen.matcher(new String(buffer));
         Matcher matchC;
-        
-        //Look for PollResponse tag
-        if(matchO.find()){
-            pollRespOpen = matchO.group(0)+"\n";
+
+        // Look for PollResponse tag
+        if (matchO.find()) {
+            pollRespOpen = matchO.group(0) + "\n";
             pollRespClose = "</" + matchO.group(1) + ">\n";
-        }
-        else {
-            //error not a taxii response.
+        } else {
+            // error not a taxii response.
             throw new IllegalArgumentException("Invalid response: no TAXII XML found.");
         }
-        
-        while (bytesRead >= 0){
+
+        while (bytesRead >= 0) {
             data = remainder.toString() + new String(buffer);
             remainder = new StringBuilder();
             matchO = cbOpen.matcher(data);
             matchC = cbClose.matcher(data);
-            
-            while (true){
-                if(!matchO.find()){
-                    //cb not found
-                    break;//?
+
+            while (true) {
+                if (!matchO.find()) {
+                    // cb not found
+                    break;// ?
                 }
-                if(!matchC.find()){
+                if (!matchC.find()) {
                     remainder.append(data.substring(matchO.start()));
                     blockCompleted = false;
                     break;
                 }
                 out.append(data.substring(matchO.start(), matchC.end()));
-                //out.append(buffer, matchO.start(), matchC.end() - matchO.start());
+                // out.append(buffer, matchO.start(), matchC.end() - matchO.start());
                 contentSize += matchC.end() - matchO.start();
                 blockCompleted = true;
-                if(contentSize >= blockSize){
+                if (contentSize >= blockSize) {
                     out.insert(0, pollRespOpen);
                     out.append(pollRespClose);
                     writeToFile(dir, out.toString());
@@ -541,47 +540,47 @@ public class HttpClient {
             Arrays.fill(buffer, '\0');
             bytesRead = in.read(buffer, 0, buffer.length);
         }
-        
+
         // We reached the end of stream and did not see the closing tag
-        if(blockCompleted){
-            if(out.length() > 0){
+        if (blockCompleted) {
+            if (out.length() > 0) {
                 out.insert(0, pollRespOpen);
                 out.append(pollRespClose);
                 writeToFile(dir, out.toString());
             }
             matchC = prClose.matcher(data);
             if (!matchC.find())
-                throw new EOFException("Stream terminated before closing Poll_Response");    
+                throw new EOFException("Stream terminated before closing Poll_Response");
         } else {
             throw new EOFException("Stream terminated before the end of block");
         }
         in.close();
     }
-    
-    public void writeToFile(String path, String data) throws IOException{
+
+    public void writeToFile(String path, String data) throws IOException {
         int writeBM = 0;
         File destDir = new File(path);
         String wBookmark = path + "/bookmark.write";
 
         if (!destDir.exists())
             destDir.mkdir();
-        
-        //attempt to get writer bookmark
-        if (new File(wBookmark).exists()){
-            BufferedReader reader = new BufferedReader (new FileReader(wBookmark));
+
+        // attempt to get writer bookmark
+        if (new File(wBookmark).exists()) {
+            BufferedReader reader = new BufferedReader(new FileReader(wBookmark));
             String line = reader.readLine();
             writeBM = Integer.parseInt(line);
             reader.close();
         }
-        
-        //write the file
+
+        // write the file
         String file = path + "/block_" + writeBM + ".xml";
-        BufferedWriter writer = new BufferedWriter( new FileWriter(file));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         writer.write(data);
         writer.close();
-        
-        //update write bookmark
-        writer = new BufferedWriter( new FileWriter(wBookmark));
+
+        // update write bookmark
+        writer = new BufferedWriter(new FileWriter(wBookmark));
         writer.write(String.valueOf(++writeBM));
         writer.close();
     }
