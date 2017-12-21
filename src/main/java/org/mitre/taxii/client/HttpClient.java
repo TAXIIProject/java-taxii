@@ -26,7 +26,16 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -35,6 +44,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import javax.net.ssl.SSLException;
@@ -337,6 +348,238 @@ public class HttpClient {
         return resultObj;
     }
 
+    /**
+     * Send a TAXII message to an endpoint. The version of the message will be
+     * determined by its package name, which must match the package name of a {@link org.mitre.taxii.messages.TaxiiXml}
+     * object in the taxiiXmlMap. If an appropriate message handler cannot be found,
+     * an exception is thrown.
+     *
+     * NOTE: It is expected that the response received will match the version of
+     * the message sent. The TAXII specification allows setting multiple values
+     * in the "x-taxii-accept" header. This library only sets and sends the
+     * version of the message being sent.
+     * 
+     * This call will split the feed into content blocks and store the XML in files
+     *  of a specified size in specified directory.
+     *
+     * @param uri The address of the endpoint to send the message to
+     * @param message The message to send.
+     * @param context The context to send with the response (to allow preemptive authentication)
+     * @param dir location of where to store downloaded XML
+     * @param blockSize size of XML files that will be created in directory that was passed in parameter 'dir'.
+     * @return resultObj
+     *              "null" if download was successful
+     *              TAXII response object in case of error.
+     * @throws Exception 
+     */
+    public Object callTaxiiService(final URI uri, final Object message, HttpClientContext context, String dir, int blockSize) throws Exception {
+        
+        // Figure out the version of the message.
+        String msgPackage = message.getClass().getPackage().getName();
+
+        // Get the appropriate TAXII message environment.
+        String msgVersion = packageToVersionMap.get(msgPackage);
+        TaxiiXml taxiiXml = taxiiXmlMap.get(msgVersion);
+
+        
+        
+        // Couldn't find a handler for the message.
+         if (null == taxiiXml) {
+            throw new JAXBException("Message is unknown TAXII version.");
+        }
+
+        // we now have a TaxiiXml that knows how to handle the message we receieved.
+        Object resultObj = null;
+
+        // Make the call to the server.
+        try {
+            // The TAXII messages must be sent as POST.
+            HttpPost postRequest = new HttpPost(uri);            
+
+            // Set the required HTTP Headers.
+            postRequest.addHeader("User-Agent", "java-taxii.httpclient");
+            postRequest.addHeader(HEADER_CONTENT_TYPE, "application/xml");
+            postRequest.addHeader(HEADER_ACCEPT, "application/xml");
+            if (taxiiXml.isRequestMessage(message)) {
+                // Should be present for requests. Should NOT be present for responses.
+                postRequest.addHeader(HEADER_X_TAXII_ACCEPT, msgVersion);
+            }
+            postRequest.addHeader(HEADER_X_TAXII_CONTENT_TYPE, msgVersion);
+            postRequest.addHeader(HEADER_X_TAXII_SERVICES, taxiiXml.getServiceVersion());
+            
+            // validate the scheme (HTTP or HTTPS)
+            if (null == postRequest.getURI().getScheme()) {
+                throw new IOException("Invalid service URI.");
+            } else if (!(postRequest.getURI().getScheme().toLowerCase().equals(SCHEME_HTTP) || 
+                    postRequest.getURI().getScheme().toLowerCase().equals(SCHEME_HTTPS))) {
+                throw new IOException("Invalid service URI. Only 'http' or 'https' are supported");                
+            }
+
+            if (postRequest.getURI().getScheme().equals(SCHEME_HTTPS)) {
+                postRequest.addHeader(HEADER_X_TAXII_PROTOCOL, Versions.VID_TAXII_HTTPS_10);
+            } else {
+                postRequest.addHeader(HEADER_X_TAXII_PROTOCOL, Versions.VID_TAXII_HTTP_10);
+            }
+
+            // Serialize the message.
+            final Marshaller m = taxiiXml.createMarshaller(false); // Don't pretty print.
+            m.setProperty(Marshaller.JAXB_FRAGMENT, true); // Don't generate xml declaration.
+
+            // Render the JAXB object to a string.
+            final StringWriter sw = new StringWriter();
+            m.marshal(message, sw);
+            String requestStr = sw.toString();
+
+            // Put the XML string in an entiny for the Request.
+            StringEntity reqEntity = new StringEntity(requestStr);
+            postRequest.setEntity(reqEntity);
+
+            // Do the request
+            try (CloseableHttpResponse response = httpClient.execute(postRequest,context)) {
+
+                // Check that we got the TAXII Content Type we're expecting.
+                Header[] headers = response.getHeaders(HEADER_X_TAXII_CONTENT_TYPE);
+                List<Header> headerList = Arrays.asList(headers);
+
+                boolean contentFound = false;
+                for (Header header : headerList) {
+                    if (msgVersion.equals(header.getValue())) {
+                        contentFound = true;
+                        break;
+                    }
+                }
+
+                if (!contentFound) { // Response is not a TAXII Message we understand.
+                    // go create a TAXII status message based on the headers.
+                    resultObj = taxiiXml.getResponseHandler().buildStatusCodeStatusMessage(response, message);
+                } else { // We should know how to handle the response.
+                    // Extract the response body.
+                    HttpEntity respEntity = response.getEntity();
+                    if(respEntity != null){
+                        try {
+                            InputStream input = respEntity.getContent();
+                            dumpContentBlocks(input, dir, blockSize);
+                        } catch (IOException | IllegalStateException e) {
+                            throw new JAXBException("Unable to establish an InputStream with TAXII server.");
+                        }
+                    }
+                        
+                    // Attempt to parse the response into a JAXB object regardless of the 
+                    // HTTP status code.
+                }
+            } catch (SSLException ex) {
+                resultObj = taxiiXml.getResponseHandler().buildSSLErrorStatusMessage(ex, message);
+            }
+        } finally {
+            httpClient.close();
+        }
+        //return resultObj;
+        return resultObj;
+    }
+       
+    public void dumpContentBlocks(InputStream input, String dir, final int blockSize) throws Exception {
+        Pattern cbOpen = Pattern.compile("(?i)<taxii_{0,1}\\d*:content_block");
+        Pattern cbClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:content_block>");
+        Pattern prOpen = Pattern.compile("(?i)<(taxii_{0,1}\\d*:poll_response)[^>]*>");
+        Pattern prClose = Pattern.compile("(?i)</taxii_{0,1}\\d*:poll_response[^>]*>");
+
+        final int bufferSize = 8192;
+        final char[] buffer = new char[bufferSize];
+        Reader in = new InputStreamReader(input, "UTF-8");
+
+        boolean blockCompleted = true;
+        int contentSize = 0;
+        int bytesRead = -1;
+        String pollRespOpen;
+        String pollRespClose;
+        StringBuilder out = new StringBuilder();
+        String data = "";
+
+        bytesRead = in.read(buffer, 0, buffer.length);
+        Matcher matchO = prOpen.matcher(new String(buffer));
+        Matcher matchC;
+
+        // Look for PollResponse tag
+        if (matchO.find()) {
+            pollRespOpen = matchO.group(0) + "\n";
+            pollRespClose = "</" + matchO.group(1) + ">\n";
+        } else {
+            // error not a taxii response.
+            throw new IllegalArgumentException("Invalid response: no TAXII XML found.");
+        }
+
+        while (bytesRead >= 0) {
+            data = data + new String(buffer, 0, bytesRead);
+            matchO = cbOpen.matcher(data);
+            matchC = cbClose.matcher(data);
+
+            while (true) {
+                if (!matchO.find()) {
+                    //content_block opening tag not found
+                    break;
+                }
+                if (!matchC.find()) {
+                    data = data.substring(matchO.start());
+                    blockCompleted = false;
+                    break;
+                }
+                out.append(data.substring(matchO.start(), matchC.end()));
+                contentSize += matchC.end() - matchO.start();
+                blockCompleted = true;
+                if (contentSize >= blockSize) {
+                    writeToFile(dir, pollRespOpen, out.toString(), pollRespClose);
+                    contentSize = 0;
+                    out = new StringBuilder();
+                }
+            }
+            Arrays.fill(buffer, '\0');
+            bytesRead = in.read(buffer, 0, buffer.length);
+        }
+
+        // We reached the end of stream and did not see the closing tag
+        if (blockCompleted) {
+            if (out.length() > 0)
+                writeToFile(dir, pollRespOpen, out.toString(), pollRespClose);
+            
+            matchC = prClose.matcher(data);
+            if (!matchC.find())
+                throw new EOFException("Stream terminated before closing Poll_Response");
+        } else {
+            throw new EOFException("Stream terminated before the end of block");
+        }
+        in.close();
+    }
+
+    public void writeToFile(String path, String oTag, String data, String cTag) throws IOException {
+        int writeBM = 0;
+        File destDir = new File(path);
+        String wBookmark = path + "/bookmark.write";
+
+        if (!destDir.exists())
+            destDir.mkdir();
+
+        // attempt to get writer bookmark
+        if (new File(wBookmark).exists()) {
+            BufferedReader reader = new BufferedReader(new FileReader(wBookmark));
+            String line = reader.readLine();
+            writeBM = Integer.parseInt(line);
+            reader.close();
+        }
+
+        // write the file
+        String file = path + "/block_" + writeBM + ".xml";
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(oTag);
+        writer.write(data);
+        writer.write(cTag);
+        writer.close();
+
+        // update write bookmark
+        writer = new BufferedWriter(new FileWriter(wBookmark));
+        writer.write(String.valueOf(++writeBM));
+        writer.close();
+    }
+    
     /**
      * Populate the map that maps package names to TAXII versions.
      * The package of the TaxiiXml classes is used to determine which version of 
