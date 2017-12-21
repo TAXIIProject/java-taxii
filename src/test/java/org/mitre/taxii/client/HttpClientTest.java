@@ -19,18 +19,22 @@ public class HttpClientTest {
     HttpClient taxiiClient;
     StringBuilder cb;
     StringBuilder s;
+    String oTag;
+    String cTag;
 
     @Before
     public void setUp() throws Exception {
         taxiiClient = new HttpClient();
+        oTag = "<taxii_11:Poll_Response collection_name='guest.Lehigh_edu'>";
+        cTag = "</taxii_11:Poll_Response>";
         s = new StringBuilder();
         cb = new StringBuilder().append("<taxii_11:Content_Block>").append("<stix:Indicators>")
                 .append("<stix:Indicator id='opensource:indicator-44ed11b0-ac22-4543-b8be-1bfa8d0dc987'>")
                 .append("</stix:Indicator>").append("</stix:Indicators>").append("</taxii_11:Content_Block>");
 
-        s.append("<taxii_11:Poll_Response collection_name='guest.Lehigh_edu'>");
+        s.append(oTag);
         s.append(cb);
-        s.append("</taxii_11:Poll_Response>");
+        s.append(cTag);
     }
 
     @After
@@ -71,10 +75,10 @@ public class HttpClientTest {
     public void writeToFileTest() throws Exception {
         String feedId = "feed_" + UUID.randomUUID();
         String path = "/var/tmp/" + feedId;
-        String data = s.toString();
+        String data = cb.toString();
 
         // First write
-        taxiiClient.writeToFile(path, data);
+        taxiiClient.writeToFile(path, oTag, data, cTag);
 
         String wBookmark = path + "/bookmark.write";
         // verify the bookmark was created
@@ -89,7 +93,7 @@ public class HttpClientTest {
         assertTrue(new File(path + "/block_" + 0 + ".xml").exists());
 
         // Second write
-        taxiiClient.writeToFile(path, data);
+        taxiiClient.writeToFile(path, oTag, data, cTag);
 
         // verify the block value is written
         line = readFile(wBookmark);
