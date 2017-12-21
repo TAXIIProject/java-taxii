@@ -509,7 +509,7 @@ public class HttpClient {
         }
 
         while (bytesRead >= 0) {
-            data = data + new String(buffer);
+            data = data + new String(buffer, 0, bytesRead);
             matchO = cbOpen.matcher(data);
             matchC = cbClose.matcher(data);
 
@@ -524,7 +524,6 @@ public class HttpClient {
                     break;
                 }
                 out.append(data.substring(matchO.start(), matchC.end()));
-                // out.append(buffer, matchO.start(), matchC.end() - matchO.start());
                 contentSize += matchC.end() - matchO.start();
                 blockCompleted = true;
                 if (contentSize >= blockSize) {
