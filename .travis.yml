@@ -10,5 +10,4 @@ script: "gradle test"
 
 notifications:
   email:
-    - gback@mitre.org
-    - stix-commits-list@lists.mitre.org
+    - stix-commits-list@groups.mitre.org
