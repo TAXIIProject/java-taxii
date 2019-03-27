@@ -290,7 +290,7 @@ public class HttpClient {
             String requestStr = sw.toString();
 
             // Put the XML string in an entiny for the Request.
-            StringEntity reqEntity = new StringEntity(requestStr);
+            StringEntity reqEntity = new StringEntity(requestStr, "UTF-8");
             postRequest.setEntity(reqEntity);
 
             // Do the request
